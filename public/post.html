@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Unite</title>
+<link rel="stylesheet" type="text/css" href="./css/style.css" />
+<script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
+<script src="./js/jquery.js"></script>
+<script src="./js/bitcoincash.min.js"></script>
+<script src="./js/sha512.js"></script>
+<script src="./js/socket.io.js"></script>
+<script src="./js/pnglib.js"></script>
+<script src="./js/identicon.js"></script>
+<script src="./js/bchaddr.js"></script>
+<script src="./js/transaction.js"></script>
+<script src="./js/post.js"></script>
+<script src="./js/name.js"></script>
+<script src="./js/init.js"></script>
+<script>
+// some global vars for this script
+var topPostTXID = find_get_parameter('post');
+var topPost;
+var load_data = function(){
+	get_post(topPostTXID).then(function(post){
+		topPost = post;
+		get_posts(topPost.sender);
+		render_post(post, 0, '#topPost');
+	});;
+}
+var handle_new_post = function(post){
+	if(post.parent == topPost.sender && (post.type == 5503 || post.type == 5505)){
+		render_post(post, 0, '#posts');
+	}
+}
+</script>
+<script>if (window.module) module = window.module;</script>
+</head>
+<body>
+<div class="nav">
+<div class="heading">
+<div class="leftbuttons">
+<button id="backbutton" class="transparent"><img class="UIImageButton" src="./res/unite_icon.svg" /></button>
+</div>
+<img src="./res/unite_icon.svg" id="headericon" />
+<h1 id="headertitle">Reply</h1>
+</div>
+<div class="rightbuttons">
+<button id="composebutton" class="transparent"><img class="UIImageButton" src="./res/compose_icon.svg" /></button>
+</div>
+<div class="navlinks">
+<a class="navlink" href="newposts.html"><img src="./res/newposts_icon.svg" /><span>New Posts</span></a>
+<a class="navlink" href="newusers.html"><img src="./res/newusers_icon.svg" /><span>New Users</span></a>
+<a class="navlink" href="feed.html"><img src="./res/feed_icon.svg" /><span>Feed</span></a>
+<a class="navlink" href="popular.html"><img src="./res/popular_icon.svg" /><span>Popular</span></a>
+<a class="navlink" href="profile.html"><img src="./res/profile_icon.svg" /><span>Profile</span></a>
+</div>
+</div>
+<div class="content">
+<div id="topPost"></div>
+<h1>Replies</h1>
+<form id="sendreply">
+<p>Write a reply...</p>
+<center>
+<textarea class="UITextArea" id="newpost"></textarea>
+</center>
+<input type="submit" id="sendbutton" class="UIButton" value="SEND" />
+</form>
+<div id="posts"></div>
+</div>
+</body>
+</html>

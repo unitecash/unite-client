@@ -1,0 +1,28 @@
+{
+  "name": "Unite",
+  "version": "1.0.0",
+  "description": "Unite.cash - We Stand Against Censorship",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "package-mac": "electron-packager . Unite --overwrite --platform=darwin --arch=x64 --icon=webroot/res/icon.icns --prune=true --out=release-builds",
+    "package-win": "electron-packager . Unite --overwrite --asar=true --platform=win32 --arch=ia32 --icon=webroot/res/icon.ico --prune=true --out=release-builds --version-string.CompanyName=Unite --version-string.FileDescription=Unite --version-string.ProductName=\"Unite\"",
+    "package-linux": "electron-packager . Unite --overwrite --asar=true --platform=linux --arch=x64 --icon=webroot/res/icon.png --prune=true --out=release-builds"
+  },
+  "repository": "",
+  "keywords": [
+    "Unite",
+    "Bitcoin",
+    "Cash",
+    "Censorship"
+  ],
+  "author": "Unite",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^1.8.4"
+  },
+  "dependencies": {
+    "electron-packager": "^12.0.1",
+    "webpack": "^4.8.2"
+  }
+}

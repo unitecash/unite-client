@@ -1,0 +1,293 @@
+body {
+	font-family:helvetica;
+	padding:0em;
+	margin:0em;
+	word-wrap:break-word;
+	background-color:#223;
+	color:#ddf;
+}
+.UIButton {
+	color:#aab;
+	background-color:#111122;
+	border:0px solid #ffffff;
+	border-radius:0.25em;
+	font-weight:bold;
+	padding:0.8em;
+	outline:none;
+}
+.UIButton:hover {
+	color:#ddf;
+}
+.navlink {
+	padding:0.375em;
+}
+.navlink span {
+	text-decoration:none;
+	color:#9999bb;
+	font-weight:bold;
+	text-transform:uppercase;
+}
+.navlink img {
+	display:none;
+}
+.nav {
+	width:100%;
+	background-color:#112;
+	padding-top:0.25em;
+	padding-bottom:0.25em;
+	position:fixed;
+	top:0px;
+	left:0px;
+	border-bottom:1px solid #334;
+}
+.nav * {
+	display:inline-block;
+}
+.heading {
+	float:left;
+	margin-top:-0.5em;
+	margin-left:0.5em;
+}
+.navlinks {
+	float:right;
+	margin-top:1em;
+	margin-right:1em;
+}
+.content {
+	padding:0.5em;
+	padding-top:5em;
+}
+#headericon {
+	height:2em;
+	float:left;
+	margin-top:1.5em;
+}
+#headertitle {
+	margin-left:0.5em;
+	text-transform:uppercase;
+}
+.qrcode {
+	opacity:0.8;
+	align:center;
+	text-align:center;
+	width:200px;
+}
+.post {
+	background-color:#002;
+	color:white;
+	margin-top:0.25em;
+	margin-bottom:0.5em;
+	border-radius:0.5em;
+	border:0px solid #668;
+	padding:1em;
+}
+.UITextArea {
+	font-family:helvetica;
+	background-color:#112;
+	color:#ddf;
+	padding:0.5em;
+	outline:none;
+	border-radius:0.25em;
+	width:90%;
+	margin-bottom:0.5em;
+	height:4em;
+	border:0px solid #666688;
+}
+.UITextField {
+	font-family:helvetica;
+	background-color:#112;
+	color:#ddf;
+	padding:0.5em;
+	outline:none;
+	border-radius:0.25em;
+	border:0px solid #666688;
+}
+#sendbutton {
+	float:right;
+	width:20%;
+}
+#charcount {
+	float:left;
+	width:40%;
+}
+.UIPanel {
+	background-color:#002;
+	border-radius:0.25em;
+	border:0px solid #668;
+	padding:1em;
+	margin:0.5em;
+}
+.time {
+	float:right;
+	text-align:right;
+	align:right;
+	margin-top:-0.75em;
+	margin-right:-0.75em;
+	color:#888;
+	font-size:0.75em;
+}
+.name {
+	float:left;
+	color:#99c;
+	font-size:0.75em;
+	margin-top:-0.25em;
+	margin-left: 1em;
+}
+.postText {
+	width:100%;
+	display:block;
+	overflow:hidden;
+}
+.banner {
+	position:fixed;
+	left:0px;
+	top:0px;
+	width:100%;
+	z-index:1000;
+	margin:0px;
+	padding:1em;
+	text-align:center;
+	align:center;
+	font-weight:bold;
+}
+.error {
+	color:white;
+	background-color:#82092f;
+}
+.success {
+	color:white;
+	background-color:#331066;
+}
+.UICloseBannerButton {
+	float:right;
+	background-color:transparent;
+	color:white;
+	font-size:1.5em;
+	border:0px solid white;
+	margin-right:1.2em;
+}
+.UIDimmedBackground {
+	width:100%;
+	height:100%;
+	position:fixed;
+	top:0px;
+	left:0px;
+	right:0px;
+	bottom:0px;
+	background-color:#002;
+	opacity:0.85;
+	margin:0px;
+	padding:0px;
+	z-index:2;
+	filter:blur(10px);
+}
+.UIAlertWindow {
+	position:fixed;
+	color:#ddf;
+	border-radius:0.5em;
+	width:80%;
+	border:1px solid #ddf;
+	padding:1em;
+	background-color:#223;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+::-webkit-scrollbar {
+    width: 8px;
+	opacity:0.7;
+	display:none;
+}
+.UINameIcon {
+	height:1.5em;
+	float:left;
+	margin-left:-0.25em;
+	margin-top:-0.5em;
+}
+
+@media only screen and (max-width: 45em) {
+    #headericon {
+		display:none;
+	}
+	.heading {
+		width:100%;
+		text-align:center;
+		align:center;
+		display:block;
+		float:default;
+		margin-left:auto;
+	}
+	.navlinks {
+		display:block;
+		width:100%;
+		align:center;
+		text-align:center;
+		margin-right:auto;
+		margin-left:auto;
+		margin-top:auto;
+	}
+	#headertitle {
+		margin-left:auto;
+		margin-right:auto;
+		margin-bottom:0.25em;
+	}
+	.content {
+		padding-top:7em;
+	}
+}
+
+@media only screen and (max-width: 30em) {
+	.nav {
+		background-color:transparent;
+		pointer-events:none;
+		height:100%;
+		top:0px;
+		bottom:0px;
+		border-bottom:none;
+	}
+	.heading {
+		pointer-events:auto;
+		left:0px;
+		top:0px;
+		background-color:#112;
+		padding-top:0.5em;
+		padding-bottom:0.75em;
+		border-bottom:1px solid #334;
+	}
+	#headertitle {
+		text-transform:none;
+		font-size:1.2em;
+	}
+	.navlinks {
+		pointer-events:auto;
+		left:0px;
+		bottom:0px;
+		position:absolute;
+		background-color:#112;
+		margin:auto;
+		border-top:1px solid #334;
+		padding-bottom:0.5em;
+		padding-top:0.5em;
+	}
+	.content {
+		padding-top:3em;
+		margin-bottom:4em;
+	}
+	.navlink {
+		padding-left:1em;
+		padding-right:1em;
+	}
+	.navlink span {
+		text-transform:none;
+		font-weight:normal;
+		font-size:0.8em;
+	}
+	.navlink img {
+		display:block;
+		height:1.5em;
+		width:1.5em;
+		margin-bottom:0.25em;
+		margin-left:auto;
+		margin-right:auto;
+	}
+}

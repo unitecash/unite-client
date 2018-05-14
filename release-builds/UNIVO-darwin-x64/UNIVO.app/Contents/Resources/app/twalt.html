@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Hello World!</title>
+<style>
+html, body {
+	-webkit-app-region:drag;
+	margin:0px;
+	padding:0px;
+	height:100%;
+}
+#window {
+	margin:0px;
+	padding:0px;
+	background-color:#223;
+	display:none;
+	-webkit-app-region:no-drag;
+	font-family:helvetica;
+	color:#ddf;
+	width:100%;
+	height:100%;
+}
+.windowhead {
+	padding-top:0.25em;
+	padding-bottom:0.25em;
+	padding-left:1em;
+	padding-right:1em;
+	margin-top:0px;
+	-webkit-app-region:drag;
+}
+.windowtitle {
+	width:65%;
+	margin:0px;
+	padding:0px;
+}
+.windowbuttons {
+	float:right;
+	top:0px;
+	right:0px;
+	margin:0px;
+	margin-top:-24px;
+	padding:0px;
+	position:relative;
+	z-index:3;
+	-webkit-app-region:non-drag;
+}
+#btn-min, #btn-max, #btn-close {
+	background-color:transparent;
+	border:none;
+	focus:none;
+	active:none;
+	outline:none;
+	font-size:1.5em;
+	font-weight:bold;
+	-webkit-app-region:no-drag;
+}
+#btn-min {
+	color:yellow;
+}
+#btn-max {
+	color:green;
+}
+#btn-close {
+	color:red;
+}
+*:active, *:focus, *:current {
+	outline:none;
+}
+</style>
+<script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
+<script src="./jquery.js"></script>
+<script>
+(function(){
+const BrowserWindow = require('electron').remote.BrowserWindow
+var isMaximized = false;
+var win = BrowserWindow.getFocusedWindow(); 
+var originalWindowPosition = {};
+originalWindowPosition.size = win.getSize();
+originalWindowPosition.position = win.getPosition();
+win.on('move', function(){
+	if(isMaximized){
+		isMaximized = false;
+		win.setSize(originalWindowPosition.size[0], originalWindowPosition.size[1]);
+	}
+});
+function init() {
+document.getElementById("btn-min").addEventListener("click", function (e) {
+	var win = BrowserWindow.getFocusedWindow();
+	win.minimize(); 
+});
+
+document.getElementById("btn-max").addEventListener("click", function (e) {
+	if(isMaximized == true){
+		isMaximized = false;
+		win.setPosition(originalWindowPosition.position[0], originalWindowPosition.position[1]);
+		win.setSize(originalWindowPosition.size[0], originalWindowPosition.size[1]);
+	}else{
+		originalWindowPosition.size = win.getSize();
+		originalWindowPosition.position = win.getPosition();
+		win.maximize(); 
+		setTimeout(function(){
+			isMaximized = true;
+		}, 100);
+	}
+});
+
+document.getElementById("btn-close").addEventListener("click", function (e) {
+	var win = BrowserWindow.getFocusedWindow();
+	win.close();
+}); 
+}
+$(document).ready(function(){
+	init(); 
+	$('#window').fadeIn(400);
+});
+})();
+</script>
+<script>if (window.module) module = window.module;</script>
+</head>
+<body>
+<div id="window">
+<div class="windowhead">
+<h4 class="windowtitle">HIT Etherial Interface</h4>
+<div class="windowbuttons">
+<button id="btn-min">-</button>
+<button id="btn-max">□</button>
+<button id="btn-close">x</button>
+</div>
+</div>
+<center>
+<h1>HIT Etherial Interface</h1>
+</center>
+</div>
+</body>
+</html>

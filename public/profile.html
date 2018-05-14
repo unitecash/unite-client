@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Unite</title>
+<link rel="shortcut icon" href="./res/icon.png" />
+<link rel="stylesheet" type="text/css" href="./css/style.css" />
+<script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
+<script src="./js/jquery.js"></script>
+<script src="./js/bitcoincash.min.js"></script>
+<script src="./js/sha512.js"></script>
+<script src="./js/socket.io.js"></script>
+<script src="./js/pnglib.js"></script>
+<script src="./js/identicon.js"></script>
+<script src="./js/bchaddr.js"></script>
+<script src="./js/transaction.js"></script>
+<script src="./js/post.js"></script>
+<script src="./js/name.js"></script>
+<script src="./js/init.js"></script>
+<script>
+var load_data = function(){
+	$('#mybalance').on('click', function(){
+		display_html_alert('#moreProfileInfo');
+	});
+	$('#changename').on('click', function(){
+		display_html_alert('#changeNameDiv');
+	});
+	$('#settingsbutton').on('click', function(){
+		display_html_alert('#settings');
+	});
+	
+	// set address text
+	$('#myaddress').text(bchaddr.toCashAddress(address.toString()));
+	
+	// get address balance
+	// TODO get_balance(addr)
+	$.ajax({
+		type: "GET",
+		url: insightBaseURL + 'addr/' + address.toString(),
+		success: function(data){
+			$('#mybalance').text('BALANCE: ' + data.balance + " BCH");
+		}
+	});
+	
+	// get posts this user has written in the past
+	get_posts(address.toString());
+	
+	// get the user's name and display italic
+	get_name(address.toString()).then(function(name){
+		myName = name;
+		$('#myName').html('Hi, ' + myName.hash + myName.name + '!');
+	});
+	
+	// display a QR code for deposit
+	$('#myqrcode').attr('src', 'https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl=' + bchaddr.toCashAddress(address.toString()));
+	
+	// set the private key text
+	$('#privateKeyText').text(privateKey.toWIF());
+}
+var handle_new_post = function(post){
+	// Only display posts sent by this user
+	if(post.sender == address.toString()){
+		render_post(post, post.isLive, '#posts');
+	}
+}
+</script>
+<script>if (window.module) module = window.module;</script>
+</head>
+<body>
+<div class="nav">
+<div class="heading">
+<img src="./res/icon.png" id="headericon" />
+<h1 id="headertitle">Profile</h1>
+</div>
+<div class="rightbuttons">
+<button id="settingsbutton" class="transparent"><img class="UIImageButton" src="./res/settings.svg" /></button>
+</div>
+<div class="navlinks">
+<a class="navlink" href="newposts.html"><img src="./res/newposts_icon.svg" /><span>New Posts</span></a>
+<a class="navlink" href="newusers.html"><img src="./res/newusers_icon.svg" /><span>New Users</span></a>
+<a class="navlink" href="feed.html"><img src="./res/feed_icon.svg" /><span>Feed</span></a>
+<a class="navlink" href="popular.html"><img src="./res/popular_icon.svg" /><span>Popular</span></a>
+<a class="navlink" href="profile.html"><img src="./res/profile_icon.svg" /><span>Profile</span></a>
+</div>
+</div>
+<div class="content">
+<center>
+<!--- TODO profile photos --->
+<img id="profileImage" src="./res/icon.png" class="ProfileImage center" />
+<p id="myName"></p>
+<p id="profileText"></p>
+<p id="editButton" class="center">Edit...</p>
+<div id="changeNameDiv" class="UIAlertWindow hidden">
+<h2>CHANGE NAME</h2>
+<p>Your name is <b style="color:red;">NOT</b> the username that you use when you log into
+your account. Your name is what others see when you write posts, send tips, or leave replies.
+Unless you set it here, your name will show up as 6 random letters and numbers.</p>
+<input type="text" id="newName" class="UITextField" placeholder="New name..." /><br/><br/>
+<button class="UIButton" id="namechangesubmit">CHANGE NAME</button>
+</div>
+<div id="moreProfileInfo" class="UIAlertWindow hidden">
+<h2>YOUR UNITE ADDRESS:</h2>
+<p class="UIPanel" style="font-family:monospace;" id="myaddress"></p>
+<img class="qrcode" id="myqrcode" alt="QR Code" /><br/><br/>
+<button class="UIButton" style="color:red;" onclick="display_html_alert('#showKey')">SHOW PRIVATE KEY</button>
+</div>
+<div id="showKey" class="UIAlertWindow hidden">
+<h1>YOUR PRIVATE KEY</h1>
+<p>Never share your key with anyone. With this key, somebody will be able to <span style="color:red;">
+hack your account and steal your money.</span> To show your key, click the button below.
+<span style="color:red;"> Only do this if you know exactly what you are doing and understand the risks!</span></p>
+<button class="UIButton" style="color:red;" onclick="display_html_alert('#showPrivateKey')">I UNDERSTAND</button>
+</div>
+<div id="showPrivateKey" class="UIAlertWindow hidden">
+<p>YOUR PRIVATE KEY:</p>
+<p id="privateKeyText" class="UIPanel" style="color:red; font-family:monospace;font-weight:bold;"></p>
+</div>
+<div id="settings" class="UIAlertWindow hidden">
+<h3 class="center center-text">SETTINGS</h3><br/>
+<button class="UIButton center w90" id="mybalance"></button><br/>
+<button class="UIButton center w90" id="changename">CHANGE NAME</button><br/>
+<button class="UIButton center w90" id="soundbutton">SOUNDS: ON</button><br/>
+<button class="UIButton center w90" id="notificationbutton">NOTIFICATIONS: ON</button><br/>
+<button class="UIButton center w90" id="logout">SIGN OUT</button>
+</div>
+</center>
+<form id="sendpost">
+<p>Write a Post</p>
+<center>
+<textarea class="UITextArea" id="newpost"></textarea>
+</center>
+<input type="submit" id="sendbutton" class="UIButton" value="SEND" />
+</form>
+<h1>Your Posts</h1>
+<div id="posts"></div>
+</div>
+</body>
+</html>
