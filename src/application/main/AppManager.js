@@ -36,9 +36,8 @@ class AppManager {
 	}
 
 	onClose (e) {
-		if (this.isQuiting) {
+		if (this.isQuitting) {
 			this.mainWindow = null
-			this.app.quit()
 		} else {
 			e.preventDefault()
 			this.mainWindow.hide()
