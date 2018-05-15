@@ -10,6 +10,6 @@ Values are stored in OP_RETURN transactions on the BCH blockchain. Referenced
 data is stored inside magnet URLs, accessible via WebTorrent or similar
 software.
 
-|  **Hex Value**  |  Description  |  Example |
-|--------------------------------------------|
-| ```0x5501```    |  Content      | ```TODO```|
+|  **Hex Value**  |  Description  |    Example   |
+|------------------------------------------------|
+| ```0x5501```    |  Content      |  ```TODO```  |
