@@ -5,9 +5,10 @@
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "build-mac": "electron-packager . Unite --overwrite --platform=darwin --arch=x64 --icon=public/images/icon.icns --prune=true --out=build/Release",
-    "build-win": "electron-packager . Unite --overwrite --asar=true --platform=win32 --arch=ia32 --icon=public/images/icon.ico --prune=true --out=build/Release --version-string.CompanyName=Unite --version-string.FileDescription=Unite --version-string.ProductName=\"Unite\"",
-    "build-linux": "electron-packager . Unite --overwrite --asar=true --platform=linux --arch=x64 --icon=public/images/icon.png --prune=true --out=build/Release"
+    "debug": "electron --inspect=5858 .",
+    "package-mac": "electron-packager . Unite --overwrite --platform=darwin --arch=x64 --icon=public/images/icon.icns --prune=true --out=build/Release",
+    "package-win": "electron-packager . Unite --overwrite --asar=true --platform=win32 --arch=ia32 --icon=public/images/icon.ico --prune=true --out=build/Release --version-string.CompanyName=Unite --version-string.FileDescription=Unite --version-string.ProductName=\"Unite\"",
+    "package-linux": "electron-packager . Unite --overwrite --asar=true --platform=linux --arch=x64 --icon=public/images/icon.png --prune=true --out=build/Release"
   },
   "repository": "",
   "keywords": [

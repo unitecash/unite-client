@@ -1,5 +1,6 @@
 const electron = require('electron')
 const path = require('path')
+const url = require('url')
 const Tray = electron.Tray
 const Menu = electron.Menu
 const BrowserWindow = electron.BrowserWindow
@@ -34,48 +35,51 @@ class AppManager {
 		}
 	}
 
-	createWindow () {
-		this.contextMenu = Menu.buildFromTemplate([
-			{
-				label: 'Show App',
-				click: function () {
-					this.mainWindow.show()
-				}
-			},
-			{
-				label: 'Quit',
-				click: function () {
-					this.app.isQuiting = true
-					this.app.quit()
-				}
-			}
-		])
-
-		this.tray = new Tray(path.join(__dirname, 'public/images/icon.ico'))
-		this.tray.setContextMenu(contextMenu)
-		this.tray.on('click', this.onClick)
-
-		this.mainWindow = new BrowserWindow(this.options)
-		this.mainWindow.loadURL(url.format({
-			pathname: path.join(__dirname, 'public/index.html'),
-			protocol: 'file:',
-			slashes: true
-		}))
-		this.mainWindow.tray = tray
-		this.mainWindow.on('close', this.onClose)
+	onClose (e) {
+		if (this.isQuiting) {
+			this.mainWindow = null
+			this.app.quit()
+		} else {
+			e.preventDefault()
+			this.mainWindow.hide()
+		}
 	}
 
 	onClick () {
 		this.mainWindow.show()
 	}
 
-	onClose (e) {
-		if (this.app.isQuiting) {
-			this.mainWindow = null
-		} else {
-			e.preventDefault()
-			this.mainWindow.hide()
-		}
+	onTrayExit () {
+		this.isQuitting = true
+		this.mainWindow.close()
+	}
+
+	createWindow () {
+		this.isQuitting = false
+
+		this.contextMenu = Menu.buildFromTemplate([
+			{
+				label: 'Show App',
+				click: this.onClick.bind(this)
+			},
+			{
+				label: 'Quit',
+				click: this.onTrayExit.bind(this)
+			}
+		])
+
+		this.tray = new Tray('./public/images/icon.ico')
+		this.tray.setContextMenu(this.contextMenu)
+		this.tray.on('click', this.onClick.bind(this))
+
+		this.mainWindow = new BrowserWindow(this.options)
+		this.mainWindow.loadURL(url.format({
+			pathname: path.join(__dirname, '../../../public/index.html'),
+			protocol: 'file:',
+			slashes: true
+		}))
+		this.mainWindow.tray = this.tray
+		this.mainWindow.on('close', this.onClose.bind(this))
 	}
 
 }
