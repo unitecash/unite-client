@@ -5,7 +5,9 @@
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "debug": "electron --inspect=5858 .",
+    "dev": "webpack --config=\"./webpack.config.js\" --mode=\"development\" ./src/client/js/main.js",
+    "build": "webpack --config=\"./webpack.config.js\" --mode=\"production\" ./src/client/js/main.js",
+    "package-all": "electron-packager . Unite --all",
     "package-mac": "electron-packager . Unite --overwrite --platform=darwin --arch=x64 --icon=public/images/icon.icns --prune=true --out=build/Release",
     "package-win": "electron-packager . Unite --overwrite --asar=true --platform=win32 --arch=ia32 --icon=public/images/icon.ico --prune=true --out=build/Release --version-string.CompanyName=Unite --version-string.FileDescription=Unite --version-string.ProductName=\"Unite\"",
     "package-linux": "electron-packager . Unite --overwrite --asar=true --platform=linux --arch=x64 --icon=public/images/icon.png --prune=true --out=build/Release"
@@ -21,7 +23,8 @@
   "author": "The Unite.cash Developers",
   "license": "MIT",
   "devDependencies": {
-    "electron": "^1.8.4"
+    "electron": "^1.8.4",
+    "webpack-cli": "^2.1.3"
   },
   "dependencies": {
     "electron-packager": "^12.0.1",

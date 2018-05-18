@@ -9,7 +9,8 @@ class AppManager {
 
 	constructor (app, options) {
 		this.app = app
-		this.options = options = {}
+		this.options = options || {}
+		console.log(options.icon)
 		this.bindEvents()
 	}
 

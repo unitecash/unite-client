@@ -5,16 +5,9 @@
 <title>Unite</title>
 <link rel="stylesheet" type="text/css" href="./css/style.css" />
 <script>if(typeof module==='object'){window.module=module;module=undefined;}</script>
-<script src="./js/jquery.js"></script>
-<script src="./js/bitcoincash.min.js"></script>
-<script src="./js/sha512.js"></script>
-<script src="./js/socket.io.js"></script>
-<script src="./js/transaction.js"></script>
-<script src="./js/post.js"></script>
-<script src="./js/name.js"></script>
-<script src="./js/init.js"></script>
+<script src="./js/main.js"></script>
 <script>
-var fade = $('*:visible');
+/*var fade = $('*:visible');
 fade.hide();
 fade.fadeIn('slow');
 var loggedIn = false;
@@ -43,7 +36,7 @@ $(document).ready(function(){
 					// store URLs in localStorage for future use
 					localStorage.insightBaseURL = $('#insightURL').val();
 					localStorage.websockURL = $('#websockURL').val();
-					
+
 					// check if WIF was used for login
 					if($('#privatekeyfield').val().length > 1){
 						// TODO validate the private key
@@ -73,7 +66,7 @@ $(document).ready(function(){
 							key = new Buffer(key);
 							key = bch.crypto.Hash.sha256(key);
 							key = bch.crypto.BN.fromBuffer(key);
-							*/
+							*//*
 							$('#loginbutton').val('PLEASE WAIT...');
 							var key = sha512(sha512('memologin:'+$('#user').val()+$('#pass').val()).substr(0, $('#pass').val().length));
 							for(var i = 0; i < $('#user').val().length * $('#pass').val().length && i < 500; i++){
@@ -129,7 +122,7 @@ $(document).ready(function(){
 	$('#advanced').on('click', function(){
 		display_html_alert('#advancedwindow');
 	});
-});
+});*/
 </script>
 <script>if (window.module) module = window.module;</script>
 </head>
