@@ -8,110 +8,133 @@
  * @file Provides the App class.
  */
 
- import $ from './jquery.js'
+ import $ from './lib/jquery.js'
  window.jQuery = $
  window.$ = $
+import bchaddr from './lib/bchaddr.js'
+import bitcoincash from './lib/bitcoincash.js'
+window.bch = bitcoincash
+import './lib/pnglib.js'
+import './lib/identicon.js'
+import io from './lib/socket.io.js'
+window.io = io
+import './lib/sha512.js'
+import './lib/webtorrent.js'
+
+import Utilities from './Utilities.js'
 
 //import TransactionManager from './TransactionManager'
 //import PostManager from './PostManager'
 //import NameManager from './NameManager'
 
+// set up some useful global constants
+const CENTRAL_CONTENT_ADDRESS     = '1HBqvcE3jArLxTe4p2KRaDsRHHtEaqG66z'
+const CENTRAL_PROFILE_ADDRESS     = '1B4wyiAP3xYx2H8AqMqrwdMfbw7YwFd4C3'
+const CENTRAL_GROUPS_ADDRESS      = '14F1NbudfgRyEzau29HpexQPzHkghbWUKR'
+const CENTRAL_REPORT_ADDRESS      = '12xemQTP98jgkAUGuGqHghdVSufqR7htjY'
+
+const DUST_LIMIT_SIZE = 547;
+const FEE_RATIO = 1.95;
+
+const DEBUG_MODE = false
 
 export default class App {
 
-
 	constructor () {
-		this.userPrivateKey;
-		this.userAddress;
-		this.userDisplayName;
-		this.insightBaseURL; // TODO a function for returning this, so random URLs can be implemented
-		this.websock;        // same??? maybe??? we crazy folk like that?
-		this.highestZIndexUsed = 2; // tracks the highest Z index used by dialog boxes
-    alert('foo is in love with bar')
+		this.userPrivateKey
+		this.userAddress
+		this.userDisplayName
+		this.insightBaseURL
+		this.websock
+		this.highestZIndexUsed = 2
+    preformStartup()
 	}
 
-	//////////   MAIN INITIALIZATION CODE
-/*
-		// check to see if the user has logged in yet
-		if(sessionStorage.privateKey !== undefined &&
-				sessionStorage.insightBaseURL !== undefined){
+  preformStartup(){
+    // check to see if the user has logged in yet
+		if(sessionStorage.privateKey !== undefined){
 
-					// user was logged in, reconstruct environment from sessionStorage
-					insightBaseURL = sessionStorage.insightBaseURL;
-					privateKey = bch.PrivateKey.fromWIF(sessionStorage.privateKey);
-					address = privateKey.toAddress();
+			this.insightBaseURL = sessionStorage.insightBaseURL
+			this.userPrivateKey = bch.PrivateKey.fromWIF(sessionStorage.privateKey)
+			this.userAddress = this.userPrivateKey.toAddress()
 
-					// check that the localStorage data structures were defined
-					if(localStorage.names == undefined){
-						var names = [];
-						localStorage.names = JSON.stringify(names);
+			// Check that the localStorage data structures were defined
+			if(localStorage.names == undefined){
+				var names = [];
+				localStorage.names = JSON.stringify(names);
+			}
+
+			if(localStorage.posts == undefined){
+				var posts = [];
+				localStorage.posts = JSON.stringify(posts);
+			}
+
+			if(localStorage.transactions == undefined){
+				var transactions = [];
+				localStorage.transactions = JSON.stringify(transactions);
+			}
+
+			// Acquire notification permissions
+			if(Notification.permission == 'default' && localStorage.notification == undefined){
+				localStorage.notification = 1;
+				display_alert('<h1>Allow Notifications</h1><p>Notifications let you know when your friends send you tips or replies.</p>');
+				Notification.requestPermission(function(permission){
+          Utilities.goBack();
+          if(permission != 'granted'){
+						var newString = '<h1>NOTIFICATIONS</h1><p>Unite will work without ';
+						newString += 'notifications, but you won\'t be notified when you ';
+						newString += 'get messages or tips from your friends.</p>';
+						display_alert(newString);
+					}else{
+						display_success('We\'ll let you know when new things happen!', 2000);
 					}
+				});
+			}
 
-					if(localStorage.posts == undefined){
-						var posts = [];
-						localStorage.posts = JSON.stringify(posts);
-					}
+			// connect to the WebSocket
+			websock = io(sessionStorage.webSocketEndpoint);
+			websock.on('connect', function(){
 
-					if(localStorage.transactions == undefined){
-						var transactions = [];
-						localStorage.transactions = JSON.stringify(transactions);
-					}
+				// subscribe to the relevant channels
+				// TODO only subscribe to channels for addresses/events the user indicates
+				websock.emit('subscribe', 'inv');
 
-					// acquire notification permissions
-					if(Notification.permission == 'default' && localStorage.notification == undefined){
-						localStorage.notification = 1;
-						display_alert('<h1>Allow Notifications</h1><p>Notifications let you know when your friends send you tips or replies.</p>');
-						Notification.requestPermission(function(permission){
-							if(permission != 'granted'){
-								var newString = '<h1>NOTIFICATIONS</h1><p>Unite will work without ';
-								newString += 'notifications, but you won\'t be notified when you ';
-								newString += 'get messages or tips from your friends.</p>';
-								display_alert(newString);
-							}else{
-								display_success('<p>We\'ll let you know when new things happen!</p>', 2000);
-							}
-						});
-					}
+				// begin listening on the WebSocket
+				socket_listen(websock);
 
-					// connect to the WebSocket
-					websock = io(sessionStorage.webSocketEndpoint);
-					websock.on('connect', function(){
-
-						// subscribe to the relevant channels
-						// TODO only subscribe to channels for addresses/events the user indicates
-						websock.emit('subscribe', 'inv');
-
-						// begin listening on the WebSocket
-						socket_listen(websock);
-
-						// if it exists, call the function on the host page for the connect event
-						if(typeof ws_connect != 'undefined'){
-							ws_connect();
-						}
-					});
-
-					// go back or close dialog when user presses escape/back
-					$(document).on('keydown', function(e) {
-						if (e.keyCode == 27){
-							document.elementFromPoint(10, 10).click();
-						}
-					});
-
-					// listen for submit events from forms which may be present on the host page
-					listen_forms();
-
-					// call the data loading function present on host pages responsible for
-					// displaying dynamic content
-					if(typeof load_data != 'undefined'){
-						load_data();
-					}
-				}else{ // in case the user was not logged in
-					if(window.location.pathname.split('/').pop() != 'login.html'){
-						// redirect the user to login.html unless they were already there
-						window.location.href = 'login.html';
-					}
+				// if it exists, call the function on the host page for the connect event
+				if(typeof ws_connect != 'undefined'){
+					ws_connect();
 				}
-*/
+
+			});
+
+			// go back or close dialog when user presses escape/back
+			$(document).on('keydown', function(e) {
+				if (e.keyCode == 27){
+					Utilities.goBack();
+				}
+			});
+
+			// listen for submit events from forms which may be present on the host page
+			listen_forms();
+
+			// call the data loading function present on host pages responsible for
+			// displaying dynamic content
+			if(typeof load_data != 'undefined'){
+				load_data();
+			}
+
+		}else{ // In case the user was not logged in
+
+			if(window.location.pathname.split('/').pop() != 'login.html'){
+				// redirect the user to login.html unless they were already there
+				window.location.href = 'login.html';
+			}
+
+		}
+  }
+
 
 			//////////  USEFUL DATA PARSING FUNCTIONS
 

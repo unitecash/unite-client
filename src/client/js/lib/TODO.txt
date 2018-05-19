@@ -1,0 +1,2 @@
+Non-minified versions of these libraries should be obtained.
+This way, WebPack can preform the most efficient optimizations.

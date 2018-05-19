@@ -1,4 +1,4 @@
-function sha512(str) {
+window.sha512 = function(str) {
   function int64(msint_32, lsint_32) {
     this.highOrder = msint_32;
     this.lowOrder = lsint_32;
