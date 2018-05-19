@@ -1,9 +1,10 @@
 /**
  * Unite Client Implementation
  * Author: The Unite.cash Developers
- * License: MIT
+ * License: GNU AGPL v3
  *
- * This script provides the frameworks for the implementation of the Unite protocol (outlined in the protocol documentation).
+ * This script provides the frameworks for the implementation of the Unite protocol which
+ * is outlined in the protocol documentation.
  *
  * @file Provides the App class.
  */
@@ -133,41 +134,8 @@ export default class App {
 			}
 
 		}
-    
+
   }
-
-
-			//////////  USEFUL DATA PARSING FUNCTIONS
-
-			// for converting hex into ascii
-	hex2a(hexx) {
-		hex = hexx.toString();
-		str = '';
-		for(i = 0; i < hex.length; i += 2)
-		{
-			str += String.fromCharCode(parseInt(hex.substr(i, 2), 16));
-		}
-		return str;
-	}
-	pop(){
-		new Audio('./res/pop.wav').play();
-	}
-
-	boink(){
-		new Audio('./res/boink.wav').play();
-	}
-
-	beep(){
-		new Audio('./res/beep.wav').play();
-	}
-
-	woosh(){
-		new Audio('./res/woosh.wav').play();
-	}
-
-	swooosh(){
-		new Audio('./res/swooosh.wav').play();
-	}
 
 	// Provides a standard way of displaying error banners.
 	display_error(error, time=5000){
@@ -212,20 +180,7 @@ export default class App {
 	display_alert(message){
 		pop();
 		// get a random ID
-		var randID = sha512('tomato'+new Date().toTimeString()+error).substr(0, 16);
-		var newString = '<div style="z-index:'+highestZIndexUsed+';" class="UIDimmedBackground" id="';
-		newString += randID+'a" onclick="$(\'#'+randID+'\').fadeOut(100);';
-		newString += '$(\'#'+randID+'a\').fadeOut(100);woosh();setTimeout(function(){';
-		newString += '$(\'#'+randID+'a\').remove();}, 150);"></div>';
-		newString += '<div style="z-index:'+(highestZIndexUsed+1)+';" class="UIAlertWindow" id="';
-		newString += randID+'">'+message+'</div>';
-		$('body').append(newString);
-		$('#'+randID).hide();
-		$('#'+randID+'a').hide();
-		$('#'+randID+'a').fadeIn(100);
-		$('#'+randID).slideDown(100);
-		document.activeElement.blur();
-		highestZIndexUsed += 2;
+
 	}
 
 		// Displays an alert from an HTML template present on the host page
