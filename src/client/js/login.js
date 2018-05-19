@@ -22,6 +22,8 @@ import './lib/sha512.js'
 import './lib/webtorrent.js'
 
 import App from './App'
+import Popup from './Popup'
+window.PopupFactory = Popup
 
 window.app = new App()
 
@@ -30,7 +32,6 @@ fade.hide()
 fade.fadeIn('slow')
 var loggedIn = false
 $(document).ready(function(){
-	$('#advancedwindow').hide()
 	$('#user').focus()
 	// determine if values were stored in localStorage
 	if(localStorage.insightBaseURL == undefined){
@@ -61,31 +62,39 @@ $(document).ready(function(){
 						sessionStorage.insightBaseURL = $('#insightURL').val()
 						sessionStorage.webSocketEndpoint = $('#websockURL').val()
 						// TODO remember their last page
-						// TODO validate the websock and insight URLs work
 						window.location.href = 'profile.html'
 					}else{
 						if($('#user').val().length < 1){
-							app.display_error('Please enter a username')
-						}else if($('#pass').val().length < 12){
-							var newString = '<h1>PASSWORD SECURITY</h1><p>You MUST choose a complex password '
-							newString += 'or your funds could be stolen!</p><p>Please choose a password that '
-							newString += '(at MINIMUM)...</p<ul style="align:left;text-align:left"><li>Is 12 characters in length</li>'
-							newString += '<li>Does not contain a name or common word</li><li>Contains a number</li>'
-							newString += '<li>Contains lowercase and uppercase letters</li></ul>'
-							app.display_alert(newString)
+							new ErrorBanner('Please enter a username').show()
+						}else if($('#pass').val().length < 12){ // [TODO]: validate this
+							var p = new Popup()
+							p.setTitle('PASSWORD SECURITY')
+							p.addText(`<p>
+								You MUST choose a complex password for this or your funds could
+								be stolen!
+							</p>
+							<p>
+								Please choose a password that, AT MINIMUM, meets the following
+								requirements:</p>
+							<ul>
+								<li>Is at least 12 characters in length</li>
+								<li>Does not contain a name or common word</li>
+								<li>Contains a number and a symbol</li>
+								<li>Contains lowercase and uppercase letters</li>
+							</ul>`)
+							p.show()
 						}else if($('#insightURL').val().length < 6){
-							app.display_error('verify the insight URL is valid')
+							new ErrorBanner('Is that Insight URL correct?').show()
 						}else if($('#websockURL').val().length < 6){
-							app.display_error('verify the WebSocket URL is valid')
+							new ErrorBanner('That WebSocket URL smells fishy...').show()
 						}else{
-							// TODO add key stretching to make this more secure
-							var key = sha512(sha512('memologin:'+$('#user').val()+$('#pass').val()))
-							key = new Buffer(key)
-							key = bch.crypto.Hash.sha256(key)
-							key = bch.crypto.BN.fromBuffer(key)
 							$('#loginbutton').val('PLEASE WAIT...')
-							var key = sha512(sha512('memologin:'+$('#user').val()+$('#pass').val()).substr(0, $('#pass').val().length))
-							for(var i = 0; i < $('#user').val().length * $('#pass').val().length && i < 500; i++){
+							var key = sha512('memologin:'+$('#user').val()+$('#pass').val())
+							key = key.substr(0, $('#pass').val().length)
+							key = sha512(key)
+							for(var i = 0;
+									i < $('#user').val().length * $('#pass').val().length
+									&& i < 500; i++) {
 								var n = 'bar'
 								var m = 3301
 								for(var j = 0; j < i; j++){
@@ -94,7 +103,8 @@ $(document).ready(function(){
 								}
 								key = sha512(n + key + (m-i))
 							}
-							sessionStorage.privateKey = new bch.PrivateKey(bch.crypto.BN.fromString(key.substr(0, 32))).toWIF()
+							key = bch.crypto.BN.fromString(key.substr(0, 32))
+							sessionStorage.privateKey = new bch.PrivateKey(key).toWIF()
 							sessionStorage.insightBaseURL = $('#insightURL').val()
 							sessionStorage.webSocketEndpoint = $('#websockURL').val()
 							// TODO remember their last page
@@ -102,39 +112,60 @@ $(document).ready(function(){
 						}
 					}
 				})
-				testSock.on('error', function(){
+				testSock.on('error', function() {
 					if(!loggedIn){
-						testSock.disconnect();
-						display_alert('<h1>CHECK WEBSOCKET URL</h1><p>It doesn\'t seem like your WebSocket URL is connecting properly. Make sure it begins with "wss://..."</p>');
+						testSock.disconnect()
+						var p = new Popup()
+						p.setTitle('CHECK WEBSOCKET URL')
+						p.addText(`
+							It doesn\'t seem like your WebSocket URL is connecting properly.
+							Make sure it begins with "wss://..."`)
+						p.show()
 					}
-				});
+				})
 				testSock.on('connect_failed', function(){
 					if(!loggedIn){
-						testSock.disconnect();
-						display_alert('<h1>CHECK WEBSOCKET URL</h1><p>It doesn\'t seem like your WebSocket URL is connecting properly. Make sure it begins with "wss://..."</p>');
+						testSock.disconnect()
+						var p = new Popup()
+						p.setTitle('CHECK WEBSOCKET URL')
+						p.addText(`
+							It doesn\'t seem like your WebSocket URL is connecting properly.
+							Make sure it begins with "wss://..."`)
+						p.show()
 					}
 				});
 				testSock.on('connect_error', function(){
 					if(!loggedIn){
-						testSock.disconnect();
-						display_alert('<h1>CHECK WEBSOCKET URL</h1><p>It doesn\'t seem like your WebSocket URL is connecting properly. Make sure it begins with "wss://..."</p>');
+						testSock.disconnect()
+						var p = new Popup()
+						p.setTitle('CHECK WEBSOCKET URL')
+						p.addText(`
+							It doesn\'t seem like your WebSocket URL is connecting properly.
+							Make sure it begins with "wss://..."`)
+						p.show()
 					}
 				});
 			},
 			error: function(data){
-				display_alert('<h1>CHECK INSIGHT URL</h1><p>It doesn\'t seem like your Insight URL is working. Make sure it includes the ".../insight-api/" or ".../api" part.</p>');
+				new ErrorBanner('Is that Insight URL correct?').show()
 			}
-		});
-	});
+		})
+	})
 	// when we click sign up
 	$('#signupButton').on('click', function(ev){
 		ev.preventDefault()
-		var newString = '<h1>NO NEED TO SIGN UP WITH Unite!</h1><p>Just enter a unique username and a secure password '
-		newString += 'to create your profile!</p><p>Unite has no central authority. That means nobody can stop you from '
-		newString += 'creating an account, and there is nobody to "sign up" with.</p>'
-		display_alert(newString)
+		var p = new Popup()
+		p.setTitle('NO NEED TO SIGN UP WITH UNITE!')
+		p.addText(`<p>
+			Just enter a unique username and a secure password to create your profile!
+		</p>
+		<p>
+			Unite has no central authority. That means nobody can stop you from
+			creating an account, and there is nobody to "sign up" with.
+		</p>`)
+		p.show()
 	})
 	$('#advanced').on('click', function(){
-		display_html_alert('#advancedwindow')
+		window.app.display_html_alert('#advancedwindow')
 	})
 })

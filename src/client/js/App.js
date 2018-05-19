@@ -3,8 +3,8 @@
  * Author: The Unite.cash Developers
  * License: GNU AGPL v3
  *
- * This script provides the frameworks for the implementation of the Unite protocol which
- * is outlined in the protocol documentation.
+ * This script provides the frameworks for the implementation of the Unite
+ * protocol which is outlined in the protocol documentation.
  *
  * @file Provides the App class.
  */
@@ -22,7 +22,8 @@ window.io = io
 import './lib/sha512.js'
 import './lib/webtorrent.js'
 
-import Utilities from './Utilities.js'
+import Utilities from './Utilities'
+import Popup from './Popup'
 
 //import TransactionManager from './TransactionManager'
 //import PostManager from './PostManager'
@@ -48,6 +49,7 @@ export default class App {
 		this.insightBaseURL
 		this.websock
 		this.highestZIndexUsed = 2
+    window.Utilities = new Utilities()
     this.preformStartup()
 	}
 
@@ -76,18 +78,24 @@ export default class App {
 			}
 
 			// Acquire notification permissions
-			if(Notification.permission == 'default' && localStorage.notification == undefined){
+			if(Notification.permission == 'default'
+          && localStorage.notification == undefined){
 				localStorage.notification = 1;
-				display_alert('<h1>Allow Notifications</h1><p>Notifications let you know when your friends send you tips or replies.</p>');
+        var p = new Popup()
+        p.setTitle('ALLOW NOTIFICATIONS')
+        p.addText('Notifications let you know when your friends send you tips ')
+        p.addText('or replies')
+        p.show()
 				Notification.requestPermission(function(permission){
           Utilities.goBack();
           if(permission != 'granted'){
-						var newString = '<h1>NOTIFICATIONS</h1><p>Unite will work without ';
-						newString += 'notifications, but you won\'t be notified when you ';
-						newString += 'get messages or tips from your friends.</p>';
-						display_alert(newString);
+            var p = new Popup()
+            p.setTitle('NOTIFICATIONS')
+            p.addText('Unite will work without notifications, but you might ')
+            p.addText('miss out when things happen.')
+            p.show()
 					}else{
-						display_success('We\'ll let you know when new things happen!', 2000);
+						new SuccessBanner('We\'ll let you know when things happen!').show()
 					}
 				});
 			}
@@ -97,13 +105,13 @@ export default class App {
 			websock.on('connect', function(){
 
 				// subscribe to the relevant channels
-				// TODO only subscribe to channels for addresses/events the user indicates
+				// TODO only subscribe to channels for addresses the user indicates
 				websock.emit('subscribe', 'inv');
 
 				// begin listening on the WebSocket
 				socket_listen(websock);
 
-				// if it exists, call the function on the host page for the connect event
+				// if it exists call the function on the host page for the connect event
 				if(typeof ws_connect != 'undefined'){
 					ws_connect();
 				}
@@ -117,7 +125,7 @@ export default class App {
 				}
 			});
 
-			// listen for submit events from forms which may be present on the host page
+			// listen for submit events from forms which are on the host page
 			listen_forms();
 
 			// call the data loading function present on host pages responsible for
@@ -170,17 +178,6 @@ export default class App {
 		setTimeout(function(){
 			$('#'+randID).slideUp('fast');
 		}, time);
-	}
-
-		// Provides a standard way of displaying alert dialog boxes.
-		/* TODO:
-		- Add the ability to use multiple buttons with custom callback functions
-		- Add a callback for when the dialog is closed
-		*/
-	display_alert(message){
-		pop();
-		// get a random ID
-
 	}
 
 		// Displays an alert from an HTML template present on the host page
