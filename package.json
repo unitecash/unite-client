@@ -5,8 +5,8 @@
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "dev": "webpack --config=\"./webpack.config.js\" --mode=\"development\" ./src/client/js/main.js",
-    "build": "webpack --config=\"./webpack.config.js\" --mode=\"production\" ./src/client/js/main.js",
+    "dev": "webpack --config=\"./webpack.config.js\" --mode=\"development\"",
+    "build": "webpack --config=\"./webpack.config.js\" --mode=\"production\"",
     "package-all": "electron-packager . Unite --all",
     "package-mac": "electron-packager . Unite --overwrite --platform=darwin --arch=x64 --icon=public/images/icon.icns --prune=true --out=build/Release",
     "package-win": "electron-packager . Unite --overwrite --asar=true --platform=win32 --arch=ia32 --icon=public/images/icon.ico --prune=true --out=build/Release --version-string.CompanyName=Unite --version-string.FileDescription=Unite --version-string.ProductName=\"Unite\"",

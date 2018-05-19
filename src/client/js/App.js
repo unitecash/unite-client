@@ -47,7 +47,7 @@ export default class App {
 		this.insightBaseURL
 		this.websock
 		this.highestZIndexUsed = 2
-    preformStartup()
+    this.preformStartup()
 	}
 
   preformStartup(){

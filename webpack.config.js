@@ -3,7 +3,8 @@ const webpack = require("webpack")
 
 module.exports = {
   entry: [
-    "./src/client/js/main.js"
+    "./src/client/js/main.js",
+    "./src/client/js/login.js"
   ],
   output: {
     filename: "[name].js",
