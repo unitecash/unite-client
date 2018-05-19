@@ -1,4 +1,17 @@
 
+import $ from './lib/jquery.js'
+window.jQuery = $
+window.$ = $
+import bchaddr from './lib/bchaddr.js'
+import bitcoincash from './lib/bitcoincash.js'
+window.bch = bitcoincash
+import './lib/pnglib.js'
+import './lib/identicon.js'
+import io from './lib/socket.io.js'
+window.io = io
+import './lib/sha512.js'
+import './lib/webtorrent.js'
+
 import App from './App'
 
 app = new App()
@@ -32,7 +45,6 @@ $(document).ready(function(){
 					// store URLs in localStorage for future use
 					localStorage.insightBaseURL = $('#insightURL').val();
 					localStorage.websockURL = $('#websockURL').val();
-
 					// check if WIF was used for login
 					if($('#privatekeyfield').val().length > 1){
 						// TODO validate the private key
@@ -62,7 +74,6 @@ $(document).ready(function(){
 							key = new Buffer(key);
 							key = bch.crypto.Hash.sha256(key);
 							key = bch.crypto.BN.fromBuffer(key);
-
 							$('#loginbutton').val('PLEASE WAIT...');
 							var key = sha512(sha512('memologin:'+$('#user').val()+$('#pass').val()).substr(0, $('#pass').val().length));
 							for(var i = 0; i < $('#user').val().length * $('#pass').val().length && i < 500; i++){
@@ -109,13 +120,13 @@ $(document).ready(function(){
 	});
 	// when we click sign up
 	$('#signupButton').on('click', function(ev){
-		ev.preventDefault();
-		var newString = '<h1>NO NEED TO SIGN UP WITH Unite!</h1><p>Just enter a unique username and a secure password ';
-		newString += 'to create your profile!</p><p>Unite has no central authority. That means nobody can stop you from ';
-		newString += 'creating an account, and there is nobody to "sign up" with.</p>';
-		display_alert(newString);
-	});
+		ev.preventDefault()
+		var newString = '<h1>NO NEED TO SIGN UP WITH Unite!</h1><p>Just enter a unique username and a secure password '
+		newString += 'to create your profile!</p><p>Unite has no central authority. That means nobody can stop you from '
+		newString += 'creating an account, and there is nobody to "sign up" with.</p>'
+		display_alert(newString)
+	})
 	$('#advanced').on('click', function(){
-		display_html_alert('#advancedwindow');
-	});
+		display_html_alert('#advancedwindow')
+	})
 })

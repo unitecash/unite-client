@@ -2,10 +2,10 @@ const path = require('path')
 const webpack = require("webpack")
 
 module.exports = {
-  entry: [
-    "./src/client/js/main.js",
-    "./src/client/js/login.js"
-  ],
+  entry: {
+    main: "./src/client/js/main.js",
+    login: "./src/client/js/login.js"
+  },
   output: {
     filename: "[name].js",
     path: path.resolve(__dirname, 'public/js')

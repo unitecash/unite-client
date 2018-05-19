@@ -8,9 +8,9 @@
  * @file Provides the App class.
  */
 
- import $ from './lib/jquery.js'
- window.jQuery = $
- window.$ = $
+import $ from './lib/jquery.js'
+window.jQuery = $
+window.$ = $
 import bchaddr from './lib/bchaddr.js'
 import bitcoincash from './lib/bitcoincash.js'
 window.bch = bitcoincash
@@ -133,6 +133,7 @@ export default class App {
 			}
 
 		}
+    
   }
 
 
