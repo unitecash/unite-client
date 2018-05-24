@@ -1,0 +1,15 @@
+{
+	"compilerOptions": {
+		"outDir": "./public/js/",
+		"noImplicitAny": true,
+		"removeComments": true,
+		"preserveConstEnums": true,
+		"sourceMap": true,
+		"module": "es6",
+		"target": "es5",
+		"allowJs": true
+	},
+	"exclude": [
+		"node_modules"
+	]
+}
