@@ -34,10 +34,10 @@ var loggedIn = false
 $(document).ready(function(){
 	$('#user').focus()
 	// determine if values were stored in localStorage
-	if(localStorage.insightBaseURL == undefined){
+	if(localStorage.insightBaseURL === undefined){
 		localStorage.insightBaseURL = 'https://bitcoincash.blockexplorer.com/api/'
 	}
-	if(localStorage.websockURL == undefined){
+	if(localStorage.websockURL === undefined){
 		localStorage.websockURL = 'wss://bitcoincash.blockexplorer.com'
 	}
 	$('#insightURL').val(localStorage.insightBaseURL)

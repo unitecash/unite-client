@@ -9,17 +9,17 @@ const webpack = require('webpack')
 const config = {
   devtool: 'source-map',
   devServer: {
-    contentBase: path.join(__dirname, 'dist')
+    contentBase: path.join(__dirname, 'public')
   },
   entry: {
-    main: "./src/client/js/main.ts",
-    login: "./src/client/js/login.ts"
+    main: "./src/client/js/main.js",
+    login: "./src/client/js/login.js"
   },
   resolve: {
     extensions: ['.tsx', '.ts', '.js']
   },
   output: {
-    path: path.resolve(__dirname, 'dist'),
+    path: path.resolve(__dirname, 'public'),
     filename: 'js/[name].js'
   },
   module: {

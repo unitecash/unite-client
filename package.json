@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "lint": "standard --parser typescript-eslint-parser --plugin typescript ./src/**/*.ts",
+    "lint-javascript": "standard ./src/**/*.js",
     "test": "karma start tests/karma.conf.js",
     "test:feature": "karma start tests/feature/karma.conf.js",
     "test:unit": "karma start tests/unit/karma.conf.js",
