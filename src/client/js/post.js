@@ -1,4 +1,12 @@
-//////////   POST PARSING, RENDERING AND MANIPULATION
+/**
+ * Post
+ * Author: The Unite.cash Developers
+ * License: GNU AGPL v3
+ *
+ * A class for storing data related to the contents of posts
+ *
+ * @file Provides the Post class
+ */
 
 // Adds a post to localStorage cache if it is not there
 var add_post_to_db = function(post){
@@ -161,10 +169,10 @@ var init_post = function(post){
 			if(post.isLive){
 				parse_notification(post);
 			}
-			
+
 			// we can also fetch image data, extended messages, parent transactions,
 			// number of replies, tips etc in the same way based on tx type
-			
+
 			if(post.type == '5504'){ // set name of sender to their new name
 				set_name(post.sender, post.data, post.time);
 			}
@@ -178,7 +186,7 @@ var init_post = function(post){
 				// for this type, the post.data is a magnet link.
 				// post.displayContent will be the contents of the torrent. (get it from webtorrent/webseed)
 			}
-			
+
 			// pass it to the page we are on, so that page can decide how to display it
 			if(typeof handle_new_post != undefined){
 				handle_new_post(post);
@@ -208,9 +216,3 @@ var get_replies = function(post){
 		});
 	});
 }
-
-
-
-
-
-

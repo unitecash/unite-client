@@ -1,4 +1,15 @@
-//////////   TRANSACTION PARSING, HANDLING AND MANIPULATION
+/**
+ * Transaction
+ * Author: The Unite.cash Developers
+ * License: GNU AGPL v3
+ *
+ * A class for storing transaction data
+ *
+ * @file Provides the Transaction class
+ */
+
+
+
 
 // takes a transaction as input and returns a post after adding the post to posts cache
 /* PARAMS:
@@ -7,7 +18,7 @@
 */
 var parse_tx = function(input, isLive){
 	return new Promise(function(resolve, reject){
-	
+
 		var time = input.time;
 		var tx_from_addr = input.vin[0].addr;
 		var parent = 'none', code = 'none', data = 'none';
@@ -72,7 +83,7 @@ var get_transactions = function(addr){
 /* TODO:
 - Return multiple small UTXOs if a large one is not found.
 - Accept a bitcoincash.js transaction as a parameter, append the relevant UTXOs,
-  then return the modified bitcoincash.js "bch.Transaction" object instead of 
+  then return the modified bitcoincash.js "bch.Transaction" object instead of
   just the UTXO.
 - Rename the function from find_utxo(address string) to add_utxos(bch.Transaction)
 */

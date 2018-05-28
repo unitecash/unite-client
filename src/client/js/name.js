@@ -1,4 +1,14 @@
-//////////   CACHING, GETTING AND SETTING NAMES
+/**
+ * Name
+ * Author: The Unite.cash Developers
+ * License: GNU AGPL v3
+ *
+ * A class to store data related to users' names
+ *
+ * @file Provides the Name class
+ */
+
+
 
 // Returns the name object given an address. Uses caching, returns first 6 of address if no name.
 /* TODO:
