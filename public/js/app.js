@@ -881,16 +881,19 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _lib_webtorrent_js__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(_lib_webtorrent_js__WEBPACK_IMPORTED_MODULE_7__);
 /* harmony import */ var _Utilities__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./Utilities */ "./src/client/js/Utilities.js");
 /* harmony import */ var _Popup__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./Popup */ "./src/client/js/Popup.js");
-/* harmony import */ var _Transaction__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./Transaction */ "./src/client/js/Transaction.js");
-/* harmony import */ var _Transaction__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(_Transaction__WEBPACK_IMPORTED_MODULE_10__);
-/* harmony import */ var _TransactionManager__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./TransactionManager */ "./src/client/js/TransactionManager.js");
-/* harmony import */ var _Post__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./Post */ "./src/client/js/Post.js");
-/* harmony import */ var _Post__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(_Post__WEBPACK_IMPORTED_MODULE_12__);
-/* harmony import */ var _PostManager__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./PostManager */ "./src/client/js/PostManager.js");
-/* harmony import */ var _Name__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./Name */ "./src/client/js/Name.js");
-/* harmony import */ var _Name__WEBPACK_IMPORTED_MODULE_14___default = /*#__PURE__*/__webpack_require__.n(_Name__WEBPACK_IMPORTED_MODULE_14__);
-/* harmony import */ var _NameManager__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./NameManager */ "./src/client/js/NameManager.js");
-/* harmony import */ var _NameManager__WEBPACK_IMPORTED_MODULE_15___default = /*#__PURE__*/__webpack_require__.n(_NameManager__WEBPACK_IMPORTED_MODULE_15__);
+/* harmony import */ var _InteractivePopup__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./InteractivePopup */ "./src/client/js/InteractivePopup.js");
+/* harmony import */ var _Transaction__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./Transaction */ "./src/client/js/Transaction.js");
+/* harmony import */ var _Transaction__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(_Transaction__WEBPACK_IMPORTED_MODULE_11__);
+/* harmony import */ var _TransactionManager__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./TransactionManager */ "./src/client/js/TransactionManager.js");
+/* harmony import */ var _Post__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./Post */ "./src/client/js/Post.js");
+/* harmony import */ var _Post__WEBPACK_IMPORTED_MODULE_13___default = /*#__PURE__*/__webpack_require__.n(_Post__WEBPACK_IMPORTED_MODULE_13__);
+/* harmony import */ var _PostManager__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./PostManager */ "./src/client/js/PostManager.js");
+/* harmony import */ var _Name__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./Name */ "./src/client/js/Name.js");
+/* harmony import */ var _Name__WEBPACK_IMPORTED_MODULE_15___default = /*#__PURE__*/__webpack_require__.n(_Name__WEBPACK_IMPORTED_MODULE_15__);
+/* harmony import */ var _NameManager__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./NameManager */ "./src/client/js/NameManager.js");
+/* harmony import */ var _NameManager__WEBPACK_IMPORTED_MODULE_16___default = /*#__PURE__*/__webpack_require__.n(_NameManager__WEBPACK_IMPORTED_MODULE_16__);
+/* harmony import */ var _NetworkManager__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./NetworkManager */ "./src/client/js/NetworkManager.js");
+/* harmony import */ var _NetworkManager__WEBPACK_IMPORTED_MODULE_17___default = /*#__PURE__*/__webpack_require__.n(_NetworkManager__WEBPACK_IMPORTED_MODULE_17__);
 /**
  * Unite Client Implementation
  * Author: The Unite.cash Developers
@@ -920,17 +923,21 @@ window.Utilities = _Utilities__WEBPACK_IMPORTED_MODULE_8__["default"]
 
 window.Popup = _Popup__WEBPACK_IMPORTED_MODULE_9__["default"]
 
-window.Transaction = _Transaction__WEBPACK_IMPORTED_MODULE_10___default.a
+window.InteractivePopup = _InteractivePopup__WEBPACK_IMPORTED_MODULE_10__["default"]
 
-window.TransactionManager = _TransactionManager__WEBPACK_IMPORTED_MODULE_11__["default"]
+window.Transaction = _Transaction__WEBPACK_IMPORTED_MODULE_11___default.a
 
-window.Post = _Post__WEBPACK_IMPORTED_MODULE_12___default.a
+window.TransactionManager = _TransactionManager__WEBPACK_IMPORTED_MODULE_12__["default"]
 
-window.PostManager = _PostManager__WEBPACK_IMPORTED_MODULE_13__["default"]
+window.Post = _Post__WEBPACK_IMPORTED_MODULE_13___default.a
 
-window.Name = _Name__WEBPACK_IMPORTED_MODULE_14___default.a
+window.PostManager = _PostManager__WEBPACK_IMPORTED_MODULE_14__["default"]
 
-window.NameManager = _NameManager__WEBPACK_IMPORTED_MODULE_15___default.a
+window.Name = _Name__WEBPACK_IMPORTED_MODULE_15___default.a
+
+window.NameManager = _NameManager__WEBPACK_IMPORTED_MODULE_16___default.a
+
+window.NetworkManager = _NetworkManager__WEBPACK_IMPORTED_MODULE_17___default.a
 
 // set up some useful global constants
 const CENTRAL_CONTENT_ADDRESS     = '1HBqvcE3jArLxTe4p2KRaDsRHHtEaqG66z'
@@ -989,7 +996,7 @@ class App {
         p.addText('or replies')
         p.show()
 				Notification.requestPermission(function(permission){
-          _Utilities__WEBPACK_IMPORTED_MODULE_8__["default"].goBack();
+          _Utilities__WEBPACK_IMPORTED_MODULE_8__["default"].goBack()
           if(permission != 'granted'){
             var p = new _Popup__WEBPACK_IMPORTED_MODULE_9__["default"]()
             p.setTitle('NOTIFICATIONS')
@@ -999,48 +1006,48 @@ class App {
 					}else{
 						new SuccessBanner('We\'ll let you know when things happen!').show()
 					}
-				});
+				})
 			}
 
 			// connect to the WebSocket
-			websock = _lib_socket_io_js__WEBPACK_IMPORTED_MODULE_5___default()(sessionStorage.webSocketEndpoint);
-			websock.on('connect', function(){
+			var websock = _lib_socket_io_js__WEBPACK_IMPORTED_MODULE_5___default()(sessionStorage.webSocketEndpoint);
+			websock.on('connect', () => {
 
 				// subscribe to the relevant channels
 				// TODO only subscribe to channels for addresses the user indicates
-				websock.emit('subscribe', 'inv');
+				websock.emit('subscribe', 'inv')
 
 				// begin listening on the WebSocket
-				socket_listen(websock);
+				this.socket_listen(websock)
 
 				// if it exists call the function on the host page for the connect event
 				if(typeof ws_connect != 'undefined'){
-					ws_connect();
+					ws_connect()
 				}
 
-			});
+			})
 
 			// go back or close dialog when user presses escape/back
 			_lib_jquery_js__WEBPACK_IMPORTED_MODULE_0___default()(document).on('keydown', function(e) {
 				if (e.keyCode == 27){
-					_Utilities__WEBPACK_IMPORTED_MODULE_8__["default"].goBack();
+					_Utilities__WEBPACK_IMPORTED_MODULE_8__["default"].goBack()
 				}
-			});
+			})
 
 			// listen for submit events from forms which are on the host page
-			listen_forms();
+			this.listen_forms()
 
 			// call the data loading function present on host pages responsible for
 			// displaying dynamic content
-			if(typeof load_data != 'undefined'){
-				load_data();
+			if(typeof appInit != 'undefined'){
+				appInit()
 			}
 
 		}else{ // In case the user was not logged in
 
 			if(window.location.pathname.split('/').pop() != 'login.html'){
 				// redirect the user to login.html unless they were already there
-				window.location.href = 'login.html';
+				window.location.href = 'login.html'
 			}
 
 		}
@@ -1049,7 +1056,7 @@ class App {
 
 	// Provides a standard way of displaying error banners.
 	display_error(error, time=5000){
-		boink();
+		_Utilities__WEBPACK_IMPORTED_MODULE_8__["default"].boink()
 		// get a random ID
 		var randID = sha512('potato'+new Date().toTimeString()+error).substr(0, 16);
 		var newString = '<div class="banner error" id="'+randID+'">'+error;
@@ -1313,6 +1320,93 @@ window.app = new App()
 
 /***/ }),
 
+/***/ "./src/client/js/InteractivePopup.js":
+/*!*******************************************!*\
+  !*** ./src/client/js/InteractivePopup.js ***!
+  \*******************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return InteractivePopup; });
+/**
+ * Interactive popup
+ * Author: The Unite.cash Developers
+ * License: GNU AGPL v3
+ *
+ * Provides a class for creating interactive popup windows out of HTML elements.
+ *
+ * @file Defines the InteractivePopup class.
+ */
+
+class InteractivePopup {
+
+  constructor (tag, options) {
+    if (typeof options === "undefined") {
+      options = {}
+    }
+    if (typeof options.animationSpeed === "undefined") {
+      options.animationSpeed = 100
+    }
+    if (typeof options.playSound === "undefined") {
+      options.playSound = true
+    }
+    this.options = options
+    this.backgroundID = Utilities.getRandomChars(16)
+    this.tag = tag
+    return this
+  }
+
+  show () {
+    if(this.options.playSound){
+      Utilities.pop()
+    }
+
+    var alertBackground = $('<div></div>')
+    alertBackground.attr('style', 'z-index: ' + app.highestZIndexUsed)
+    alertBackground.attr('class', 'UIDimmedBackground hidden')
+    alertBackground.attr('id', this.backgroundID)
+    $('body').on('click', '#' + this.backgroundID, () => {
+      this.hide()
+    })
+
+		$('body').append(alertBackground)
+		$('#' + this.backgroundID).fadeIn(this.options.animationSpeed)
+    $(this.tag).slideDown(this.options.animationSpeed)
+    $(this.tag).attr('style', 'z-index:'+(app.highestZIndexUsed+1))
+    $(this.tag).css('display', 'inline')
+
+		document.activeElement.blur()
+		app.highestZIndexUsed += 2
+  }
+
+  // thanks to https://stackoverflow.com/a/7259663/5860286 for this
+  hide () {
+    if(this.options.playSound) {
+      Utilities.woosh()
+    }
+    $(this.tag).fadeOut(this.options.animationSpeed)
+    $.when($('#' + this.backgroundID).fadeOut(this.options.animationSpeed)).done(function() {
+      $('#' + this.backgroundID).remove()
+    })
+  }
+
+  setAnimationSpeed(speed){
+    this.options.animationSpeed = speed
+    return this
+  }
+
+  setOptions(options){
+    this.options = options;
+    return this
+  }
+
+}
+
+
+/***/ }),
+
 /***/ "./src/client/js/Name.js":
 /*!*******************************!*\
   !*** ./src/client/js/Name.js ***!
@@ -1444,6 +1538,17 @@ var get_name_hash = function(addr){
 
 /***/ }),
 
+/***/ "./src/client/js/NetworkManager.js":
+/*!*****************************************!*\
+  !*** ./src/client/js/NetworkManager.js ***!
+  \*****************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+
+
+/***/ }),
+
 /***/ "./src/client/js/Popup.js":
 /*!********************************!*\
   !*** ./src/client/js/Popup.js ***!
@@ -1454,9 +1559,6 @@ var get_name_hash = function(addr){
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Popup; });
-/* harmony import */ var _lib_jquery_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./lib/jquery.js */ "./src/client/js/lib/jquery.js");
-/* harmony import */ var _lib_jquery_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_lib_jquery_js__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _Utilities__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Utilities */ "./src/client/js/Utilities.js");
 /**
  * Popup class
  * Author: The Unite.cash Developers
@@ -1466,10 +1568,6 @@ __webpack_require__.r(__webpack_exports__);
  *
  * @file Defines the Popup class
  */
-
-
-
-
 
 class Popup {
 
@@ -1498,29 +1596,29 @@ class Popup {
       options.centered = false
     }
     this.options = options
-    this.divID = window.Utilities.getRandomChars(16)
-    this.backgroundID = window.Utilities.getRandomChars(16)
+    this.divID = Utilities.getRandomChars(16)
+    this.backgroundID = Utilities.getRandomChars(16)
     if(this.options.showCloseButton) {
-      this.closeButtonID = window.Utilities.getRandomChars(16)
+      this.closeButtonID = Utilities.getRandomChars(16)
     }
     return this
   }
 
   show () {
     if(this.options.playSound){
-      window.Utilities.pop()
+      Utilities.pop()
     }
 
-    var alertBackground = _lib_jquery_js__WEBPACK_IMPORTED_MODULE_0___default()('<div></div>')
-    alertBackground.attr('style', 'z-index: ' + window.app.highestZIndexUsed)
+    var alertBackground = $('<div></div>')
+    alertBackground.attr('style', 'z-index: ' + app.highestZIndexUsed)
     alertBackground.attr('class', 'UIDimmedBackground hidden')
     alertBackground.attr('id', this.backgroundID)
-    _lib_jquery_js__WEBPACK_IMPORTED_MODULE_0___default()('body').on('click', '#' + this.backgroundID, () => {
+    $('body').on('click', '#' + this.backgroundID, () => {
       this.hide()
     })
 
-    var alertHTML = _lib_jquery_js__WEBPACK_IMPORTED_MODULE_0___default()('<div></div>')
-    alertHTML.attr('style', 'z-index: ' + (window.app.highestZIndexUsed+1))
+    var alertHTML = $('<div></div>')
+    alertHTML.attr('style', 'z-index: ' + (app.highestZIndexUsed+1))
     alertHTML.attr('id', this.divID)
     if(this.options.isCentered){
       alertHTML.attr('class', 'UIAlertWindow center-text hidden')
@@ -1529,40 +1627,41 @@ class Popup {
     }
 
     if(this.options.titleText != undefined){
-      var alertTitle = _lib_jquery_js__WEBPACK_IMPORTED_MODULE_0___default()('<h1></h1>')
+      var alertTitle = $('<h1></h1>')
       alertTitle.text(this.options.titleText)
       alertHTML.append(alertTitle)
     }
 
     if(this.options.showCloseButton){
-      var closeButton = _lib_jquery_js__WEBPACK_IMPORTED_MODULE_0___default()('<button></button>')
+      var closeButton = $('<button></button>')
       closeButton.attr('class', 'UICloseButton')
       closeButton.attr('id', this.closeButtonID)
-      _lib_jquery_js__WEBPACK_IMPORTED_MODULE_0___default()('body').on('click', '#' + this.closeButtonID, () => {
+      $('body').on('click', '#' + this.closeButtonID, () => {
         this.hide()
       })
+      alertHTML.append(closeButton)
     }
 
     alertHTML.append(this.options.text)
-		_lib_jquery_js__WEBPACK_IMPORTED_MODULE_0___default()('body').append(alertBackground)
-    _lib_jquery_js__WEBPACK_IMPORTED_MODULE_0___default()('body').append(alertHTML)
-		_lib_jquery_js__WEBPACK_IMPORTED_MODULE_0___default()('#' + this.backgroundID).fadeIn(this.options.animationSpeed)
-		_lib_jquery_js__WEBPACK_IMPORTED_MODULE_0___default()('#' + this.divID).slideDown(this.options.animationSpeed)
+		$('body').append(alertBackground)
+    $('body').append(alertHTML)
+		$('#' + this.backgroundID).fadeIn(this.options.animationSpeed)
+		$('#' + this.divID).slideDown(this.options.animationSpeed)
 
 		document.activeElement.blur()
-		window.app.highestZIndexUsed += 2
+		app.highestZIndexUsed += 2
   }
 
   // thanks to https://stackoverflow.com/a/7259663/5860286 for this
   hide () {
     if(this.options.playSound) {
-      window.Utilities.woosh()
+      Utilities.woosh()
     }
-    _lib_jquery_js__WEBPACK_IMPORTED_MODULE_0___default.a.when(_lib_jquery_js__WEBPACK_IMPORTED_MODULE_0___default()('#' + this.divID).fadeOut(this.options.animationSpeed)).done(function() {
-      _lib_jquery_js__WEBPACK_IMPORTED_MODULE_0___default()('#' + this.divID).remove()
+    $.when($('#' + this.divID).fadeOut(this.options.animationSpeed)).done(function() {
+      $('#' + this.divID).remove()
     })
-    _lib_jquery_js__WEBPACK_IMPORTED_MODULE_0___default.a.when(_lib_jquery_js__WEBPACK_IMPORTED_MODULE_0___default()('#' + this.backgroundID).fadeOut(this.options.animationSpeed)).done(function() {
-      _lib_jquery_js__WEBPACK_IMPORTED_MODULE_0___default()('#' + this.backgroundID).remove()
+    $.when($('#' + this.backgroundID).fadeOut(this.options.animationSpeed)).done(function() {
+      $('#' + this.backgroundID).remove()
     })
   }
 
@@ -1584,6 +1683,15 @@ class Popup {
   setAnimationSpeed(speed){
     this.options.animationSpeed = speed
     return this
+  }
+
+  setIsCentered(centered){
+    this.options.centered = centered
+    return this
+  }
+
+  setCloseButtonShown(showCloseButton){
+    this.options.showCloseButton = showCloseButton
   }
 
   setOptions(options){

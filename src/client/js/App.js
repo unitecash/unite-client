@@ -26,6 +26,8 @@ import Utilities from './Utilities'
 window.Utilities = Utilities
 import Popup from './Popup'
 window.Popup = Popup
+import InteractivePopup from './InteractivePopup'
+window.InteractivePopup = InteractivePopup
 import Transaction from './Transaction'
 window.Transaction = Transaction
 import TransactionManager from './TransactionManager'
@@ -38,6 +40,8 @@ import Name from './Name'
 window.Name = Name
 import NameManager from './NameManager'
 window.NameManager = NameManager
+import NetworkManager from './NetworkManager'
+window.NetworkManager = NetworkManager
 
 // set up some useful global constants
 const CENTRAL_CONTENT_ADDRESS     = '1HBqvcE3jArLxTe4p2KRaDsRHHtEaqG66z'
@@ -96,7 +100,7 @@ export default class App {
         p.addText('or replies')
         p.show()
 				Notification.requestPermission(function(permission){
-          Utilities.goBack();
+          Utilities.goBack()
           if(permission != 'granted'){
             var p = new Popup()
             p.setTitle('NOTIFICATIONS')
@@ -106,48 +110,48 @@ export default class App {
 					}else{
 						new SuccessBanner('We\'ll let you know when things happen!').show()
 					}
-				});
+				})
 			}
 
 			// connect to the WebSocket
-			websock = io(sessionStorage.webSocketEndpoint);
-			websock.on('connect', function(){
+			var websock = io(sessionStorage.webSocketEndpoint);
+			websock.on('connect', () => {
 
 				// subscribe to the relevant channels
 				// TODO only subscribe to channels for addresses the user indicates
-				websock.emit('subscribe', 'inv');
+				websock.emit('subscribe', 'inv')
 
 				// begin listening on the WebSocket
-				socket_listen(websock);
+				this.socket_listen(websock)
 
 				// if it exists call the function on the host page for the connect event
 				if(typeof ws_connect != 'undefined'){
-					ws_connect();
+					ws_connect()
 				}
 
-			});
+			})
 
 			// go back or close dialog when user presses escape/back
 			$(document).on('keydown', function(e) {
 				if (e.keyCode == 27){
-					Utilities.goBack();
+					Utilities.goBack()
 				}
-			});
+			})
 
 			// listen for submit events from forms which are on the host page
-			listen_forms();
+			this.listen_forms()
 
 			// call the data loading function present on host pages responsible for
 			// displaying dynamic content
-			if(typeof load_data != 'undefined'){
-				load_data();
+			if(typeof appInit != 'undefined'){
+				appInit()
 			}
 
 		}else{ // In case the user was not logged in
 
 			if(window.location.pathname.split('/').pop() != 'login.html'){
 				// redirect the user to login.html unless they were already there
-				window.location.href = 'login.html';
+				window.location.href = 'login.html'
 			}
 
 		}
@@ -156,7 +160,7 @@ export default class App {
 
 	// Provides a standard way of displaying error banners.
 	display_error(error, time=5000){
-		boink();
+		Utilities.boink()
 		// get a random ID
 		var randID = sha512('potato'+new Date().toTimeString()+error).substr(0, 16);
 		var newString = '<div class="banner error" id="'+randID+'">'+error;

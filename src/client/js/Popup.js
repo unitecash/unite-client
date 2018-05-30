@@ -8,10 +8,6 @@
  * @file Defines the Popup class
  */
 
-import $ from './lib/jquery.js'
-
-import Utilities from './Utilities'
-
 export default class Popup {
 
   /**
@@ -39,21 +35,21 @@ export default class Popup {
       options.centered = false
     }
     this.options = options
-    this.divID = window.Utilities.getRandomChars(16)
-    this.backgroundID = window.Utilities.getRandomChars(16)
+    this.divID = Utilities.getRandomChars(16)
+    this.backgroundID = Utilities.getRandomChars(16)
     if(this.options.showCloseButton) {
-      this.closeButtonID = window.Utilities.getRandomChars(16)
+      this.closeButtonID = Utilities.getRandomChars(16)
     }
     return this
   }
 
   show () {
     if(this.options.playSound){
-      window.Utilities.pop()
+      Utilities.pop()
     }
 
     var alertBackground = $('<div></div>')
-    alertBackground.attr('style', 'z-index: ' + window.app.highestZIndexUsed)
+    alertBackground.attr('style', 'z-index: ' + app.highestZIndexUsed)
     alertBackground.attr('class', 'UIDimmedBackground hidden')
     alertBackground.attr('id', this.backgroundID)
     $('body').on('click', '#' + this.backgroundID, () => {
@@ -61,7 +57,7 @@ export default class Popup {
     })
 
     var alertHTML = $('<div></div>')
-    alertHTML.attr('style', 'z-index: ' + (window.app.highestZIndexUsed+1))
+    alertHTML.attr('style', 'z-index: ' + (app.highestZIndexUsed+1))
     alertHTML.attr('id', this.divID)
     if(this.options.isCentered){
       alertHTML.attr('class', 'UIAlertWindow center-text hidden')
@@ -82,6 +78,7 @@ export default class Popup {
       $('body').on('click', '#' + this.closeButtonID, () => {
         this.hide()
       })
+      alertHTML.append(closeButton)
     }
 
     alertHTML.append(this.options.text)
@@ -91,13 +88,13 @@ export default class Popup {
 		$('#' + this.divID).slideDown(this.options.animationSpeed)
 
 		document.activeElement.blur()
-		window.app.highestZIndexUsed += 2
+		app.highestZIndexUsed += 2
   }
 
   // thanks to https://stackoverflow.com/a/7259663/5860286 for this
   hide () {
     if(this.options.playSound) {
-      window.Utilities.woosh()
+      Utilities.woosh()
     }
     $.when($('#' + this.divID).fadeOut(this.options.animationSpeed)).done(function() {
       $('#' + this.divID).remove()
@@ -125,6 +122,15 @@ export default class Popup {
   setAnimationSpeed(speed){
     this.options.animationSpeed = speed
     return this
+  }
+
+  setIsCentered(centered){
+    this.options.centered = centered
+    return this
+  }
+
+  setCloseButtonShown(showCloseButton){
+    this.options.showCloseButton = showCloseButton
   }
 
   setOptions(options){

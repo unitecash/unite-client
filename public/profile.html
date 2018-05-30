@@ -3,80 +3,36 @@
 <head>
 <meta charset="UTF-8">
 <title>Unite</title>
-<link rel="shortcut icon" href="./res/icon.png" />
+<link rel="shortcut icon" href="./images/icon.png" />
 <link rel="stylesheet" type="text/css" href="./css/style.css" />
-<script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
-<script src="./js/profile.js"></script>
 <script>
-var load_data = function(){
-	$('#mybalance').on('click', function(){
-		display_html_alert('#moreProfileInfo');
-	});
-	$('#changename').on('click', function(){
-		display_html_alert('#changeNameDiv');
-	});
-	$('#settingsbutton').on('click', function(){
-		display_html_alert('#settings');
-	});
-
-	// set address text
-	$('#myaddress').text(bchaddr.toCashAddress(address.toString()));
-
-	// get address balance
-	// TODO get_balance(addr)
-	$.ajax({
-		type: "GET",
-		url: insightBaseURL + 'addr/' + address.toString(),
-		success: function(data){
-			$('#mybalance').text('BALANCE: ' + data.balance + " BCH");
-		}
-	});
-
-	// get posts this user has written in the past
-	get_posts(address.toString());
-
-	// get the user's name and display italic
-	get_name(address.toString()).then(function(name){
-		myName = name;
-		$('#myName').html('Hi, ' + myName.hash + myName.name + '!');
-	});
-
-	// display a QR code for deposit
-	$('#myqrcode').attr('src', 'https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl=' + bchaddr.toCashAddress(address.toString()));
-
-	// set the private key text
-	$('#privateKeyText').text(privateKey.toWIF());
-}
-var handle_new_post = function(post){
-	// Only display posts sent by this user
-	if(post.sender == address.toString()){
-		render_post(post, post.isLive, '#posts');
-	}
-}
+if(typeof module === 'object'){window.module=module;module=undefined;}
 </script>
+<script src="./js/app.js"></script>
+<script src="./js/profile.js"></script>
 <script>if (window.module) module = window.module;</script>
 </head>
 <body>
 <div class="nav">
 <div class="heading">
-<img src="./res/icon.png" id="headericon" />
+<img src="./images/icon.svg" id="headericon" />
 <h1 id="headertitle">Profile</h1>
 </div>
 <div class="rightbuttons">
-<button id="settingsbutton" class="transparent"><img class="UIImageButton" src="./res/settings.svg" /></button>
+<button id="settingsbutton" class="transparent"><img class="UIImageButton" src="./images/settings.svg" /></button>
 </div>
 <div class="navlinks">
-<a class="navlink" href="newposts.html"><img src="./res/newposts_icon.svg" /><span>New Posts</span></a>
-<a class="navlink" href="newusers.html"><img src="./res/newusers_icon.svg" /><span>New Users</span></a>
-<a class="navlink" href="feed.html"><img src="./res/feed_icon.svg" /><span>Feed</span></a>
-<a class="navlink" href="popular.html"><img src="./res/popular_icon.svg" /><span>Popular</span></a>
-<a class="navlink" href="profile.html"><img src="./res/profile_icon.svg" /><span>Profile</span></a>
+<a class="navlink" href="newposts.html"><img src="./images/newposts_icon.svg" /><span>New Posts</span></a>
+<a class="navlink" href="newusers.html"><img src="./images/newusers_icon.svg" /><span>New Users</span></a>
+<a class="navlink" href="feed.html"><img src="./images/feed_icon.svg" /><span>Feed</span></a>
+<a class="navlink" href="popular.html"><img src="./images/popular_icon.svg" /><span>Popular</span></a>
+<a class="navlink" href="profile.html"><img src="./images/profile_icon.svg" /><span>Profile</span></a>
 </div>
 </div>
 <div class="content">
 <center>
 <!--- TODO profile photos --->
-<img id="profileImage" src="./res/icon.png" class="ProfileImage center" />
+<img id="profileImage" src="./images/icon.svg" class="ProfileImage center" />
 <p id="myName"></p>
 <p id="profileText"></p>
 <p id="editButton" class="center">Edit...</p>

@@ -128,9 +128,8 @@ $(document).ready(function(){
 						if($('#user').val().length < 1){
 							new ErrorBanner('Please enter a username').show()
 						}else if($('#pass').val().length < 12){ // [TODO]: validate this
-							var p = new Popup()
-							p.setTitle('PASSWORD SECURITY')
-							p.addText(`<p>
+							new Popup().setTitle('PASSWORD SECURITY')
+							.addText(`<p>
 								You MUST choose a complex password for this or your funds could
 								be stolen!
 							</p>
@@ -143,7 +142,7 @@ $(document).ready(function(){
 								<li>Contains a number and a symbol</li>
 								<li>Contains lowercase and uppercase letters</li>
 							</ul>`)
-							p.show()
+							.show()
 						}else if($('#insightURL').val().length < 6){
 							new ErrorBanner('Is that Insight URL correct?').show()
 						}else if($('#websockURL').val().length < 6){
@@ -176,34 +175,32 @@ $(document).ready(function(){
 				testSock.on('error', function() {
 					if(!loggedIn){
 						testSock.disconnect()
-						var p = new Popup()
-						p.setTitle('CHECK WEBSOCKET URL')
-						p.addText(`
-							It doesn\'t seem like your WebSocket URL is connecting properly.
+						new Popup()
+						.setTitle('CHECK WEBSOCKET URL')
+						.addText(`
+							It doesn't seem like your WebSocket URL is connecting properly.
 							Make sure it begins with "wss://..."`)
-						p.show()
+						.show()
 					}
 				})
 				testSock.on('connect_failed', function(){
 					if(!loggedIn){
 						testSock.disconnect()
-						var p = new Popup()
-						p.setTitle('CHECK WEBSOCKET URL')
-						p.addText(`
+						new Popup().setTitle('CHECK WEBSOCKET URL')
+						.addText(`
 							It doesn\'t seem like your WebSocket URL is connecting properly.
 							Make sure it begins with "wss://..."`)
-						p.show()
+						.show()
 					}
 				});
 				testSock.on('connect_error', function(){
 					if(!loggedIn){
 						testSock.disconnect()
-						var p = new Popup()
-						p.setTitle('CHECK WEBSOCKET URL')
-						p.addText(`
+						new Popup().setTitle('CHECK WEBSOCKET URL')
+						.addText(`
 							It doesn\'t seem like your WebSocket URL is connecting properly.
 							Make sure it begins with "wss://..."`)
-						p.show()
+						.show()
 					}
 				});
 			},
@@ -215,19 +212,21 @@ $(document).ready(function(){
 	// when we click sign up
 	$('#signupButton').on('click', function(ev){
 		ev.preventDefault()
-		var p = new Popup()
-		p.setTitle('NO NEED TO SIGN UP WITH UNITE!')
-		p.addText(`<p>
-			Just enter a unique username and a secure password to create your profile!
+		new Popup()
+		.setTitle('NO NEED TO SIGN UP WITH UNITE!')
+		.addText(`<p>
+			Just enter a unique username and a secure password to create
+			your profile!
 		</p>
 		<p>
-			Unite has no central authority. That means nobody can stop you from
-			creating an account, and there is nobody to "sign up" with.
+			Unite has no central authority. That means nobody can stop
+			you from creating an account, and there is nobody to "sign up"
+			with.
 		</p>`)
-		p.show()
+		.show()
 	})
 	$('#advanced').on('click', function(){
-		// new InteractivePopup('#advancedwindow').show()
+		new InteractivePopup('#advancedwindow').show()
 	})
 })
 
