@@ -8,25 +8,6 @@
  * @file Provides an entry point for the login page.
  */
 
-import $ from './lib/jquery.js'
-window.jQuery = $
-window.$ = $
-import bchaddr from './lib/bchaddr.js'
-import bitcoincash from './lib/bitcoincash.js'
-window.bch = bitcoincash
-import './lib/pnglib.js'
-import './lib/identicon.js'
-import io from './lib/socket.io.js'
-window.io = io
-import './lib/sha512.js'
-import './lib/webtorrent.js'
-
-import App from './App'
-import Popup from './Popup'
-window.PopupFactory = Popup
-
-window.app = new App()
-
 var fade = $('*:visible')
 fade.hide()
 fade.fadeIn('slow')
@@ -166,6 +147,6 @@ $(document).ready(function(){
 		p.show()
 	})
 	$('#advanced').on('click', function(){
-		window.app.display_html_alert('#advancedwindow')
+		// new InteractivePopup('#advancedwindow').show()
 	})
 })

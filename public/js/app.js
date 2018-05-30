@@ -66,7 +66,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = "./src/client/js/main.js");
+/******/ 	return __webpack_require__(__webpack_require__.s = "./src/client/js/App.js");
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -881,6 +881,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _lib_webtorrent_js__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(_lib_webtorrent_js__WEBPACK_IMPORTED_MODULE_7__);
 /* harmony import */ var _Utilities__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./Utilities */ "./src/client/js/Utilities.js");
 /* harmony import */ var _Popup__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./Popup */ "./src/client/js/Popup.js");
+/* harmony import */ var _Transaction__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./Transaction */ "./src/client/js/Transaction.js");
+/* harmony import */ var _Transaction__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(_Transaction__WEBPACK_IMPORTED_MODULE_10__);
+/* harmony import */ var _TransactionManager__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./TransactionManager */ "./src/client/js/TransactionManager.js");
+/* harmony import */ var _Post__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./Post */ "./src/client/js/Post.js");
+/* harmony import */ var _Post__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(_Post__WEBPACK_IMPORTED_MODULE_12__);
+/* harmony import */ var _PostManager__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./PostManager */ "./src/client/js/PostManager.js");
+/* harmony import */ var _Name__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./Name */ "./src/client/js/Name.js");
+/* harmony import */ var _Name__WEBPACK_IMPORTED_MODULE_14___default = /*#__PURE__*/__webpack_require__.n(_Name__WEBPACK_IMPORTED_MODULE_14__);
+/* harmony import */ var _NameManager__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./NameManager */ "./src/client/js/NameManager.js");
+/* harmony import */ var _NameManager__WEBPACK_IMPORTED_MODULE_15___default = /*#__PURE__*/__webpack_require__.n(_NameManager__WEBPACK_IMPORTED_MODULE_15__);
 /**
  * Unite Client Implementation
  * Author: The Unite.cash Developers
@@ -906,11 +916,21 @@ window.io = _lib_socket_io_js__WEBPACK_IMPORTED_MODULE_5___default.a
 
 
 
+window.Utilities = _Utilities__WEBPACK_IMPORTED_MODULE_8__["default"]
 
+window.Popup = _Popup__WEBPACK_IMPORTED_MODULE_9__["default"]
 
-//import TransactionManager from './TransactionManager'
-//import PostManager from './PostManager'
-//import NameManager from './NameManager'
+window.Transaction = _Transaction__WEBPACK_IMPORTED_MODULE_10___default.a
+
+window.TransactionManager = _TransactionManager__WEBPACK_IMPORTED_MODULE_11__["default"]
+
+window.Post = _Post__WEBPACK_IMPORTED_MODULE_12___default.a
+
+window.PostManager = _PostManager__WEBPACK_IMPORTED_MODULE_13__["default"]
+
+window.Name = _Name__WEBPACK_IMPORTED_MODULE_14___default.a
+
+window.NameManager = _NameManager__WEBPACK_IMPORTED_MODULE_15___default.a
 
 // set up some useful global constants
 const CENTRAL_CONTENT_ADDRESS     = '1HBqvcE3jArLxTe4p2KRaDsRHHtEaqG66z'
@@ -932,7 +952,6 @@ class App {
 		this.insightBaseURL
 		this.websock
 		this.highestZIndexUsed = 2
-    window.Utilities = new _Utilities__WEBPACK_IMPORTED_MODULE_8__["default"]()
     this.preformStartup()
 	}
 
@@ -1289,6 +1308,139 @@ class App {
 
 }
 
+window.app = new App()
+
+
+/***/ }),
+
+/***/ "./src/client/js/Name.js":
+/*!*******************************!*\
+  !*** ./src/client/js/Name.js ***!
+  \*******************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+/**
+ * Name
+ * Author: The Unite.cash Developers
+ * License: GNU AGPL v3
+ *
+ * A class to store data related to users' names
+ *
+ * @file Provides the Name class
+ */
+
+
+
+// Returns the name object given an address. Uses caching, returns first 6 of address if no name.
+/* TODO:
+- unique immutable hash symbol (color and shape) based on address to deter spoofing
+*/
+var get_name = function(addr){
+	return new Promise(function(resolve, reject){
+		var success = false;
+		var names = JSON.parse(localStorage.names);
+		// declare an empty default name just in case none exists
+		var name = {address: addr, name: addr.substr(0, 6), time: 0, hash: get_name_hash(addr)};
+		for(var i = 0; i < names.length; i++){
+			if(names[i].address == addr){
+				success = true;
+				resolve(names[i]);
+			}
+		}
+		if(!success){
+			get_transactions(addr).then(function(tx_arr){
+				var found_name = false;
+				for(var j = 0; j < tx_arr.length; j++){
+					var input = tx_arr[j];
+					var time = input.time;
+					for(var i = 0; i < input.vout.length; i++){
+						if(!input.vout[i].scriptPubKey.asm.startsWith('OP_RETURN')) continue;
+						code = input.vout[i].scriptPubKey.asm.substring(10, 14);
+						data = input.vout[i].scriptPubKey.asm.substring(14, input.length);
+						data = hex2a(data);
+						if(code == '5504'){
+							found_name = true;
+							set_name(addr, data.substr(0, 24), time);
+							//name = data.substr(0, 24);
+							get_name(addr).then(function(name){ // this should be re-done
+								resolve(name);
+							});
+						}
+					}
+				}
+				if(!found_name){
+					// set_name(addr, addr.substr(0, 6), 0); // uncomment to reduce load on server
+					resolve(name);
+				}
+			});
+		}
+	});
+}
+
+// Sets a users name and decides if the new name should be kept based on timestamp
+/* TODO:
+- Check for and remove duplicate entries to prevent arbitrary results when cache is queried
+*/
+var set_name = function(addr, name, time){
+	var names = JSON.parse(localStorage.names);
+	var doesExist = false;
+	for(var i = 0; i < names.length; i++){
+		if(names[i].address == addr){
+			doesExist = true;
+			if(names[i].time < time){ // the stored value is old
+				delete names[i];
+				var new_name = {address: addr, name: name, time: time, hash: get_name_hash(addr)};
+				// change all posts with this sender to the new name
+				var posts = JSON.parse(localStorage.posts);
+				for(var i = 0; i < posts.length; i++){
+					if(posts[i].sender == addr){
+						posts[i].name = new_name;
+					}
+				}
+				localStorage.posts = JSON.stringify(posts);
+				names[i] = new_name;
+			}else{
+				if(debug){
+					console.log('Not adding name because it already exists.');
+				}
+			}
+		}
+	}
+	if(!doesExist){
+		var new_name = {address: addr, name: name, time: time, hash: get_name_hash(addr)};
+		// change all posts with this sender to the new name
+		var posts = JSON.parse(localStorage.posts);
+		for(var i = 0; i < posts.length; i++){
+			if(posts[i].sender == addr){
+				posts[i].name = new_name;
+			}
+		}
+		localStorage.posts = JSON.stringify(posts);
+		names.push(new_name);
+	}
+	localStorage.names = JSON.stringify(names);
+}
+
+// Returns a unique "identicon" based on the address given
+var get_name_hash = function(addr){
+	var addr_h = sha512(addr).substr(0, 32);
+	var data = new Identicon(addr_h).toString();
+	var img = '<img class="UINameIcon" src="data:image/png;base64,' + data + '" alt="Real Address: '+addr+'" poster="Real Address: '+addr+'" />';
+	return img;
+}
+
+
+/***/ }),
+
+/***/ "./src/client/js/NameManager.js":
+/*!**************************************!*\
+  !*** ./src/client/js/NameManager.js ***!
+  \**************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+
 
 /***/ }),
 
@@ -1444,6 +1596,511 @@ class Popup {
 
 /***/ }),
 
+/***/ "./src/client/js/Post.js":
+/*!*******************************!*\
+  !*** ./src/client/js/Post.js ***!
+  \*******************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+/**
+ * Post
+ * Author: The Unite.cash Developers
+ * License: GNU AGPL v3
+ *
+ * A class for storing data related to the contents of posts
+ *
+ * @file Provides the Post class
+ */
+
+// Adds a post to localStorage cache if it is not there
+var add_post_to_db = function(post){
+	// get posts from localStorage
+	var posts = JSON.parse(localStorage.posts);
+	// iterate posts, looking for matching TXIDs
+	for(var i = 0; i < posts.length; i++){
+		if(posts[i].txid == post.txid){
+			if(debug){
+				console.log('Not adding post with redundant TXID to database');
+			}
+			return;
+		}
+	}
+	// no match in DB, we are good to add it
+	posts.push(post);
+	localStorage.posts = JSON.stringify(posts);
+}
+
+// Renders a post to the #posts div
+/* TODO:
+- elementIndex: indicates where in the HTML the new post is rendered
+- replyIndent [limited to 4?]: The level of indentation to apply to the post
+*/
+/* PARAMS
+- pushToTop: boolean indicating if post should (true) or should not (false) be pushed to
+  the top of the HTML instead of the bottom (default).
+*/
+var render_post = function(post, pushToTop = 0, tag = '#posts'){
+	if(post.type != 5501 && post.type != 5502 && post.type != 5503 && post.type != 5505) return;
+	var uid = post.txid.substr(0, 16);
+	var postDiv = $('<div id="'+uid+'div" class="post"></div>');
+	var nameText = $('<p id="'+uid+'name" class="name"></p>');
+	nameText.text(post.name.name);
+	var timeText = $('<p id="'+uid+'time" class="time"></p>');
+	timeText.text(post.time);
+	var nameHash = $(post.name.hash);
+	var container = $('<div></div>');
+	container.append(nameText);
+	container.append(nameHash);
+	container.append(timeText);
+	var postText = $('<div id="'+uid+'content" class="postText"></div>');
+	var actionBar = $('<div class="actionBar"></div>');
+	actionBar.append($('<p id="'+uid+'reply" class="UITextButton">reply</p>'));
+	actionBar.append($('<p id="'+uid+'viewreply" class="UITextButton">show replies</p>'));
+	actionBar.append($('<p id="'+uid+'tip" class="UITextButton">tip</p>'));
+	actionBar.append($('<p id="'+uid+'report" class="UITextButton">report</p>'));
+	postText.text(post.displayContent);
+	postDiv.append(postText);
+	postDiv.prepend(container);
+	postDiv.append(actionBar);
+	if(pushToTop){
+		$(tag).prepend(postDiv);
+	}else{
+		$(tag).append(postDiv);
+	}
+	var newString = '<div id="'+uid+'tipwindow" class="UIAlertWindow hidden">';
+	newString += '<h1>SEND A TIP</h1>';
+	newString += '<p>Show how much you appreciate ' + post.name.name + '\'s post by sending a tip!</p>';
+	newString += '<form id="'+uid+'tipform">';
+	newString += '<input type="text" id="'+uid+'tipamount" class="UITextField center w90"';
+	newString += 'placeholder="Amount (satoshis)" /><br/>';
+	newString += '<input type="submit" class="UIButton center w90" value="SEND" />';
+	newString += '</form></div>';
+	$('body').append($(newString));
+	$('#'+uid+'name').on('click', function(){
+		window.location.href = 'user.html?address='+post.sender;
+	});
+	$('#'+uid+'viewreply').on('click', function(){
+		window.location.href = 'post.html?post='+post.txid;
+	});
+	$('#'+uid+'tip').on('click', function(){
+		display_html_alert('#'+uid+'tipwindow');
+	});
+	$('#'+uid+'tipform').on('submit', function(ev){
+		ev.preventDefault();
+		var tipAmount = $('#'+uid+'tipamount').val();
+		document.elementFromPoint(10, 10).click();
+		if(post.sender == address.toString()){
+			display_alert('<h1>NARCISSISM?</h1><p>You just tried to tip yourself. You failed. Miserably.</p>');
+		}else{
+			find_utxo(address.toString(), tipAmount).then(function(utxo){
+				if(utxo == -1){
+					var newString = '<h1>ACCOUNT BALANCE</h1>';
+					newString += '<p>Check that you\'ve funded your account before posting!</p>';
+					newString += '<p>We\'re working on a way to fund new users\' posts, it\'ll be ';
+					newString += 'out soon!</p><p>In the meantime, here are some ways to fund your account: </p>';
+					newString += '<ul><li>Ask a friend to send you some Bitcoin Cash to your Unite address</li>';
+					newString += '<li>You can get some from the free.bitcoin.com faucet</li>';
+					newString += '<li>You can trade any cryptocurrency for Bitcoin Cash on ShapeShift</li>';
+					newString += '<li>You can be tipped on sites like yours.org or Reddit (r/btc)</li>';
+					newString += '<li>You can buy some on sites like coinbase.com or kraken.com</li></ul>';
+					display_alert(newString);
+				}else{
+					// create dummy tx to find approximate actual TX size with fee
+					transaction = new bch.Transaction();
+					transaction.from(utxo);
+					transaction.to(address.toString(), utxo.satoshis - tipAmount - 300); // approximate
+					transaction.to(post.sender, parseInt(tipAmount))
+					transaction.addData(hex2a('5503') + hex2a(post.txid));
+					transaction.sign(privateKey);
+					var tx_size = parseInt(transaction.toString().length/feeThreshold); // fee threshold
+					// recreate transaction with correct fee
+					transaction = new bch.Transaction();
+					transaction.from(utxo);
+					transaction.to(address.toString(), utxo.satoshis - tipAmount - tx_size); // approximate
+					transaction.to(post.sender, parseInt(tipAmount))
+					transaction.addData(hex2a('5503') + hex2a(post.txid));
+					transaction.sign(privateKey);
+					console.log(transaction.toString());
+					//broadcast_tx(transaction.toString());
+					display_success('Your tip has been sent!');
+					swooosh();
+					$('#'+uid+'tipamount').val('');
+				}
+			});
+		}
+	});
+}
+
+// Given a TXID, returns a post object
+var get_post = function(txid){
+	return new Promise(function(resolve, reject){
+		// check if we have the post already in cache
+		var posts = JSON.parse(localStorage.posts);
+		var success = false;
+		for(var i = 0; i < posts.length; i++){
+			if(posts[i].txid == txid){
+				success = true;
+				resolve(posts[i]);
+				return;
+			}
+		}
+		if(!success){
+			get_tx(txid).then(function(transaction){
+				parse_tx(transaction).then(function(post){
+					resolve(post);
+				});
+			});
+		}
+	});
+}
+
+// Gets posts associated with an address
+var get_posts = function(addr){
+	get_transactions(addr).then(function(tx_arr){
+		for(var i = 0; i < tx_arr.length; i++){ // for each transaction
+			parse_tx(tx_arr[i]);
+		}
+	});
+}
+
+
+// Initial processing of posts. Assigns the name, finds number of replies, replyy depth etc.
+var init_post = function(post){
+	return new Promise(function(resolve, reject){
+		get_name(post.sender).then(function(name){
+			post.name = name;
+			// notifications for live transactions
+			if(post.isLive){
+				parse_notification(post);
+			}
+
+			// we can also fetch image data, extended messages, parent transactions,
+			// number of replies, tips etc in the same way based on tx type
+
+			if(post.type == '5504'){ // set name of sender to their new name
+				set_name(post.sender, post.data, post.time);
+			}
+			if(post.type == '5503'){
+				post.displayContent = post.data.substr(46);
+			}
+			if(post.type == '5501'){
+				post.displayContent = post.data;
+			}
+			if(post.type == '5502'){
+				// for this type, the post.data is a magnet link.
+				// post.displayContent will be the contents of the torrent. (get it from webtorrent/webseed)
+			}
+
+			// pass it to the page we are on, so that page can decide how to display it
+			if(typeof handle_new_post != undefined){
+				handle_new_post(post);
+			}
+			resolve(post);
+		});
+	});
+}
+
+// Returns an array of posts which are replies to the given post // incomplete and posibly permanently deprecated
+var get_replies = function(post){
+	return new Promise(function(resolve, reject){
+		var post_arr = [];
+		get_posts(post.sender).then(function(posts){
+			for(var i = 0; i < posts.length; i++){
+				if(posts[i].parent == post.sender){
+					if(posts[i].type == 5503){
+						console.log(posts[i].data.substr(0, 64));
+						console.log(post.txid);
+						if(posts[i].data.substr(0, 64) == post.txid){
+							post_arr.push(posts[i]);
+						}
+					}
+				}
+			}
+			resolve(post_arr);
+		});
+	});
+}
+
+
+/***/ }),
+
+/***/ "./src/client/js/PostManager.js":
+/*!**************************************!*\
+  !*** ./src/client/js/PostManager.js ***!
+  \**************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return PostManager; });
+/**
+ * PostManager
+ * Author: The Unite.cash Developers
+ * License: GNU AGPL v3
+ *
+ * A class for querying, caching, storing, and retrieving Post objects
+ *
+ * @file Defines the PostManager class
+ */
+
+ class PostManager {
+
+
+
+ }
+
+
+/***/ }),
+
+/***/ "./src/client/js/Transaction.js":
+/*!**************************************!*\
+  !*** ./src/client/js/Transaction.js ***!
+  \**************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+/**
+ * Transaction
+ * Author: The Unite.cash Developers
+ * License: GNU AGPL v3
+ *
+ * A class for storing transaction data
+ *
+ * @file Provides the Transaction class
+ */
+
+
+
+
+// takes a transaction as input and returns a post after adding the post to posts cache
+/* PARAMS:
+- isLive: a boolean indicating if the transaction came in over WebSocket (true),
+  or not (false).
+*/
+var parse_tx = function(input, isLive){
+	return new Promise(function(resolve, reject){
+
+		var time = input.time;
+		var tx_from_addr = input.vin[0].addr;
+		var parent = 'none', code = 'none', data = 'none';
+		for(var i = 0; i < input.vout.length; i++){ // for each output
+			if(!input.vout[i].scriptPubKey.asm.startsWith('OP_RETURN')){
+				if(parseInt(input.vout[i].value * 100000000) <= dustLimitSize
+						&& parseInt(input.vout[i].value * 100000000) != 0){ // this is the parent reference output
+					parent = input.vout[i].scriptPubKey.addresses[0];
+				}
+			}else{ // OP_RETURN data parsing
+				code = input.vout[i].scriptPubKey.asm.substring(10, 14);
+				data = input.vout[i].scriptPubKey.asm.substring(14, input.length);
+				data = hex2a(data);
+			}
+		}
+		if(parent != 'none' && code != 'none' && data != 'none'){
+			var post = {
+				type: code,
+				sender: tx_from_addr,
+				parent: parent,
+				txid: input.txid,
+				time: time,
+				data: data,
+				isLive: isLive
+			};
+			init_post(post).then(function(updated_post){
+				add_post_to_db(updated_post);
+				resolve(updated_post);
+			});
+		}else{
+			resolve(-1);
+		}
+	});
+}
+
+
+// Returns an array of Unite transactions by address, adding them to cache
+/* TODO:
+- A better way of handling multiple pages of transactions than just requesting
+  the first 1000 from insight
+*/
+var get_transactions = function(addr){
+	return new Promise(function(resolve, reject){
+		var tx_arr = [];
+		$.ajax({
+			type: "GET",
+			url: insightBaseURL + 'addr/' + addr + '?from=0&to=1000', // TODO a better solution than a hard limit
+			success: function(data){
+				for(var i = 0; i < data.transactions.length; i++){ // for each transaction
+					get_tx(data.transactions[i]).then(function(tx){
+						tx_arr.push(tx);
+					});
+				}
+				resolve(tx_arr);
+			}
+		});
+	});
+}
+
+// returns a UTXO suitable for spending given an address
+// returns -1 if none are found (insufficient funds)
+/* TODO:
+- Return multiple small UTXOs if a large one is not found.
+- Accept a bitcoincash.js transaction as a parameter, append the relevant UTXOs,
+  then return the modified bitcoincash.js "bch.Transaction" object instead of
+  just the UTXO.
+- Rename the function from find_utxo(address string) to add_utxos(bch.Transaction)
+*/
+var find_utxo = function(address, amount = 1000){
+	return new Promise(function(resolve, reject){
+		$.ajax({
+			type: "GET",
+			url: insightBaseURL + 'addr/' + address.toString() + '/utxo',
+			success: function(data){
+				var utxo = -1;
+				for(var i = 0; i < data.length; i++){
+					if(data[i].satoshis > amount){ // TODO other checks, precision
+						utxo = {
+							txId: data[i].txid,
+							outputIndex: data[i].vout,
+							address: data[i].address,
+							script: data[i].scriptPubKey,
+							satoshis: data[i].satoshis
+						};
+						resolve(utxo);
+						i = data.length + 1; // stop loop
+					}
+				}
+				resolve(utxo);
+			}
+		});
+	});
+}
+
+// Sends a raw hex bitcoin transaction over the live network
+var broadcast_tx = function(tx){
+	if(debug){
+		console.log('pretend broadcasting transaction (debug):\n\n'+tx+'\n\n');
+	}else{
+		$.ajax({
+			type: "POST",
+			url: insightBaseURL + 'tx/send',
+			data: {rawtx: tx},
+			success: function(data){
+				console.log('TX broadcast successful.\nTX:\n\n'+tx+'\n\ntxid:\n\n: ' + data.txid+'\n\n');
+			},
+			error: function(data){
+				var newString = '<h1>BROADCAST FAILURE</h1>';
+				newString += '<p>Looks like this action was rejected by tne network for some reason... ';
+				newString += 'Please give this to a developer so they can have a look, or post it on Unite ';
+				newString += 'or somewhere we\'ll see it.</p><p>This is vary important to us, because it ';
+				newString += 'just ruined your experience:</p><div class="UIPanel" style="font-family:monospace;">';
+				newString += tx+'</div>'
+				display_alert(newString);
+			}
+		});
+	}
+}
+
+// Adds transaction to localStorage transactions cache, if it is not already there
+var add_tx_to_db = function(tx){
+	// get the tx db
+	var transactions = JSON.parse(localStorage.transactions);
+	// check if it exists
+	for(var i = 0; i < transactions.length; i++){
+		if(transactions[i].txid == tx.txid){
+			if(debug){
+				console.log('Not adding transaction, it is a duplicate.');
+			}
+			return;
+		}
+	}
+	transactions.push(tx);
+	localStorage.transactions = JSON.stringify(transactions);
+}
+
+// Returns a transaction given a TXID. first searches the cache, then the network
+var get_tx = function(txid){
+	return new Promise(function(resolve, reject){
+		// check if it exists in the DB already
+		var transactions = JSON.parse(localStorage.transactions);
+		var success = false;
+		for(var i = 0; i < transactions.length; i++){
+			if(transactions[i].txid == txid){
+				success = true;
+				resolve(transactions[i]);
+				return;
+			}
+		}
+		if(!success){ // now we look it up on the network and then add it to DB.
+			$.ajax({
+				type: "GET",
+				url: insightBaseURL + 'tx/' + txid,
+				success: function(transaction){
+					if(is_univo_tx(transaction)){
+						add_tx_to_db(transaction);
+						resolve(transaction);
+					}else{
+						resolve(-1);
+					}
+					return;
+				}
+			});
+		}
+	});
+}
+
+// Determines if the given transaction is a Unite transaction
+var is_univo_tx = function(transaction){
+	var parent = 'none', code = 'none';
+	for(var i = 0; i < transaction.vout.length; i++){ // for each output
+		if(!transaction.vout[i].scriptPubKey.asm.startsWith('OP_RETURN')){
+			if(parseInt(transaction.vout[i].value * 100000000) <= dustLimitSize
+					&& parseInt(transaction.vout[i].value * 100000000) != 0){ // this is the parent reference output
+				parent = transaction.vout[i].scriptPubKey.addresses[0];
+			}
+		}else{ // OP_RETURN data parsing
+			code = transaction.vout[i].scriptPubKey.asm.substring(10, 14);
+		}
+	}
+	if(code.startsWith('55') && parent != 'none'){
+		return true;
+	}else{
+		return false;
+	}
+}
+
+
+/***/ }),
+
+/***/ "./src/client/js/TransactionManager.js":
+/*!*********************************************!*\
+  !*** ./src/client/js/TransactionManager.js ***!
+  \*********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return TransactionManager; });
+/**
+ * TransactionManager
+ * Author: The Unite.cash Developers
+ * License: GNU AGPL v3
+ *
+ * A class for managing, parsing, broadcasting and storing Transaction objects
+ *
+ * @file Defines the TransactionManager class
+ */
+
+ class TransactionManager {
+
+   
+
+ }
+
+
+/***/ }),
+
 /***/ "./src/client/js/Utilities.js":
 /*!************************************!*\
   !*** ./src/client/js/Utilities.js ***!
@@ -1466,28 +2123,28 @@ __webpack_require__.r(__webpack_exports__);
 
 class Utilities {
 
-  pop(){
+  static pop(){
 		new Audio('./audio/pop.wav').play();
 	}
 
-	boink(){
+	static boink(){
 		new Audio('./audio/boink.wav').play();
 	}
 
-	beep(){
+	static beep(){
 		new Audio('./audio/beep.wav').play();
 	}
 
-	woosh(){
+	static woosh(){
 		new Audio('./audio/woosh.wav').play();
 	}
 
-	swooosh(){
+	static swooosh(){
 		new Audio('./audio/swooosh.wav').play();
 	}
 
   // thanks to https://stackoverflow.com/a/3745677/5860286 for this
-  hex2a(hexx) {
+  static hex2a(hexx) {
 		hex = hexx.toString();
 		str = '';
 		for(i = 0; i < hex.length; i += 2) {
@@ -1497,7 +2154,7 @@ class Utilities {
 	}
 
   // thanks to https://stackoverflow.com/a/1349426/5860286 for this
-  getRandomChars(length) {
+  static getRandomChars(length) {
     var text = "";
     var l = length || 16;
     var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -1508,7 +2165,7 @@ class Utilities {
   }
 
   // thanks to https://stackoverflow.com/a/3277417/5860286 for this
-  goBack(){
+  static goBack(){
      document.elementFromPoint(10, 10).click(); // TODO his is hacky and should be re-done
   }
 
@@ -9435,25 +10092,7 @@ HEADERS_RECEIVED:2,LOADING:3,DONE:4},c=n.IncomingMessage=function(e,n,r){functio
 flags:3841,dataOffset:8,entries:i}}]};return u.trafs[0].trun.dataOffset+=f.encodingLength(u),u}}).call(this,e("buffer").Buffer)},{"binary-search":12,buffer:24,events:34,inherits:41,"mp4-box-encoding":53,"mp4-stream":56,"range-slice-stream":74}],117:[function(e,t,n){function r(e,t,n){var i=this;if(!(this instanceof r))return new r(e,t,n);n=n||{},i.detailedError=null,i._elem=t,i._elemWrapper=new o(t),i._waitingFired=!1,i._trackMeta=null,i._file=e,i._tracks=null,"none"!==i._elem.preload&&i._createMuxer(),i._onError=function(e){i.detailedError=i._elemWrapper.detailedError,i.destroy()},i._onWaiting=function(){i._waitingFired=!0,i._muxer?i._tracks&&i._pump():i._createMuxer()},i._elem.addEventListener("waiting",i._onWaiting),i._elem.addEventListener("error",i._onError)}var o=e("mediasource"),i=e("pump"),s=e("./mp4-remuxer");t.exports=r,r.prototype._createMuxer=function(){var e=this;e._muxer=new s(e._file),e._muxer.on("ready",function(t){e._tracks=t.map(function(t){var n=e._elemWrapper.createWriteStream(t.mime);n.on("error",function(t){e._elemWrapper.error(t)});var r={muxed:null,mediaSource:n,initFlushed:!1,onInitFlushed:null};return n.write(t.init,function(e){r.initFlushed=!0,r.onInitFlushed&&r.onInitFlushed(e)}),r}),(e._waitingFired||"auto"===e._elem.preload)&&e._pump()}),e._muxer.on("error",function(t){e._elemWrapper.error(t)})},r.prototype._pump=function(){var e=this,t=e._muxer.seek(e._elem.currentTime,!e._tracks);e._tracks.forEach(function(n,r){var o=function(){n.muxed&&(n.muxed.destroy(),n.mediaSource=e._elemWrapper.createWriteStream(n.mediaSource),n.mediaSource.on("error",function(t){e._elemWrapper.error(t)})),n.muxed=t[r],i(n.muxed,n.mediaSource)};n.initFlushed?o():n.onInitFlushed=function(t){if(t)return void e._elemWrapper.error(t);o()}})},r.prototype.destroy=function(){var e=this;e.destroyed||(e.destroyed=!0,e._elem.removeEventListener("waiting",e._onWaiting),e._elem.removeEventListener("error",e._onError),e._tracks&&e._tracks.forEach(function(e){e.muxed.destroy()}),e._elem.src="")}},{"./mp4-remuxer":116,mediasource:49,pump:67}],118:[function(e,t,n){function r(e,t){function n(){for(var t=new Array(arguments.length),n=0;n<t.length;n++)t[n]=arguments[n];var r=e.apply(this,t),o=t[t.length-1];return"function"==typeof r&&r!==o&&Object.keys(o).forEach(function(e){r[e]=o[e]}),r}if(e&&t)return r(e)(t);if("function"!=typeof e)throw new TypeError("need wrapper function");return Object.keys(e).forEach(function(t){n[t]=e[t]}),n}t.exports=r},{}],119:[function(e,t,n){function r(){for(var e={},t=0;t<arguments.length;t++){var n=arguments[t];for(var r in n)o.call(n,r)&&(e[r]=n[r])}return e}t.exports=r;var o=Object.prototype.hasOwnProperty},{}],120:[function(e,t,n){function r(e){for(var t=1;t<arguments.length;t++){var n=arguments[t];for(var r in n)o.call(n,r)&&(e[r]=n[r])}return e}t.exports=r;var o=Object.prototype.hasOwnProperty},{}],121:[function(e,t,n){t.exports=function e(t,n,r){return void 0===n?function(n,r){return e(t,n,r)}:(void 0===r&&(r="0"),t-=n.toString().length,t>0?new Array(t+(/\./.test(n)?2:1)).join(r)+n:n+"")}},{}],122:[function(e,t,n){t.exports={version:"0.98.18"}},{}],123:[function(e,t,n){(function(n,r){function o(e){function t(){i.destroyed||(i.ready=!0,i.emit("ready"))}var i=this;if(!(i instanceof o))return new o(e);h.call(i),e||(e={}),"string"==typeof e.peerId?i.peerId=e.peerId:a.isBuffer(e.peerId)?i.peerId=e.peerId.toString("hex"):i.peerId=a.from(B+b(9).toString("base64")).toString("hex"),i.peerIdBuffer=a.from(i.peerId,"hex"),"string"==typeof e.nodeId?i.nodeId=e.nodeId:a.isBuffer(e.nodeId)?i.nodeId=e.nodeId.toString("hex"):i.nodeId=b(20).toString("hex"),i.nodeIdBuffer=a.from(i.nodeId,"hex"),i._debugId=i.peerId.toString("hex").substring(0,7),i.destroyed=!1,i.listening=!1,i.torrentPort=e.torrentPort||0,i.dhtPort=e.dhtPort||0,i.tracker=void 0!==e.tracker?e.tracker:{},i.torrents=[],i.maxConns=Number(e.maxConns)||55,i._debug("new webtorrent (peerId %s, nodeId %s, port %s)",i.peerId,i.nodeId,i.torrentPort),i.tracker&&("object"!=typeof i.tracker&&(i.tracker={}),e.rtcConfig&&(console.warn("WebTorrent: opts.rtcConfig is deprecated. Use opts.tracker.rtcConfig instead"),i.tracker.rtcConfig=e.rtcConfig),e.wrtc&&(console.warn("WebTorrent: opts.wrtc is deprecated. Use opts.tracker.wrtc instead"),i.tracker.wrtc=e.wrtc),r.WRTC&&!i.tracker.wrtc&&(i.tracker.wrtc=r.WRTC)),"function"==typeof k?i._tcpPool=new k(i):n.nextTick(function(){i._onListening()}),i._downloadSpeed=w(),i._uploadSpeed=w(),!1!==e.dht&&"function"==typeof d?(i.dht=new d(l({nodeId:i.nodeId},e.dht)),i.dht.once("error",function(e){i._destroy(e)}),i.dht.once("listening",function(){var e=i.dht.address();e&&(i.dhtPort=e.port)}),i.dht.setMaxListeners(0),i.dht.listen(i.dhtPort)):i.dht=!1,i.enableWebSeeds=!1!==e.webSeeds,"function"==typeof m&&null!=e.blocklist?m(e.blocklist,{headers:{"user-agent":"WebTorrent/"+S+" (https://webtorrent.io)"}},function(e,n){if(e)return i.error("Failed to load blocklist: "+e.message);i.blocked=n,t()}):n.nextTick(t)}function i(e){return"object"==typeof e&&null!=e&&"function"==typeof e.pipe}function s(e){return"undefined"!=typeof FileList&&e instanceof FileList}t.exports=o;var a=e("safe-buffer").Buffer,u=e("simple-concat"),c=e("create-torrent"),f=e("debug")("webtorrent"),d=e("bittorrent-dht/client"),h=e("events").EventEmitter,l=e("xtend"),p=e("inherits"),m=e("load-ip-set"),g=e("run-parallel"),y=e("parse-torrent"),_=e("path"),v=e("simple-peer"),b=e("randombytes"),w=e("speedometer"),E=e("zero-fill"),k=e("./lib/tcp-pool"),x=e("./lib/torrent"),S=e("./package.json").version,I=S.match(/([0-9]+)/g).slice(0,2).map(function(e){return E(2,e)}).join(""),B="-WW"+I+"-";p(o,h),o.WEBRTC_SUPPORT=v.WEBRTC_SUPPORT,Object.defineProperty(o.prototype,"downloadSpeed",{get:function(){return this._downloadSpeed()}}),Object.defineProperty(o.prototype,"uploadSpeed",{get:function(){return this._uploadSpeed()}}),Object.defineProperty(o.prototype,"progress",{get:function(){var e=this.torrents.filter(function(e){return 1!==e.progress});return e.reduce(function(e,t){return e+t.downloaded},0)/(e.reduce(function(e,t){return e+(t.length||0)},0)||1)}}),Object.defineProperty(o.prototype,"ratio",{get:function(){return this.torrents.reduce(function(e,t){return e+t.uploaded},0)/(this.torrents.reduce(function(e,t){return e+t.received},0)||1)}}),o.prototype.get=function(e){var t,n,r=this,o=r.torrents.length;if(e instanceof x){for(t=0;t<o;t++)if((n=r.torrents[t])===e)return n}else{var i;try{i=y(e)}catch(e){}if(!i)return null;if(!i.infoHash)throw new Error("Invalid torrent identifier");for(t=0;t<o;t++)if(n=r.torrents[t],n.infoHash===i.infoHash)return n}return null},o.prototype.download=function(e,t,n){return console.warn("WebTorrent: client.download() is deprecated. Use client.add() instead"),this.add(e,t,n)},o.prototype.add=function(e,t,n){function r(){if(!s.destroyed)for(var e=0,t=s.torrents.length;e<t;e++){var n=s.torrents[e];if(n.infoHash===a.infoHash&&n!==a)return void a._destroy(new Error("Cannot add duplicate torrent "+a.infoHash))}}function o(){s.destroyed||("function"==typeof n&&n(a),s.emit("torrent",a))}function i(){a.removeListener("_infoHash",r),a.removeListener("ready",o),a.removeListener("close",i)}var s=this;if(s.destroyed)throw new Error("client is destroyed");if("function"==typeof t)return s.add(e,null,t);s._debug("add"),t=t?l(t):{};var a=new x(e,s,t);return s.torrents.push(a),a.once("_infoHash",r),a.once("ready",o),a.once("close",i),a},o.prototype.seed=function(e,t,n){function r(e){var t=[function(t){e.load(f,t)}];a.dht&&t.push(function(t){e.once("dhtAnnounce",t)}),g(t,function(t){if(!a.destroyed)return t?e._destroy(t):void o(e)})}function o(e){a._debug("on seed"),"function"==typeof n&&n(e),e.emit("seed"),a.emit("seed",e)}var a=this;if(a.destroyed)throw new Error("client is destroyed");if("function"==typeof t)return a.seed(e,null,t);a._debug("seed"),t=t?l(t):{},"string"==typeof e&&(t.path=_.dirname(e)),t.createdBy||(t.createdBy="WebTorrent/"+I);var f,d=a.add(null,t,r);return s(e)&&(e=Array.prototype.slice.call(e)),Array.isArray(e)||(e=[e]),g(e.map(function(e){return function(t){i(e)?u(e,t):t(null,e)}}),function(e,n){if(!a.destroyed)return e?d._destroy(e):void c.parseInput(n,t,function(e,r){if(!a.destroyed){if(e)return d._destroy(e);f=r.map(function(e){return e.getStream}),c(n,t,function(e,t){if(!a.destroyed){if(e)return d._destroy(e);var n=a.get(t);n?d._destroy(new Error("Cannot add duplicate torrent "+n.infoHash)):d._onTorrentId(t)}})}})}),d},o.prototype.remove=function(e,t){if(this._debug("remove"),!this.get(e))throw new Error("No torrent with id "+e);this._remove(e,t)},o.prototype._remove=function(e,t){var n=this.get(e);n&&(this.torrents.splice(this.torrents.indexOf(n),1),n.destroy(t))},o.prototype.address=function(){return this.listening?this._tcpPool?this._tcpPool.server.address():{address:"0.0.0.0",family:"IPv4",port:0}:null},o.prototype.destroy=function(e){if(this.destroyed)throw new Error("client already destroyed");this._destroy(null,e)},o.prototype._destroy=function(e,t){var n=this;n._debug("client destroy"),n.destroyed=!0;var r=n.torrents.map(function(e){return function(t){e.destroy(t)}});n._tcpPool&&r.push(function(e){n._tcpPool.destroy(e)}),n.dht&&r.push(function(e){n.dht.destroy(e)}),g(r,t),e&&n.emit("error",e),n.torrents=[],n._tcpPool=null,n.dht=null},o.prototype._onListening=function(){if(this._debug("listening"),this.listening=!0,this._tcpPool){var e=this._tcpPool.server.address();e&&(this.torrentPort=e.port)}this.emit("listening")},o.prototype._debug=function(){var e=[].slice.call(arguments);e[0]="["+this._debugId+"] "+e[0],f.apply(null,e)}}).call(this,e("_process"),"undefined"!=typeof global?global:"undefined"!=typeof self?self:"undefined"!=typeof window?window:{})},{"./lib/tcp-pool":21,"./lib/torrent":5,"./package.json":122,_process:66,"bittorrent-dht/client":21,"create-torrent":29,debug:30,events:34,inherits:41,"load-ip-set":21,"parse-torrent":62,path:63,randombytes:73,"run-parallel":86,"safe-buffer":88,"simple-concat":89,"simple-peer":91,speedometer:94,xtend:119,"zero-fill":121}]},{},[123])(123)});
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../../node_modules/webpack/buildin/global.js */ "./node_modules/webpack/buildin/global.js"), __webpack_require__(/*! ./../../../../node_modules/timers-browserify/main.js */ "./node_modules/timers-browserify/main.js").setImmediate))
 
-/***/ }),
-
-/***/ "./src/client/js/main.js":
-/*!*******************************!*\
-  !*** ./src/client/js/main.js ***!
-  \*******************************/
-/*! no exports provided */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _App__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./App */ "./src/client/js/App.js");
-
-
-
-const app = new _App__WEBPACK_IMPORTED_MODULE_0__["default"]()
-
-
 /***/ })
 
 /******/ });
-//# sourceMappingURL=main.js.map
+//# sourceMappingURL=app.js.map

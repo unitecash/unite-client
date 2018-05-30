@@ -6,17 +6,7 @@
 <link rel="shortcut icon" href="./res/icon.png" />
 <link rel="stylesheet" type="text/css" href="./css/style.css" />
 <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
-<script src="./js/jquery.js"></script>
-<script src="./js/bitcoincash.min.js"></script>
-<script src="./js/sha512.js"></script>
-<script src="./js/socket.io.js"></script>
-<script src="./js/pnglib.js"></script>
-<script src="./js/identicon.js"></script>
-<script src="./js/bchaddr.js"></script>
-<script src="./js/transaction.js"></script>
-<script src="./js/post.js"></script>
-<script src="./js/name.js"></script>
-<script src="./js/init.js"></script>
+<script src="./js/profile.js"></script>
 <script>
 var load_data = function(){
 	$('#mybalance').on('click', function(){
@@ -28,10 +18,10 @@ var load_data = function(){
 	$('#settingsbutton').on('click', function(){
 		display_html_alert('#settings');
 	});
-	
+
 	// set address text
 	$('#myaddress').text(bchaddr.toCashAddress(address.toString()));
-	
+
 	// get address balance
 	// TODO get_balance(addr)
 	$.ajax({
@@ -41,19 +31,19 @@ var load_data = function(){
 			$('#mybalance').text('BALANCE: ' + data.balance + " BCH");
 		}
 	});
-	
+
 	// get posts this user has written in the past
 	get_posts(address.toString());
-	
+
 	// get the user's name and display italic
 	get_name(address.toString()).then(function(name){
 		myName = name;
 		$('#myName').html('Hi, ' + myName.hash + myName.name + '!');
 	});
-	
+
 	// display a QR code for deposit
 	$('#myqrcode').attr('src', 'https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl=' + bchaddr.toCashAddress(address.toString()));
-	
+
 	// set the private key text
 	$('#privateKeyText').text(privateKey.toWIF());
 }

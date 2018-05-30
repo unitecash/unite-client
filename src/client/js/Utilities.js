@@ -10,28 +10,28 @@
 
 export default class Utilities {
 
-  pop(){
+  static pop(){
 		new Audio('./audio/pop.wav').play();
 	}
 
-	boink(){
+	static boink(){
 		new Audio('./audio/boink.wav').play();
 	}
 
-	beep(){
+	static beep(){
 		new Audio('./audio/beep.wav').play();
 	}
 
-	woosh(){
+	static woosh(){
 		new Audio('./audio/woosh.wav').play();
 	}
 
-	swooosh(){
+	static swooosh(){
 		new Audio('./audio/swooosh.wav').play();
 	}
 
   // thanks to https://stackoverflow.com/a/3745677/5860286 for this
-  hex2a(hexx) {
+  static hex2a(hexx) {
 		hex = hexx.toString();
 		str = '';
 		for(i = 0; i < hex.length; i += 2) {
@@ -41,7 +41,7 @@ export default class Utilities {
 	}
 
   // thanks to https://stackoverflow.com/a/1349426/5860286 for this
-  getRandomChars(length) {
+  static getRandomChars(length) {
     var text = "";
     var l = length || 16;
     var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -52,7 +52,7 @@ export default class Utilities {
   }
 
   // thanks to https://stackoverflow.com/a/3277417/5860286 for this
-  goBack(){
+  static goBack(){
      document.elementFromPoint(10, 10).click(); // TODO his is hacky and should be re-done
   }
 

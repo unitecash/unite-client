@@ -6,38 +6,8 @@
 <link rel="shortcut icon" href="./res/icon.png" />
 <link rel="stylesheet" type="text/css" href="./css/style.css" />
 <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
-<script src="./js/jquery.js"></script>
-<script src="./js/bitcoincash.min.js"></script>
-<script src="./js/sha512.js"></script>
-<script src="./js/socket.io.js"></script>
-<script src="./js/pnglib.js"></script>
-<script src="./js/identicon.js"></script>
-<script src="./js/bchaddr.js"></script>
-<script src="./js/transaction.js"></script>
-<script src="./js/post.js"></script>
-<script src="./js/name.js"></script>
-<script src="./js/init.js"></script>
-<script>
-var userAddress, userName;
-var load_data = function(){
-	userAddress = find_get_parameter('address'); // TODO validation
-	// get posts this user has written in the past
-	get_posts(userAddress);
-	
-	// get the user's name and display italic
-	get_name(userAddress).then(function(name){
-		userName = name;
-		$('#myName').html(name.hash + name.name);
-		$('#headertitle').text(name.name);
-	});
-}
-var handle_new_post = function(post){
-	// Only display posts sent by this user
-	if(post.sender == userAddress){
-		render_post(post, post.isLive, '#posts');
-	}
-}
-</script>
+<script src="./js/app.js"></script>
+<script src="./js/user.js"></script>
 <script>if (window.module) module = window.module;</script>
 </head>
 <body>

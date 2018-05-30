@@ -23,11 +23,21 @@ import './lib/sha512.js'
 import './lib/webtorrent.js'
 
 import Utilities from './Utilities'
+window.Utilities = Utilities
 import Popup from './Popup'
-
-//import TransactionManager from './TransactionManager'
-//import PostManager from './PostManager'
-//import NameManager from './NameManager'
+window.Popup = Popup
+import Transaction from './Transaction'
+window.Transaction = Transaction
+import TransactionManager from './TransactionManager'
+window.TransactionManager = TransactionManager
+import Post from './Post'
+window.Post = Post
+import PostManager from './PostManager'
+window.PostManager = PostManager
+import Name from './Name'
+window.Name = Name
+import NameManager from './NameManager'
+window.NameManager = NameManager
 
 // set up some useful global constants
 const CENTRAL_CONTENT_ADDRESS     = '1HBqvcE3jArLxTe4p2KRaDsRHHtEaqG66z'
@@ -49,7 +59,6 @@ export default class App {
 		this.insightBaseURL
 		this.websock
 		this.highestZIndexUsed = 2
-    window.Utilities = new Utilities()
     this.preformStartup()
 	}
 
@@ -405,3 +414,5 @@ export default class App {
 		}
 
 }
+
+window.app = new App()

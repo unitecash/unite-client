@@ -12,8 +12,12 @@ const config = {
     contentBase: path.join(__dirname, 'public')
   },
   entry: {
-    main: "./src/client/js/main.js",
-    login: "./src/client/js/login.js"
+    app: "./src/client/js/App.js",
+    login: "./src/client/js/pages/login.js",
+    newPosts: "./src/client/js/pages/newPosts.js",
+    profile: "./src/client/js/pages/profile.js",
+    post: "./src/client/js/pages/post.js",
+    user: "./src/client/js/pages/user.js"
   },
   resolve: {
     extensions: ['.tsx', '.ts', '.js']
@@ -125,11 +129,11 @@ const config = {
       filename: (getPath) => {
         return getPath('css/styles.css')
       }
-    }),
-    new webpack.ProvidePlugin({
-      $: "jquery",
-      jQuery: "jquery"
-    })
+    })//,
+    //new webpack.ProvidePlugin({
+    //  $: "jquery",
+    //  jQuery: "jquery"
+    //})
   ],
   node: {
     fs: 'empty'
