@@ -24,10 +24,16 @@ import './lib/webtorrent.js'
 
 import Utilities from './Utilities'
 window.Utilities = Utilities
-import Popup from './Popup'
+import Popup from './UI/Popup'
 window.Popup = Popup
-import InteractivePopup from './InteractivePopup'
+import InteractivePopup from './UI/InteractivePopup'
 window.InteractivePopup = InteractivePopup
+import Banner from './UI/Banner'
+window.Banner = Banner
+import ErrorBanner from './UI/ErrorBanner'
+window.ErrorBanner = ErrorBanner
+import SuccessBanner from './UI/SuccessBanner'
+window.SuccessBanner = SuccessBanner
 import Transaction from './Transaction'
 window.Transaction = Transaction
 import TransactionManager from './TransactionManager'
@@ -157,59 +163,6 @@ export default class App {
 		}
 
   }
-
-	// Provides a standard way of displaying error banners.
-	display_error(error, time=5000){
-		Utilities.boink()
-		// get a random ID
-		var randID = sha512('potato'+new Date().toTimeString()+error).substr(0, 16);
-		var newString = '<div class="banner error" id="'+randID+'">'+error;
-		newString += '<button onclick="$(\'#'+randID+'\').slideUp(\'fast\');" ';
-		newString += 'class="UICloseBannerButton">×</button></div>';
-		$('body').append(newString);
-		$('#'+randID).hide();
-		$('#'+randID).slideToggle('fast');
-		setTimeout(function(){
-			$('#'+randID).slideUp('fast');
-		}, time);
-	}
-
-		// Provides a way of displaying success and notification banners.
-		/* TODO:
-		- Add a customizable click event so the user can be directed to the source
-  	of the notification or alert.
-		*/
-	display_success(message, time=5000){
-		// get a random ID
-		var randID = sha512('tomato'+new Date().toTimeString()+error).substr(0, 16);
-		var newString = '<div class="banner success" id="'+randID+'">'+message;
-		newString += '<button onclick="$(\'#'+randID+'\').slideUp(\'fast\');" ';
-		newString += 'class="UICloseBannerButton">×</button></div>';
-		$('body').append(newString);
-		$('#'+randID).hide();
-		$('#'+randID).slideToggle('fast');
-		setTimeout(function(){
-			$('#'+randID).slideUp('fast');
-		}, time);
-	}
-
-		// Displays an alert from an HTML template present on the host page
-	display_html_alert(tag){
-		pop();
-		var randID = sha512('tomato'+new Date().toTimeString()+tag).substr(0, 16);
-		var newString = '<div style="z-index:'+highestZIndexUsed+';" class="UIDimmedBackground" id="';
-		newString += randID+'a" onclick="$(\''+tag+'\').fadeOut(100);';
-		newString += '$(\'#'+randID+'a\').fadeOut(100);woosh();setTimeout(function(){';
-		newString += '$(\'#'+randID+'a\').remove();}, 150);"></div>';
-		$('body').append(newString);
-		$('#'+randID+'a').hide();
-		$('#'+randID+'a').fadeIn(100);
-		$(tag).slideDown(100);
-		$(tag).attr('style', 'z-index:'+(highestZIndexUsed+1)+';');
-		$(tag).css('display', 'inline');
-		document.activeElement.blur();
-		highestZIndexUsed += 2;
-	}
 
 		// Parses a notification out of a post, then displays the notification.
 		/* TODO:

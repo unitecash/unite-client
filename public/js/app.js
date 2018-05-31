@@ -880,20 +880,23 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _lib_webtorrent_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./lib/webtorrent.js */ "./src/client/js/lib/webtorrent.js");
 /* harmony import */ var _lib_webtorrent_js__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(_lib_webtorrent_js__WEBPACK_IMPORTED_MODULE_7__);
 /* harmony import */ var _Utilities__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./Utilities */ "./src/client/js/Utilities.js");
-/* harmony import */ var _Popup__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./Popup */ "./src/client/js/Popup.js");
-/* harmony import */ var _InteractivePopup__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./InteractivePopup */ "./src/client/js/InteractivePopup.js");
-/* harmony import */ var _Transaction__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./Transaction */ "./src/client/js/Transaction.js");
-/* harmony import */ var _Transaction__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(_Transaction__WEBPACK_IMPORTED_MODULE_11__);
-/* harmony import */ var _TransactionManager__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./TransactionManager */ "./src/client/js/TransactionManager.js");
-/* harmony import */ var _Post__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./Post */ "./src/client/js/Post.js");
-/* harmony import */ var _Post__WEBPACK_IMPORTED_MODULE_13___default = /*#__PURE__*/__webpack_require__.n(_Post__WEBPACK_IMPORTED_MODULE_13__);
-/* harmony import */ var _PostManager__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./PostManager */ "./src/client/js/PostManager.js");
-/* harmony import */ var _Name__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./Name */ "./src/client/js/Name.js");
-/* harmony import */ var _Name__WEBPACK_IMPORTED_MODULE_15___default = /*#__PURE__*/__webpack_require__.n(_Name__WEBPACK_IMPORTED_MODULE_15__);
-/* harmony import */ var _NameManager__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./NameManager */ "./src/client/js/NameManager.js");
-/* harmony import */ var _NameManager__WEBPACK_IMPORTED_MODULE_16___default = /*#__PURE__*/__webpack_require__.n(_NameManager__WEBPACK_IMPORTED_MODULE_16__);
-/* harmony import */ var _NetworkManager__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./NetworkManager */ "./src/client/js/NetworkManager.js");
-/* harmony import */ var _NetworkManager__WEBPACK_IMPORTED_MODULE_17___default = /*#__PURE__*/__webpack_require__.n(_NetworkManager__WEBPACK_IMPORTED_MODULE_17__);
+/* harmony import */ var _UI_Popup__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./UI/Popup */ "./src/client/js/UI/Popup.js");
+/* harmony import */ var _UI_InteractivePopup__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./UI/InteractivePopup */ "./src/client/js/UI/InteractivePopup.js");
+/* harmony import */ var _UI_Banner__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./UI/Banner */ "./src/client/js/UI/Banner.js");
+/* harmony import */ var _UI_ErrorBanner__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./UI/ErrorBanner */ "./src/client/js/UI/ErrorBanner.js");
+/* harmony import */ var _UI_SuccessBanner__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./UI/SuccessBanner */ "./src/client/js/UI/SuccessBanner.js");
+/* harmony import */ var _Transaction__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./Transaction */ "./src/client/js/Transaction.js");
+/* harmony import */ var _Transaction__WEBPACK_IMPORTED_MODULE_14___default = /*#__PURE__*/__webpack_require__.n(_Transaction__WEBPACK_IMPORTED_MODULE_14__);
+/* harmony import */ var _TransactionManager__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./TransactionManager */ "./src/client/js/TransactionManager.js");
+/* harmony import */ var _Post__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./Post */ "./src/client/js/Post.js");
+/* harmony import */ var _Post__WEBPACK_IMPORTED_MODULE_16___default = /*#__PURE__*/__webpack_require__.n(_Post__WEBPACK_IMPORTED_MODULE_16__);
+/* harmony import */ var _PostManager__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./PostManager */ "./src/client/js/PostManager.js");
+/* harmony import */ var _Name__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./Name */ "./src/client/js/Name.js");
+/* harmony import */ var _Name__WEBPACK_IMPORTED_MODULE_18___default = /*#__PURE__*/__webpack_require__.n(_Name__WEBPACK_IMPORTED_MODULE_18__);
+/* harmony import */ var _NameManager__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./NameManager */ "./src/client/js/NameManager.js");
+/* harmony import */ var _NameManager__WEBPACK_IMPORTED_MODULE_19___default = /*#__PURE__*/__webpack_require__.n(_NameManager__WEBPACK_IMPORTED_MODULE_19__);
+/* harmony import */ var _NetworkManager__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./NetworkManager */ "./src/client/js/NetworkManager.js");
+/* harmony import */ var _NetworkManager__WEBPACK_IMPORTED_MODULE_20___default = /*#__PURE__*/__webpack_require__.n(_NetworkManager__WEBPACK_IMPORTED_MODULE_20__);
 /**
  * Unite Client Implementation
  * Author: The Unite.cash Developers
@@ -921,23 +924,29 @@ window.io = _lib_socket_io_js__WEBPACK_IMPORTED_MODULE_5___default.a
 
 window.Utilities = _Utilities__WEBPACK_IMPORTED_MODULE_8__["default"]
 
-window.Popup = _Popup__WEBPACK_IMPORTED_MODULE_9__["default"]
+window.Popup = _UI_Popup__WEBPACK_IMPORTED_MODULE_9__["default"]
 
-window.InteractivePopup = _InteractivePopup__WEBPACK_IMPORTED_MODULE_10__["default"]
+window.InteractivePopup = _UI_InteractivePopup__WEBPACK_IMPORTED_MODULE_10__["default"]
 
-window.Transaction = _Transaction__WEBPACK_IMPORTED_MODULE_11___default.a
+window.Banner = _UI_Banner__WEBPACK_IMPORTED_MODULE_11__["default"]
 
-window.TransactionManager = _TransactionManager__WEBPACK_IMPORTED_MODULE_12__["default"]
+window.ErrorBanner = _UI_ErrorBanner__WEBPACK_IMPORTED_MODULE_12__["default"]
 
-window.Post = _Post__WEBPACK_IMPORTED_MODULE_13___default.a
+window.SuccessBanner = _UI_SuccessBanner__WEBPACK_IMPORTED_MODULE_13__["default"]
 
-window.PostManager = _PostManager__WEBPACK_IMPORTED_MODULE_14__["default"]
+window.Transaction = _Transaction__WEBPACK_IMPORTED_MODULE_14___default.a
 
-window.Name = _Name__WEBPACK_IMPORTED_MODULE_15___default.a
+window.TransactionManager = _TransactionManager__WEBPACK_IMPORTED_MODULE_15__["default"]
 
-window.NameManager = _NameManager__WEBPACK_IMPORTED_MODULE_16___default.a
+window.Post = _Post__WEBPACK_IMPORTED_MODULE_16___default.a
 
-window.NetworkManager = _NetworkManager__WEBPACK_IMPORTED_MODULE_17___default.a
+window.PostManager = _PostManager__WEBPACK_IMPORTED_MODULE_17__["default"]
+
+window.Name = _Name__WEBPACK_IMPORTED_MODULE_18___default.a
+
+window.NameManager = _NameManager__WEBPACK_IMPORTED_MODULE_19___default.a
+
+window.NetworkManager = _NetworkManager__WEBPACK_IMPORTED_MODULE_20___default.a
 
 // set up some useful global constants
 const CENTRAL_CONTENT_ADDRESS     = '1HBqvcE3jArLxTe4p2KRaDsRHHtEaqG66z'
@@ -990,7 +999,7 @@ class App {
 			if(Notification.permission == 'default'
           && localStorage.notification == undefined){
 				localStorage.notification = 1;
-        var p = new _Popup__WEBPACK_IMPORTED_MODULE_9__["default"]()
+        var p = new _UI_Popup__WEBPACK_IMPORTED_MODULE_9__["default"]()
         p.setTitle('ALLOW NOTIFICATIONS')
         p.addText('Notifications let you know when your friends send you tips ')
         p.addText('or replies')
@@ -998,13 +1007,13 @@ class App {
 				Notification.requestPermission(function(permission){
           _Utilities__WEBPACK_IMPORTED_MODULE_8__["default"].goBack()
           if(permission != 'granted'){
-            var p = new _Popup__WEBPACK_IMPORTED_MODULE_9__["default"]()
+            var p = new _UI_Popup__WEBPACK_IMPORTED_MODULE_9__["default"]()
             p.setTitle('NOTIFICATIONS')
             p.addText('Unite will work without notifications, but you might ')
             p.addText('miss out when things happen.')
             p.show()
 					}else{
-						new SuccessBanner('We\'ll let you know when things happen!').show()
+						new _UI_SuccessBanner__WEBPACK_IMPORTED_MODULE_13__["default"]('We\'ll let you know when things happen!').show()
 					}
 				})
 			}
@@ -1053,59 +1062,6 @@ class App {
 		}
 
   }
-
-	// Provides a standard way of displaying error banners.
-	display_error(error, time=5000){
-		_Utilities__WEBPACK_IMPORTED_MODULE_8__["default"].boink()
-		// get a random ID
-		var randID = sha512('potato'+new Date().toTimeString()+error).substr(0, 16);
-		var newString = '<div class="banner error" id="'+randID+'">'+error;
-		newString += '<button onclick="$(\'#'+randID+'\').slideUp(\'fast\');" ';
-		newString += 'class="UICloseBannerButton">×</button></div>';
-		_lib_jquery_js__WEBPACK_IMPORTED_MODULE_0___default()('body').append(newString);
-		_lib_jquery_js__WEBPACK_IMPORTED_MODULE_0___default()('#'+randID).hide();
-		_lib_jquery_js__WEBPACK_IMPORTED_MODULE_0___default()('#'+randID).slideToggle('fast');
-		setTimeout(function(){
-			_lib_jquery_js__WEBPACK_IMPORTED_MODULE_0___default()('#'+randID).slideUp('fast');
-		}, time);
-	}
-
-		// Provides a way of displaying success and notification banners.
-		/* TODO:
-		- Add a customizable click event so the user can be directed to the source
-  	of the notification or alert.
-		*/
-	display_success(message, time=5000){
-		// get a random ID
-		var randID = sha512('tomato'+new Date().toTimeString()+error).substr(0, 16);
-		var newString = '<div class="banner success" id="'+randID+'">'+message;
-		newString += '<button onclick="$(\'#'+randID+'\').slideUp(\'fast\');" ';
-		newString += 'class="UICloseBannerButton">×</button></div>';
-		_lib_jquery_js__WEBPACK_IMPORTED_MODULE_0___default()('body').append(newString);
-		_lib_jquery_js__WEBPACK_IMPORTED_MODULE_0___default()('#'+randID).hide();
-		_lib_jquery_js__WEBPACK_IMPORTED_MODULE_0___default()('#'+randID).slideToggle('fast');
-		setTimeout(function(){
-			_lib_jquery_js__WEBPACK_IMPORTED_MODULE_0___default()('#'+randID).slideUp('fast');
-		}, time);
-	}
-
-		// Displays an alert from an HTML template present on the host page
-	display_html_alert(tag){
-		pop();
-		var randID = sha512('tomato'+new Date().toTimeString()+tag).substr(0, 16);
-		var newString = '<div style="z-index:'+highestZIndexUsed+';" class="UIDimmedBackground" id="';
-		newString += randID+'a" onclick="$(\''+tag+'\').fadeOut(100);';
-		newString += '$(\'#'+randID+'a\').fadeOut(100);woosh();setTimeout(function(){';
-		newString += '$(\'#'+randID+'a\').remove();}, 150);"></div>';
-		_lib_jquery_js__WEBPACK_IMPORTED_MODULE_0___default()('body').append(newString);
-		_lib_jquery_js__WEBPACK_IMPORTED_MODULE_0___default()('#'+randID+'a').hide();
-		_lib_jquery_js__WEBPACK_IMPORTED_MODULE_0___default()('#'+randID+'a').fadeIn(100);
-		_lib_jquery_js__WEBPACK_IMPORTED_MODULE_0___default()(tag).slideDown(100);
-		_lib_jquery_js__WEBPACK_IMPORTED_MODULE_0___default()(tag).attr('style', 'z-index:'+(highestZIndexUsed+1)+';');
-		_lib_jquery_js__WEBPACK_IMPORTED_MODULE_0___default()(tag).css('display', 'inline');
-		document.activeElement.blur();
-		highestZIndexUsed += 2;
-	}
 
 		// Parses a notification out of a post, then displays the notification.
 		/* TODO:
@@ -1320,93 +1276,6 @@ window.app = new App()
 
 /***/ }),
 
-/***/ "./src/client/js/InteractivePopup.js":
-/*!*******************************************!*\
-  !*** ./src/client/js/InteractivePopup.js ***!
-  \*******************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return InteractivePopup; });
-/**
- * Interactive popup
- * Author: The Unite.cash Developers
- * License: GNU AGPL v3
- *
- * Provides a class for creating interactive popup windows out of HTML elements.
- *
- * @file Defines the InteractivePopup class.
- */
-
-class InteractivePopup {
-
-  constructor (tag, options) {
-    if (typeof options === "undefined") {
-      options = {}
-    }
-    if (typeof options.animationSpeed === "undefined") {
-      options.animationSpeed = 100
-    }
-    if (typeof options.playSound === "undefined") {
-      options.playSound = true
-    }
-    this.options = options
-    this.backgroundID = Utilities.getRandomChars(16)
-    this.tag = tag
-    return this
-  }
-
-  show () {
-    if(this.options.playSound){
-      Utilities.pop()
-    }
-
-    var alertBackground = $('<div></div>')
-    alertBackground.attr('style', 'z-index: ' + app.highestZIndexUsed)
-    alertBackground.attr('class', 'UIDimmedBackground hidden')
-    alertBackground.attr('id', this.backgroundID)
-    $('body').on('click', '#' + this.backgroundID, () => {
-      this.hide()
-    })
-
-		$('body').append(alertBackground)
-		$('#' + this.backgroundID).fadeIn(this.options.animationSpeed)
-    $(this.tag).slideDown(this.options.animationSpeed)
-    $(this.tag).attr('style', 'z-index:'+(app.highestZIndexUsed+1))
-    $(this.tag).css('display', 'inline')
-
-		document.activeElement.blur()
-		app.highestZIndexUsed += 2
-  }
-
-  // thanks to https://stackoverflow.com/a/7259663/5860286 for this
-  hide () {
-    if(this.options.playSound) {
-      Utilities.woosh()
-    }
-    $(this.tag).fadeOut(this.options.animationSpeed)
-    $.when($('#' + this.backgroundID).fadeOut(this.options.animationSpeed)).done(function() {
-      $('#' + this.backgroundID).remove()
-    })
-  }
-
-  setAnimationSpeed(speed){
-    this.options.animationSpeed = speed
-    return this
-  }
-
-  setOptions(options){
-    this.options = options;
-    return this
-  }
-
-}
-
-
-/***/ }),
-
 /***/ "./src/client/js/Name.js":
 /*!*******************************!*\
   !*** ./src/client/js/Name.js ***!
@@ -1545,161 +1414,6 @@ var get_name_hash = function(addr){
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-
-
-/***/ }),
-
-/***/ "./src/client/js/Popup.js":
-/*!********************************!*\
-  !*** ./src/client/js/Popup.js ***!
-  \********************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Popup; });
-/**
- * Popup class
- * Author: The Unite.cash Developers
- * Licence: GNU AGPL v3
- *
- * This file provides a class for showing information in a popup dialog.
- *
- * @file Defines the Popup class
- */
-
-class Popup {
-
-  /**
-	 * Constructs a Popup object.
-	 *
-	 * @constructor
-	 */
-  constructor (options) {
-    if (typeof options === "undefined") {
-      options = {}
-    }
-    if (typeof options.text === "undefined") {
-      options.text = ''
-    }
-    if (typeof options.animationSpeed === "undefined") {
-      options.animationSpeed = 100
-    }
-    if (typeof options.playSound === "undefined") {
-      options.playSound = true
-    }
-    if (typeof options.showCloseButton === "undefined") {
-      options.showCloseButton = false
-    }
-    if (typeof options.centered === "undefined") {
-      options.centered = false
-    }
-    this.options = options
-    this.divID = Utilities.getRandomChars(16)
-    this.backgroundID = Utilities.getRandomChars(16)
-    if(this.options.showCloseButton) {
-      this.closeButtonID = Utilities.getRandomChars(16)
-    }
-    return this
-  }
-
-  show () {
-    if(this.options.playSound){
-      Utilities.pop()
-    }
-
-    var alertBackground = $('<div></div>')
-    alertBackground.attr('style', 'z-index: ' + app.highestZIndexUsed)
-    alertBackground.attr('class', 'UIDimmedBackground hidden')
-    alertBackground.attr('id', this.backgroundID)
-    $('body').on('click', '#' + this.backgroundID, () => {
-      this.hide()
-    })
-
-    var alertHTML = $('<div></div>')
-    alertHTML.attr('style', 'z-index: ' + (app.highestZIndexUsed+1))
-    alertHTML.attr('id', this.divID)
-    if(this.options.isCentered){
-      alertHTML.attr('class', 'UIAlertWindow center-text hidden')
-    }else{
-      alertHTML.attr('class', 'UIAlertWindow hidden')
-    }
-
-    if(this.options.titleText != undefined){
-      var alertTitle = $('<h1></h1>')
-      alertTitle.text(this.options.titleText)
-      alertHTML.append(alertTitle)
-    }
-
-    if(this.options.showCloseButton){
-      var closeButton = $('<button></button>')
-      closeButton.attr('class', 'UICloseButton')
-      closeButton.attr('id', this.closeButtonID)
-      $('body').on('click', '#' + this.closeButtonID, () => {
-        this.hide()
-      })
-      alertHTML.append(closeButton)
-    }
-
-    alertHTML.append(this.options.text)
-		$('body').append(alertBackground)
-    $('body').append(alertHTML)
-		$('#' + this.backgroundID).fadeIn(this.options.animationSpeed)
-		$('#' + this.divID).slideDown(this.options.animationSpeed)
-
-		document.activeElement.blur()
-		app.highestZIndexUsed += 2
-  }
-
-  // thanks to https://stackoverflow.com/a/7259663/5860286 for this
-  hide () {
-    if(this.options.playSound) {
-      Utilities.woosh()
-    }
-    $.when($('#' + this.divID).fadeOut(this.options.animationSpeed)).done(function() {
-      $('#' + this.divID).remove()
-    })
-    $.when($('#' + this.backgroundID).fadeOut(this.options.animationSpeed)).done(function() {
-      $('#' + this.backgroundID).remove()
-    })
-  }
-
-  setTitle (title) {
-    this.options.titleText = title
-    return this
-  }
-
-  addText (text) {
-    this.options.text += text
-    return this
-  }
-
-  setText (text) {
-    this.options.text = text
-    return this
-  }
-
-  setAnimationSpeed(speed){
-    this.options.animationSpeed = speed
-    return this
-  }
-
-  setIsCentered(centered){
-    this.options.centered = centered
-    return this
-  }
-
-  setCloseButtonShown(showCloseButton){
-    this.options.showCloseButton = showCloseButton
-  }
-
-  setOptions(options){
-    this.options = options;
-    return this
-  }
-
-}
 
 
 /***/ }),
@@ -2205,6 +1919,436 @@ __webpack_require__.r(__webpack_exports__);
    
 
  }
+
+
+/***/ }),
+
+/***/ "./src/client/js/UI/Banner.js":
+/*!************************************!*\
+  !*** ./src/client/js/UI/Banner.js ***!
+  \************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Banner; });
+/**
+ * Banners
+ * Author: The Unite.cash Developers
+ * License: GNU AGPL v3
+ *
+ * Provides a class for creating on-screen banners
+ *
+ * @file Defines the Banner class.
+ */
+
+class Banner {
+
+  constructor (text, options) {
+    if (typeof options === 'undefined') {
+      options = {}
+    }
+    if (typeof options.animationSpeed === 'undefined') {
+      options.animationSpeed = 250
+    }
+    if (typeof options.playSound === 'undefined') {
+      options.playSound = true
+    }
+    if (typeof options.time === 'undefined') {
+      options.time = 5000
+    }
+    if (typeof options.backgroundColor === 'undefined') {
+      options.backgroundColor = '#660033'
+    }
+    this.options = options
+    this.ID = Utilities.getRandomChars(16)
+    this.closeButtonID = Utilities.getRandomChars(16)
+    this.text = text
+    return this
+  }
+
+  show () {
+    if(this.options.playSound){
+      Utilities.boink() // TODO customize the sound to be played
+    }
+
+    var alertBanner = $('<div></div>')
+    alertBanner.attr('class', 'banner')
+    alertBanner.attr('id', this.ID)
+    alertBanner.css('backgroundColor', this.options.backgroundColor)
+
+    var closeButton = $('<button></button>')
+    closeButton.attr('class', 'UICloseBannerButton')
+    closeButton.attr('id', this.closeButtonID)
+    closeButton.append('×')
+    $('body').on('click', '#' + this.closeButtonID, () => {
+      this.hide()
+    })
+
+    alertBanner.append(closeButton)
+    alertBanner.append(this.text)
+    $('body').append(alertBanner)
+    $('#' + this.ID).hide()
+    $('#' + this.ID).slideToggle(this.options.animationSpeed)
+    setTimeout(() => {
+      this.hide()
+    }, this.options.time);
+
+  }
+
+  // thanks to https://stackoverflow.com/a/7259663/5860286 for this
+  hide () {
+    $.when($('#' + this.ID).slideUp(this.options.animationSpeed)).done(function() {
+      $('#' + this.ID).remove()
+    })
+  }
+
+  setAnimationSpeed(speed){
+    this.options.animationSpeed = speed
+    return this
+  }
+
+  setTime(time){
+    this.options.time = time
+    return this
+  }
+
+  setOptions(options){
+    this.options = options;
+    return this
+  }
+
+  setBackgroundColor(backgroundColor){
+    this.options.backgroundColor = setBackgroundColor
+    return this
+  }
+
+}
+
+
+/***/ }),
+
+/***/ "./src/client/js/UI/ErrorBanner.js":
+/*!*****************************************!*\
+  !*** ./src/client/js/UI/ErrorBanner.js ***!
+  \*****************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return ErrorBanner; });
+/* harmony import */ var _Banner__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Banner */ "./src/client/js/UI/Banner.js");
+/**
+ * Error Banners
+ * Author: The Unite.cash Developers
+ * License: GNU AGPL v3
+ *
+ * Provides a template for creating error banners.
+ *
+ * @file Defines the ErrorBanner class.
+ */
+
+
+
+class ErrorBanner extends _Banner__WEBPACK_IMPORTED_MODULE_0__["default"] {
+
+  constructor(text, options){
+    if (typeof options === 'undefined') {
+      options = {}
+    }
+    if (typeof options.backgroundColor === 'undefined'){
+      options.backgroundColor = '#660033'
+    }
+    super(text, options)
+    return this
+  }
+
+}
+
+
+/***/ }),
+
+/***/ "./src/client/js/UI/InteractivePopup.js":
+/*!**********************************************!*\
+  !*** ./src/client/js/UI/InteractivePopup.js ***!
+  \**********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return InteractivePopup; });
+/**
+ * Interactive popup
+ * Author: The Unite.cash Developers
+ * License: GNU AGPL v3
+ *
+ * Provides a class for creating interactive popup windows out of HTML elements.
+ *
+ * @file Defines the InteractivePopup class.
+ */
+
+class InteractivePopup {
+
+  constructor (tag, options) {
+    if (typeof options === "undefined") {
+      options = {}
+    }
+    if (typeof options.animationSpeed === "undefined") {
+      options.animationSpeed = 100
+    }
+    if (typeof options.playSound === "undefined") {
+      options.playSound = true
+    }
+    this.options = options
+    this.backgroundID = Utilities.getRandomChars(16)
+    this.tag = tag
+    return this
+  }
+
+  show () {
+    if(this.options.playSound){
+      Utilities.pop()
+    }
+
+    var alertBackground = $('<div></div>')
+    alertBackground.attr('style', 'z-index: ' + app.highestZIndexUsed)
+    alertBackground.attr('class', 'UIDimmedBackground hidden')
+    alertBackground.attr('id', this.backgroundID)
+    $('body').on('click', '#' + this.backgroundID, () => {
+      this.hide()
+    })
+
+		$('body').append(alertBackground)
+		$('#' + this.backgroundID).fadeIn(this.options.animationSpeed)
+    $(this.tag).slideDown(this.options.animationSpeed)
+    $(this.tag).attr('style', 'z-index:'+(app.highestZIndexUsed+1))
+    $(this.tag).css('display', 'inline')
+
+		document.activeElement.blur()
+		app.highestZIndexUsed += 2
+  }
+
+  // thanks to https://stackoverflow.com/a/7259663/5860286 for this
+  hide () {
+    if(this.options.playSound) {
+      Utilities.woosh()
+    }
+    $(this.tag).fadeOut(this.options.animationSpeed)
+    $.when($('#' + this.backgroundID).fadeOut(this.options.animationSpeed)).done(function() {
+      $('#' + this.backgroundID).remove()
+    })
+  }
+
+  setAnimationSpeed(speed){
+    this.options.animationSpeed = speed
+    return this
+  }
+
+  setOptions(options){
+    this.options = options;
+    return this
+  }
+
+}
+
+
+/***/ }),
+
+/***/ "./src/client/js/UI/Popup.js":
+/*!***********************************!*\
+  !*** ./src/client/js/UI/Popup.js ***!
+  \***********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Popup; });
+/**
+ * Popup class
+ * Author: The Unite.cash Developers
+ * Licence: GNU AGPL v3
+ *
+ * This file provides a class for showing information in a popup dialog.
+ *
+ * @file Defines the Popup class
+ */
+
+class Popup {
+
+  /**
+	 * Constructs a Popup object.
+	 *
+	 * @constructor
+	 */
+  constructor (options) {
+    if (typeof options === "undefined") {
+      options = {}
+    }
+    if (typeof options.text === "undefined") {
+      options.text = ''
+    }
+    if (typeof options.animationSpeed === "undefined") {
+      options.animationSpeed = 100
+    }
+    if (typeof options.playSound === "undefined") {
+      options.playSound = true
+    }
+    if (typeof options.showCloseButton === "undefined") {
+      options.showCloseButton = false
+    }
+    if (typeof options.centered === "undefined") {
+      options.centered = false
+    }
+    this.options = options
+    this.divID = Utilities.getRandomChars(16)
+    this.backgroundID = Utilities.getRandomChars(16)
+    if(this.options.showCloseButton) {
+      this.closeButtonID = Utilities.getRandomChars(16)
+    }
+    return this
+  }
+
+  show () {
+    if(this.options.playSound){
+      Utilities.pop()
+    }
+
+    var alertBackground = $('<div></div>')
+    alertBackground.attr('style', 'z-index: ' + app.highestZIndexUsed)
+    alertBackground.attr('class', 'UIDimmedBackground hidden')
+    alertBackground.attr('id', this.backgroundID)
+    $('body').on('click', '#' + this.backgroundID, () => {
+      this.hide()
+    })
+
+    var alertHTML = $('<div></div>')
+    alertHTML.attr('style', 'z-index: ' + (app.highestZIndexUsed+1))
+    alertHTML.attr('id', this.divID)
+    if(this.options.isCentered){
+      alertHTML.attr('class', 'UIAlertWindow center-text hidden')
+    }else{
+      alertHTML.attr('class', 'UIAlertWindow hidden')
+    }
+
+    if(this.options.titleText != undefined){
+      var alertTitle = $('<h1></h1>')
+      alertTitle.text(this.options.titleText)
+      alertHTML.append(alertTitle)
+    }
+
+    if(this.options.showCloseButton){
+      var closeButton = $('<button></button>')
+      closeButton.attr('class', 'UICloseButton')
+      closeButton.attr('id', this.closeButtonID)
+      $('body').on('click', '#' + this.closeButtonID, () => {
+        this.hide()
+      })
+      alertHTML.append(closeButton)
+    }
+
+    alertHTML.append(this.options.text)
+		$('body').append(alertBackground)
+    $('body').append(alertHTML)
+		$('#' + this.backgroundID).fadeIn(this.options.animationSpeed)
+		$('#' + this.divID).slideDown(this.options.animationSpeed)
+
+		document.activeElement.blur()
+		app.highestZIndexUsed += 2
+  }
+
+  // thanks to https://stackoverflow.com/a/7259663/5860286 for this
+  hide () {
+    if(this.options.playSound) {
+      Utilities.woosh()
+    }
+    $.when($('#' + this.divID).fadeOut(this.options.animationSpeed)).done(function() {
+      $('#' + this.divID).remove()
+    })
+    $.when($('#' + this.backgroundID).fadeOut(this.options.animationSpeed)).done(function() {
+      $('#' + this.backgroundID).remove()
+    })
+  }
+
+  setTitle (title) {
+    this.options.titleText = title
+    return this
+  }
+
+  addText (text) {
+    this.options.text += text
+    return this
+  }
+
+  setText (text) {
+    this.options.text = text
+    return this
+  }
+
+  setAnimationSpeed(speed){
+    this.options.animationSpeed = speed
+    return this
+  }
+
+  setIsCentered(centered){
+    this.options.centered = centered
+    return this
+  }
+
+  setCloseButtonShown(showCloseButton){
+    this.options.showCloseButton = showCloseButton
+  }
+
+  setOptions(options){
+    this.options = options;
+    return this
+  }
+
+}
+
+
+/***/ }),
+
+/***/ "./src/client/js/UI/SuccessBanner.js":
+/*!*******************************************!*\
+  !*** ./src/client/js/UI/SuccessBanner.js ***!
+  \*******************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return SuccessBanner; });
+/* harmony import */ var _Banner__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Banner */ "./src/client/js/UI/Banner.js");
+/**
+ * Success Banners
+ * Author: The Unite.cash Developers
+ * License: GNU AGPL v3
+ *
+ * Provides a template for creating success banners.
+ *
+ * @file Defines the ErrorBanner class.
+ */
+
+
+
+class SuccessBanner extends _Banner__WEBPACK_IMPORTED_MODULE_0__["default"] {
+
+  constructor(text, options){
+    if (typeof options === 'undefined') {
+      options = {}
+    }
+    if (typeof options.backgroundColor === 'undefined'){
+      options.backgroundColor = '#114411'
+    }
+    super(text, options)
+    return this
+  }
+
+}
 
 
 /***/ }),

@@ -147,14 +147,6 @@ body {
 	align:center;
 	font-weight:bold;
 }
-.error {
-	color:white;
-	background-color:#82092f;
-}
-.success {
-	color:white;
-	background-color:#331066;
-}
 .UICloseBannerButton {
 	float:right;
 	background-color:transparent;
