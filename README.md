@@ -4,17 +4,29 @@ This is a fully open-source implementation of a Bitcoin Cash blockchain
 social network. Keys never leave the client, and everything runs either
 in-browser or in Electron.
 
-## Temporary notified
+## Temporary Note
 
 This project and repository is currently in the process of being
-re-organized. Things may not work, and files can and will move around
+refactored. Things may not work, and files can and will move around
 frequently. This software has yet to enter pre-alpha stage.
 
-## Protocol
+## Building
 
-Values are stored in OP_RETURN transactions on the BCH blockchain. Referenced
-data is stored inside magnet URLs, accessible via WebTorrent or similar
-software.
+You will need NodeJS and NPM in order to build and run the project.
+The process should work on all operating systems that can run NPM.
+
+Clone the repository to a directory on your computer. Then run the
+commands below:
+
+```npm install```
+
+```npm run build```
+
+```npm run start```
+
+You may open an issue if you have questions or trouble. However,
+be advised that this project is in pre-alpha stage and that things may not
+work.
 
 ## License
 
