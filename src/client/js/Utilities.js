@@ -10,51 +10,74 @@
 
 export default class Utilities {
 
-  static pop(){
+  static pop() {
 		new Audio('./audio/pop.wav').play();
 	}
 
-	static boink(){
+	static boink() {
 		new Audio('./audio/boink.wav').play();
 	}
 
-	static beep(){
+	static beep() {
 		new Audio('./audio/beep.wav').play();
 	}
 
-	static woosh(){
+	static woosh() {
 		new Audio('./audio/woosh.wav').play();
 	}
 
-	static swooosh(){
+	static swooosh() {
 		new Audio('./audio/swooosh.wav').play();
 	}
 
   // thanks to https://stackoverflow.com/a/3745677/5860286 for this
   static hex2a(hexx) {
-		hex = hexx.toString();
-		str = '';
+		hex = hexx.toString()
+		str = ''
 		for(i = 0; i < hex.length; i += 2) {
-			str += String.fromCharCode(parseInt(hex.substr(i, 2), 16));
+			str += String.fromCharCode(parseInt(hex.substr(i, 2), 16))
 		}
-		return str;
+		return str
 	}
 
   // thanks to https://stackoverflow.com/a/1349426/5860286 for this
   static getRandomChars(length) {
-    var text = "";
-    var l = length || 16;
-    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-    for (var i = 0; i < l; i++){
-      text += possible.charAt(Math.floor(Math.random() * possible.length));
+    var text = ''
+    var l = length || 16
+    var poss = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+    for (var i = 0; i < l; i++) {
+      text += poss.charAt(Math.floor(Math.random() * possible.length))
     }
-    return text;
+    return text
   }
 
   // thanks to https://stackoverflow.com/a/3277417/5860286 for this
-  static goBack(){
-     document.elementFromPoint(10, 10).click(); // TODO his is hacky and should be re-done
+  static closePopup() { // hacky
+    document.elementFromPoint(10, 10).click()
   }
 
+  static resolveGETParam(parameterName) { // hacky
+    var result = null,
+        tmp = []
+    var items = location.search.substr(1).split("&")
+    for (var index = 0; index < items.length; index++) {
+        tmp = items[index].split("=")
+        if (tmp[0] === parameterName) result = decodeURIComponent(tmp[1])
+    }
+    return result;
+  }
+
+  static redirect(URL) {
+    networkManager.disconnect()
+    window.location.href = URL
+  }
+
+  static logOut() {
+    $('*').fadeOut(1000)
+    delete sessionStorage.privateKey
+    setTimeout(() => {
+      Utilities.redirect('login.html')
+    }, 1100)
+  }
 
 }

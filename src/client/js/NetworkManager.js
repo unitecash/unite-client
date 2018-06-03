@@ -46,4 +46,8 @@ export default class NetworkManager {
     this.socketStream.emit('unsubscribe', addr)
   }
 
+  disconnect() {
+    this.socketStream.disconnect()
+  }
+
 }
