@@ -5,7 +5,8 @@
  *
  * Define a class for storing data about notifications
  *
- * @todo Deep linking functionality
+ * TODO:
+ * - Deep linking functionality
  *
  * @file Defines the Notification class
  */

@@ -98,23 +98,7 @@ export default class App {
 
 			new NotificationManager()
 
-			// connect to the WebSocket
-			var websock = io(sessionStorage.webSocketEndpoint);
-			websock.on('connect', () => {
-
-				// subscribe to the relevant channels
-				// TODO only subscribe to channels for addresses the user indicates
-				websock.emit('subscribe', 'inv')
-
-				// begin listening on the WebSocket
-				this.socket_listen(websock)
-
-				// if it exists call the function on the host page for the connect event
-				if(typeof ws_connect != 'undefined'){
-					ws_connect()
-				}
-
-			})
+			new NetworkManager()
 
 			// go back or close dialog when user presses escape/back
 			$(document).on('keydown', function(e) {
@@ -142,22 +126,6 @@ export default class App {
 		}
 
   }
-
-		//////////   WEBSOCKET FUNCTIONS
-
-		// listens to the WebSocket for incoming transactions.
-		/* TODO:
-		- only subscribe to the rooms for addresses this user follows or shows interest in
-		*/
-		socket_listen(socket){
-			socket.on('tx', function(data){
-				get_tx(data.txid).then(function(tx){
-					if(tx != -1){
-						parse_tx(tx, 1);
-					}
-				});
-			});
-		}
 
 		// returns GET parameters from the URL
 		find_get_parameter(parameterName) {
