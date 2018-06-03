@@ -96,28 +96,7 @@ export default class App {
 				localStorage.transactions = JSON.stringify(transactions);
 			}
 
-			// Acquire notification permissions
-			if(Notification.permission == 'default'
-          && localStorage.notification == undefined){
-				localStorage.notification = 1;
-        var p = new Popup()
-        p.setTitle('ALLOW NOTIFICATIONS')
-        p.addText('Notifications let you know when your friends send you tips ')
-        p.addText('or replies')
-        p.show()
-				Notification.requestPermission(function(permission){
-          Utilities.goBack()
-          if(permission != 'granted'){
-            var p = new Popup()
-            p.setTitle('NOTIFICATIONS')
-            p.addText('Unite will work without notifications, but you might ')
-            p.addText('miss out when things happen.')
-            p.show()
-					}else{
-						new SuccessBanner('We\'ll let you know when things happen!').show()
-					}
-				})
-			}
+			new NotificationManager()
 
 			// connect to the WebSocket
 			var websock = io(sessionStorage.webSocketEndpoint);
@@ -157,50 +136,12 @@ export default class App {
 
 			if(window.location.pathname.split('/').pop() != 'login.html'){
 				// redirect the user to login.html unless they were already there
-				window.location.href = 'login.html'
+				location.href = 'login.html'
 			}
 
 		}
 
   }
-
-		// Parses a notification out of a post, then displays the notification.
-		/* TODO:
-		- Add an optional "on click" callback on the banner and/or notification to allow
-  	the user to get to the source of the message if desired.
-		*/
-	parse_notification(post){
-		if(post.type == '5501'){
-			display_notification(post.name.name, post.data);
-		}
-		if(post.type == '5504'){
-			display_notification(post.sender.substr(0, 6), 'Changed name to ' + post.name.name);
-		}
-	}
-
-	// displays a notification if the document is not in focus, or a banner if it is.
-	/* TODO:
-	- Add an optional "on click" callback on the notification to allow
-  the user to get to the source of the message/action if desired.
-	*/
-	display_notification(title, text){
-		if(!document.hasFocus()){ // the user is not using the application
-			var n = new Notification(title, {icon: './res/icon.png', body: text});
-			n.onclick = function(ev){
-				parent.focus();
-				if(typeof require != undefined){
-					var win = require("electron").remote.getCurrentWindow();
-					win.show();
-					win.setAlwaysOnTop(true);
-					win.focus();
-					win.setAlwaysOnTop(false);
-				}
-			};
-		}else{ // the user is using the application
-			display_success(title + '   ' + text);
-		}
-		pop();
-	}
 
 		//////////   WEBSOCKET FUNCTIONS
 

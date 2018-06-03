@@ -1,4 +1,4 @@
-var load_data = function(){
+var appInit = function(){
 	$('#mybalance').on('click', function(){
 		display_html_alert('#moreProfileInfo');
 	});

@@ -1,5 +1,5 @@
 var userAddress, userName;
-var load_data = function(){ // should be appInit
+var appInit = function(){ // should be appInit
 	userAddress = find_get_parameter('address'); // TODO validation
 	// get posts this user has written in the past
 	get_posts(userAddress); // should be postManager.findPosts(addr)

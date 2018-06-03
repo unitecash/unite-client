@@ -1,7 +1,7 @@
 // some global vars for this script
 var topPostTXID = find_get_parameter('post');
 var topPost;
-var load_data = function(){
+var appInit = function(){
 	get_post(topPostTXID).then(function(post){
 		topPost = post;
 		get_posts(topPost.sender);

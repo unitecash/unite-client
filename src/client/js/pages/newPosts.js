@@ -1,4 +1,4 @@
-var load_data = function(){
+var appInit = function(){
 	// get posts this user has written in the past
 	get_posts(central_posts_address);
 }
