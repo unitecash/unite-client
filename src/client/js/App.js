@@ -24,6 +24,8 @@ import './lib/webtorrent.js'
 
 import Utilities from './Utilities'
 window.Utilities = Utilities
+import Messages from './UI/Messages'
+window.Messages = Messages
 import Popup from './UI/Popup'
 window.Popup = Popup
 import InteractivePopup from './UI/InteractivePopup'

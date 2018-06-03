@@ -132,18 +132,7 @@ $(document).ready(function(){
 	// when we click sign up
 	$('#signupButton').on('click', function(ev){
 		ev.preventDefault()
-		new Popup()
-		.setTitle('NO NEED TO SIGN UP WITH UNITE!')
-		.addText(`<p>
-			Just enter a unique username and a secure password to create
-			your profile!
-		</p>
-		<p>
-			Unite has no central authority. That means nobody can stop
-			you from creating an account, and there is nobody to "sign up"
-			with.
-		</p>`)
-		.show()
+		Messages.signUp()
 	})
 	$('#advanced').on('click', function(){
 		new InteractivePopup('#advancedwindow').show()

@@ -9,8 +9,6 @@
  * @file Defines the NetworkManager class
  */
 
-import Transaction from './Transaction'
-
 export default class NetworkManager {
 
   /*

@@ -45,23 +45,11 @@ export default class FormManager {
       ev.preventDefault()
       var post_text = $('#newpost').val()
       if(post_text.length < 1 || post_text.length > 217){
-        new Popup()
-        .addText('There is a temporary character limit of 217 characters for ')
-        .addText('all posts. This will be removed soon.')
-        .show()
+        Messages.tempCharLimit(217)
       }else{
         find_utxo(address.toString()).then((utxo) => {
           if(utxo == -1) {
-            var newString = '<h1>ACCOUNT BALANCE</h1>'
-            newString += '<p>Check that you\'ve funded your account before posting!</p>'
-            newString += '<p>We\'re working on a way to fund new users\' posts, it\'ll be '
-            newString += 'out soon!</p><p>In the meantime, here are some ways to fund your account: </p>'
-            newString += '<ul><li>Ask a friend to send you some Bitcoin Cash to your Unite address</li>'
-            newString += '<li>You can get some from the free.bitcoin.com faucet</li>';
-            newString += '<li>You can trade any cryptocurrency for Bitcoin Cash on ShapeShift</li>'
-            newString += '<li>You can be tipped on sites like yours.org or Reddit (r/btc)</li>'
-            newString += '<li>You can buy some on sites like coinbase.com or kraken.com</li></ul>'
-            new Popup(newString).show()
+            Messages.notEnoughFunds()
           }else{
             // create dummy tx to find approximate actual TX size with fee
             transaction = new bch.Transaction()
@@ -79,7 +67,7 @@ export default class FormManager {
             transaction.addData(hex2a('5501')+post_text)
             transaction.sign(privateKey)
             broadcast_tx(transaction.toString())
-            display_success('Your post has been sent!')
+            new SuccessBanner('Your post has been sent!').show()
             swooosh()
             $('#newpost').val('')
           }
@@ -92,7 +80,7 @@ export default class FormManager {
     $('#namechangesubmit').on('click', function(){
       var name = $('#newName').val();
       if(name.length < 5 || name.length > 24){
-        new Popup('Your name shouldn\'t be less than 5 or more than 24 characters!').show()
+        new Popup('Your name should be between 5 and 24 characters.').show()
       }else{
         find_utxo(address.toString()).then(function(utxo){
           // create dummy tx to find approx size with fee
@@ -123,20 +111,11 @@ export default class FormManager {
       ev.preventDefault();
       var post_text = $('#newpost').val();
       if(post_text.length < 1 || post_text.length > 45){
-        display_alert('[TEMPORARY] There is a temporary character limit of 45 characters for all posts. This will be removed soon!');
+        Messages.tempCharLimit()
       }else{
         find_utxo(address.toString()).then(function(utxo){
           if(utxo == -1){
-            var newString = '<h1>ACCOUNT BALANCE</h1>';
-            newString += '<p>Check that you\'ve funded your account before posting!</p>';
-            newString += '<p>We\'re working on a way to fund new users\' posts, it\'ll be ';
-            newString += 'out soon!</p><p>In the meantime, here are some ways to fund your account: </p>';
-            newString += '<ul><li>Ask a friend to send you some Bitcoin Cash to your Unite address</li>';
-            newString += '<li>You can get some from the free.bitcoin.com faucet</li>';
-            newString += '<li>You can trade any cryptocurrency for Bitcoin Cash on ShapeShift</li>';
-            newString += '<li>You can be tipped on sites like yours.org or Reddit (r/btc)</li>';
-            newString += '<li>You can buy some on sites like coinbase.com or kraken.com</li></ul>';
-            display_alert(newString)
+            Messages.notEnoughFunds()
           }else{
             // TODO [IMPORTANT!] verify this is set in the URL
             // create dummy tx to find approximate actual TX size with fee
@@ -155,8 +134,7 @@ export default class FormManager {
             transaction.addData(hex2a('5503')+hex2a(topPost.txid)+post_text)
             transaction.sign(privateKey)
             broadcast_tx(transaction.toString())
-            console.log(transaction.toString())
-            display_success('Your reply has been sent!')
+            new SuccessBanner('Your reply has been sent!').show()
             swooosh()
             $('#newpost').val('')
           }

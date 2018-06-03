@@ -107,6 +107,9 @@ body {
 	float:right;
 	width:20%;
 }
+.mono {
+	font-family: monospace;
+}
 .UIPanel {
 	background-color:#002;
 	border-radius:0.25em;

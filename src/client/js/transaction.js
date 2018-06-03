@@ -126,13 +126,7 @@ var broadcast_tx = function(tx){
 				console.log('TX broadcast successful.\nTX:\n\n'+tx+'\n\ntxid:\n\n: ' + data.txid+'\n\n');
 			},
 			error: function(data){
-				var newString = '<h1>BROADCAST FAILURE</h1>';
-				newString += '<p>Looks like this action was rejected by tne network for some reason... ';
-				newString += 'Please give this to a developer so they can have a look, or post it on Unite ';
-				newString += 'or somewhere we\'ll see it.</p><p>This is vary important to us, because it ';
-				newString += 'just ruined your experience:</p><div class="UIPanel" style="font-family:monospace;">';
-				newString += tx+'</div>'
-				display_alert(newString);
+				Messages.broadcastFailure(tx)
 			}
 		});
 	}
