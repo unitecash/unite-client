@@ -1,19 +1,30 @@
-var userAddress, userName;
-var appInit = function(){ // should be appInit
-	userAddress = find_get_parameter('address'); // TODO validation
-	// get posts this user has written in the past
-	get_posts(userAddress); // should be postManager.findPosts(addr)
+/**
+ * User page logic
+ * Author: The Unite.cash Developers
+ * License: GNU AGPL v3
+ *
+ * Defines the logic used by the page which displays user profiles.
+ *
+ * @file User page logic
+ */
+
+window.pageInit = function(){
+	userAddress = Utilities.resolveGETParam('address')
+	// should create window.user = new User(userAddress).then(() => { ... })
+	get_posts(userAddress); // should be user.getPosts()
 
 	// get the user's name and display italic
-	get_name(userAddress).then(function(name){ // should be NamManager.resolve(addr)
-		userName = name;
-		$('#myName').html(name.hash + name.name);
-		$('#headertitle').text(name.name);
-	});
+	/*get_name (userAddress).then(function(name) {
+		// should be NamManager.resolveFromAddress(addr)
+		userName = name
+		$('#myName').html(name.hash + name.name)
+		$('#headertitle').text(name.name)
+	})*/
+	// ^ should just be $('#myName').html(name.hash + user.displayName
 }
-var handle_new_post = function(post){ // should be onIncomingPost
+window.onPostLoad = function(post){
 	// Only display posts sent by this user
-	if(post.sender == userAddress){
-		render_post(post, post.isLive, '#posts'); // should be post.render()
+	if(post.sender == user.address){
+		post.render('#posts')
 	}
 }

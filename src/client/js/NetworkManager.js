@@ -32,7 +32,7 @@ export default class NetworkManager {
 
   bindEvents() {
     this.socketStream.on('tx', (data) => {
-      new Transaction(data.txid)
+      //new Transaction(data.txid)
     })
   }
 

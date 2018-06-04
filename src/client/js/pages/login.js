@@ -12,17 +12,11 @@ var fade = $('*:visible')
 fade.hide()
 fade.fadeIn('slow')
 var loggedIn = false
-$(document).ready(function(){
+
+$(document).ready(() => {
 	$('#user').focus()
-	// determine if values were stored in localStorage
-	if(localStorage.insightBaseURL === undefined){
-		localStorage.insightBaseURL = 'https://bitcoincash.blockexplorer.com/api/'
-	}
-	if(localStorage.websockURL === undefined){
-		localStorage.websockURL = 'wss://bitcoincash.blockexplorer.com'
-	}
-	$('#insightURL').val(localStorage.insightBaseURL)
-	$('#websockURL').val(localStorage.websockURL)
+	$('#insightURL').val(config.randomInsightEndpoint())
+	$('#websockURL').val(config.randomInsightWebsocket())
 	$('#loginform').on('submit', function(ev){
 		ev.preventDefault()
 		// verify insight URL and WebSocket URL
@@ -33,42 +27,23 @@ $(document).ready(function(){
 				var testSock = io($('#websockURL').val())
 				testSock.on('connect', function(){
 					loggedIn = true
-					// store URLs in localStorage for future use
-					localStorage.insightBaseURL = $('#insightURL').val()
-					localStorage.websockURL = $('#websockURL').val()
 					// check if WIF was used for login
-					if($('#privatekeyfield').val().length > 1){
+					if ($('#privatekeyfield').val().length > 5) { // logging in with WIF
 						// TODO validate the private key
 						sessionStorage.privateKey = $('#privatekeyfield').val()
-						sessionStorage.insightBaseURL = $('#insightURL').val()
-						sessionStorage.webSocketEndpoint = $('#websockURL').val()
-						// TODO remember their last page
-						window.location.href = 'profile.html'
-					}else{
+						Utilities.redirect('profile.html')
+					} else { // logging in with username and password
 						if($('#user').val().length < 1){
 							new ErrorBanner('Please enter a username').show()
 						}else if($('#pass').val().length < 12){ // [TODO]: validate this
-							new Popup().setTitle('PASSWORD SECURITY')
-							.addText(`<p>
-								You MUST choose a complex password for this or your funds could
-								be stolen!
-							</p>
-							<p>
-								Please choose a password that, AT MINIMUM, meets the following
-								requirements:</p>
-							<ul>
-								<li>Is at least 12 characters in length</li>
-								<li>Does not contain a name or common word</li>
-								<li>Contains a number and a symbol</li>
-								<li>Contains lowercase and uppercase letters</li>
-							</ul>`)
-							.show()
+							Messages.passwordSecurity()
 						}else if($('#insightURL').val().length < 6){
 							new ErrorBanner('Is that Insight URL correct?').show()
 						}else if($('#websockURL').val().length < 6){
 							new ErrorBanner('That WebSocket URL smells fishy...').show()
 						}else{
 							$('#loginbutton').val('PLEASE WAIT...')
+							// current implementation of key stretching algorithm
 							var key = sha512('memologin:'+$('#user').val()+$('#pass').val())
 							key = key.substr(0, $('#pass').val().length)
 							key = sha512(key)
@@ -85,10 +60,7 @@ $(document).ready(function(){
 							}
 							key = bch.crypto.BN.fromString(key.substr(0, 32))
 							sessionStorage.privateKey = new bch.PrivateKey(key).toWIF()
-							sessionStorage.insightBaseURL = $('#insightURL').val()
-							sessionStorage.webSocketEndpoint = $('#websockURL').val()
-							// TODO remember their last page
-							window.location.href = 'profile.html'
+							Utilities.redirect('profile.html')
 						}
 					}
 				})
@@ -129,7 +101,6 @@ $(document).ready(function(){
 			}
 		})
 	})
-	// when we click sign up
 	$('#signupButton').on('click', function(ev){
 		ev.preventDefault()
 		Messages.signUp()

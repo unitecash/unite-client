@@ -10,49 +10,54 @@
 
 export default class Utilities {
 
-  static pop() {
+  static pop () {
 		new Audio('./audio/pop.wav').play();
 	}
 
-	static boink() {
+	static boink () {
 		new Audio('./audio/boink.wav').play();
 	}
 
-	static beep() {
+	static beep () {
 		new Audio('./audio/beep.wav').play();
 	}
 
-	static woosh() {
+	static woosh () {
 		new Audio('./audio/woosh.wav').play();
 	}
 
-	static swooosh() {
+	static swooosh () {
 		new Audio('./audio/swooosh.wav').play();
 	}
 
   // thanks to https://stackoverflow.com/a/3745677/5860286 for this
-  static hex2a(hexx) {
+  static hex2a (hexx) {
 		hex = hexx.toString()
 		str = ''
-		for(i = 0; i < hex.length; i += 2) {
+		for (i = 0; i < hex.length; i += 2) {
 			str += String.fromCharCode(parseInt(hex.substr(i, 2), 16))
 		}
 		return str
 	}
 
   // thanks to https://stackoverflow.com/a/1349426/5860286 for this
-  static getRandomChars(length) {
+  static getRandomChars (length) {
     var text = ''
     var l = length || 16
     var poss = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
     for (var i = 0; i < l; i++) {
-      text += poss.charAt(Math.floor(Math.random() * possible.length))
+      text += poss.charAt(Math.floor(Math.random() * poss.length))
     }
     return text
   }
 
+  // thanks to https://stackoverflow.com/a/5915122/5860286 for this
+  static getRandomFromArray (items) {
+    return items[Math.floor(Math.random()*items.length)]
+  }
+
   // thanks to https://stackoverflow.com/a/3277417/5860286 for this
-  static closePopup() { // hacky
+  static closePopup () { // hacky
     document.elementFromPoint(10, 10).click()
   }
 

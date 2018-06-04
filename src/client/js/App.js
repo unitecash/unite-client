@@ -22,6 +22,8 @@ window.io = io
 import './lib/sha512.js'
 import './lib/webtorrent.js'
 
+import Config from './Config'
+window.Config = Config
 import Utilities from './Utilities'
 window.Utilities = Utilities
 import Messages from './UI/Messages'
@@ -50,71 +52,35 @@ import NameManager from './NameManager'
 window.NameManager = NameManager
 import NetworkManager from './NetworkManager'
 window.NetworkManager = NetworkManager
-
-// set up some useful global constants
-const CENTRAL_CONTENT_ADDRESS     = '1HBqvcE3jArLxTe4p2KRaDsRHHtEaqG66z'
-const CENTRAL_PROFILE_ADDRESS     = '1B4wyiAP3xYx2H8AqMqrwdMfbw7YwFd4C3'
-const CENTRAL_GROUPS_ADDRESS      = '14F1NbudfgRyEzau29HpexQPzHkghbWUKR'
-const CENTRAL_REPORT_ADDRESS      = '12xemQTP98jgkAUGuGqHghdVSufqR7htjY'
-
-const DUST_LIMIT_SIZE = 547;
-const FEE_RATIO = 1.95;
-
-const DEBUG_MODE = false
+import Notification from './Notification'
+window.AppNotification = Notification
+import NotificationManager from './NotificationManager'
+window.NotificationManager = NotificationManager
+import FormManager from './FormManager'
+window.FormManager = FormManager
 
 export default class App {
 
 	constructor () {
-		this.userPrivateKey
-		this.userAddress
-		this.userDisplayName
-		this.insightBaseURL
-		this.websock
-		this.highestZIndexUsed = 2
     this.init()
 	}
 
   init () {
-    // check to see if the user has logged in yet
+		window.config = new Config()
+    // check if the user has logged in
 		if(sessionStorage.privateKey !== undefined){
-
-			this.insightBaseURL = sessionStorage.insightBaseURL
-			this.userPrivateKey = bch.PrivateKey.fromWIF(sessionStorage.privateKey)
-			this.userAddress = this.userPrivateKey.toAddress()
-
-			// Check that the localStorage data structures were defined
-			if(localStorage.names == undefined){
-				var names = [];
-				localStorage.names = JSON.stringify(names);
-			}
-
-			if(localStorage.posts == undefined){
-				var posts = [];
-				localStorage.posts = JSON.stringify(posts);
-			}
-
-			if(localStorage.transactions == undefined){
-				var transactions = [];
-				localStorage.transactions = JSON.stringify(transactions);
-			}
-
 			window.notificationManager = new NotificationManager()
 			window.networkManager = new NetworkManager()
 			window.formManager = new FormManager()
-
-			// call the data loading function present on host pages responsible for
-			// displaying dynamic content
-			if(typeof appInit != 'undefined') {
-				appInit()
+			if(typeof pageInit != 'undefined') {
+				pageInit()
 			}
 		}else{
-			if(window.location.pathname.split('/').pop() != 'login.html') {
+			if(window.location.pathname.split('/').pop() != 'login.html') {// endsWith
 				Utilities.redirect('login.html')
 			}
 		}
-
   }
-
 }
 
 window.app = new App()

@@ -62,4 +62,22 @@ export default class Messages {
     .show()
   }
 
+  static passwordSecurity() {
+    new Popup().setTitle('PASSWORD SECURITY')
+    .addText(`<p>
+      You MUST choose a complex password for this or your funds could
+      be stolen!
+    </p>
+    <p>
+      Please choose a password that, AT MINIMUM, meets the following
+      requirements:</p>
+    <ul>
+      <li>Is at least 12 characters in length</li>
+      <li>Does not contain a name or common word</li>
+      <li>Contains a number and a symbol</li>
+      <li>Contains lowercase and uppercase letters</li>
+    </ul>`)
+    .show()
+  }
+
 }
