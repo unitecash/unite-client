@@ -26,9 +26,9 @@ export default class Transaction {
         $.ajax({
           type: 'GET',
           url: config.randomInsightEndpoint () + 'tx/' + txid,
-          success: function (transaction) {
-            if (transactionManager.validate (transaction)) {
-              transactionManager.remember(transaction)
+          success: (transaction) => {
+            if (TransactionManager.validate (transaction)) {
+              TransactionManager.remember(transaction)
               new Post(transaction)
               resolve (transaction)
             } else {

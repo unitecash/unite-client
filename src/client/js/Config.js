@@ -69,4 +69,17 @@ export default class Config {
 
     this.highestZIndexUsed = 2
   }
+
+  randomInsightEndpoint () {
+    return Utilities.getRandomFromArray (
+      JSON.parse (localStorage.insightEndpointsArray)
+    )
+  }
+
+  randomInsightWebsocket () {
+    return Utilities.getRandomFromArray (
+      JSON.parse (localStorage.insightWebsocketsArray)
+    )
+  }
+
 }
