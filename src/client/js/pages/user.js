@@ -9,7 +9,7 @@
  */
 
 window.pageInit = function () {
-  userAddress = Utilities.resolveGETParam('address')
+  window.userAddress = Utilities.resolveGETParam('address')
   // should create window.user = new User(userAddress).then(() => { ... })
   get_posts(userAddress) // should be user.getPosts()
 
@@ -24,7 +24,7 @@ window.pageInit = function () {
 }
 window.onPostLoad = function (post) {
   // Only display posts sent by this user
-  if (post.sender == user.address) {
+  if (post.sender === user.address) {
     post.render('#posts')
   }
 }

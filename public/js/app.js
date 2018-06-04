@@ -1420,6 +1420,23 @@ class NetworkManager {
   disconnect () {
     this.socketStream.disconnect()
   }
+
+  broadcastTransaction (hex) {
+    $.ajax({
+      type: 'POST',
+      url: config.randomInsightEndpoint() + 'tx/send',
+      data: {rawtx: hex},
+      success: function (data) {
+        console.log('TX broadcast successful.\nTX:\n\n' + tx + '\n\ntxid:\n\n: ' + data.txid + '\n\n')
+      },
+      error: function (data) {
+        Messages.broadcastFailure(hex)
+      }
+    })
+  }
+
+  
+
 }
 
 
@@ -1941,25 +1958,6 @@ var find_utxo = function (address, amount = 1000) {
   })
 }
 
-// Sends a raw hex bitcoin transaction over the live network
-var broadcast_tx = function (tx) {
-  if (debug) {
-    console.log('pretend broadcasting transaction (debug):\n\n' + tx + '\n\n')
-  } else {
-    $.ajax({
-      type: 'POST',
-      url: insightBaseURL + 'tx/send',
-      data: {rawtx: tx},
-      success: function (data) {
-        console.log('TX broadcast successful.\nTX:\n\n' + tx + '\n\ntxid:\n\n: ' + data.txid + '\n\n')
-      },
-      error: function (data) {
-        Messages.broadcastFailure(tx)
-      }
-    })
-  }
-}
-
 // Adds transaction to localStorage transactions cache, if it is not already there
 var add_tx_to_db = function (tx) {
   // get the tx db
@@ -1990,7 +1988,7 @@ var get_tx = function (txid) {
         return
       }
     }
-    if (!success) { // now we look it up on the network and then add it to DB.
+    if (!success) { // look it up from the network and add it to cache
       $.ajax({
         type: 'GET',
         url: insightBaseURL + 'tx/' + txid,

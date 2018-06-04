@@ -44,4 +44,21 @@ export default class NetworkManager {
   disconnect () {
     this.socketStream.disconnect()
   }
+
+  broadcastTransaction (hex) {
+    $.ajax({
+      type: 'POST',
+      url: config.randomInsightEndpoint() + 'tx/send',
+      data: {rawtx: hex},
+      success: function (data) {
+        console.log('TX broadcast successful.\nTX:\n\n' + tx + '\n\ntxid:\n\n: ' + data.txid + '\n\n')
+      },
+      error: function (data) {
+        Messages.broadcastFailure(hex)
+      }
+    })
+  }
+
+  
+
 }
