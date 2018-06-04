@@ -68,7 +68,9 @@ export default class Utilities {
   }
 
   static redirect(URL) {
-    networkManager.disconnect()
+    if (typeof networkManager !== 'undefined') {
+      networkManager.disconnect()
+    }
     window.location.href = URL
   }
 

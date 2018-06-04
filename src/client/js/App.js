@@ -107,9 +107,8 @@ export default class App {
 			if(typeof appInit != 'undefined') {
 				appInit()
 			}
-		}else{ // In case the user was not logged in
+		}else{
 			if(window.location.pathname.split('/').pop() != 'login.html') {
-				// redirect the user to login.html unless they were already there
 				Utilities.redirect('login.html')
 			}
 		}
