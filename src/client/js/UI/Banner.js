@@ -9,7 +9,6 @@
  */
 
 export default class Banner {
-
   constructor (text, options) {
     if (typeof options === 'undefined') {
       options = {}
@@ -34,7 +33,7 @@ export default class Banner {
   }
 
   show () {
-    if(this.options.playSound){
+    if (this.options.playSound) {
       Utilities.boink() // TODO customize the sound to be played
     }
 
@@ -58,35 +57,33 @@ export default class Banner {
     $('#' + this.ID).slideToggle(this.options.animationSpeed)
     setTimeout(() => {
       this.hide()
-    }, this.options.time);
-
+    }, this.options.time)
   }
 
   // thanks to https://stackoverflow.com/a/7259663/5860286 for this
   hide () {
-    $.when($('#' + this.ID).slideUp(this.options.animationSpeed)).done(function() {
+    $.when($('#' + this.ID).slideUp(this.options.animationSpeed)).done(function () {
       $('#' + this.ID).remove()
     })
   }
 
-  setAnimationSpeed(speed){
+  setAnimationSpeed (speed) {
     this.options.animationSpeed = speed
     return this
   }
 
-  setTime(time){
+  setTime (time) {
     this.options.time = time
     return this
   }
 
-  setOptions(options){
-    this.options = options;
+  setOptions (options) {
+    this.options = options
     return this
   }
 
-  setBackgroundColor(backgroundColor){
+  setBackgroundColor (backgroundColor) {
     this.options.backgroundColor = setBackgroundColor
     return this
   }
-
 }

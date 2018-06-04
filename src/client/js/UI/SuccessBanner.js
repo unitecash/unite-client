@@ -11,16 +11,14 @@
 import Banner from './Banner'
 
 export default class SuccessBanner extends Banner {
-
-  constructor(text, options){
+  constructor (text, options) {
     if (typeof options === 'undefined') {
       options = {}
     }
-    if (typeof options.backgroundColor === 'undefined'){
+    if (typeof options.backgroundColor === 'undefined') {
       options.backgroundColor = '#114411'
     }
     super(text, options)
     return this
   }
-
 }

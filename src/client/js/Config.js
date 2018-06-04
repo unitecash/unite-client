@@ -10,13 +10,11 @@
  */
 
 export default class Config {
-
   constructor () {
-
     this.CENTRAL_CONTENT_ADDRESS = '1HBqvcE3jArLxTe4p2KRaDsRHHtEaqG66z'
     this.CENTRAL_PROFILE_ADDRESS = '1B4wyiAP3xYx2H8AqMqrwdMfbw7YwFd4C3'
-    this.CENTRAL_GROUPS_ADDRESS  = '14F1NbudfgRyEzau29HpexQPzHkghbWUKR'
-    this.CENTRAL_REPORT_ADDRESS  = '12xemQTP98jgkAUGuGqHghdVSufqR7htjY'
+    this.CENTRAL_GROUPS_ADDRESS = '14F1NbudfgRyEzau29HpexQPzHkghbWUKR'
+    this.CENTRAL_REPORT_ADDRESS = '12xemQTP98jgkAUGuGqHghdVSufqR7htjY'
 
     this.DUST_LIMIT_SIZE = 547
     this.FEE_RATIO = 1.95
@@ -32,13 +30,13 @@ export default class Config {
     ]
 
     if (typeof localStorage.insightEndpointsArray === 'undefined') {
-  		localStorage.insightEndpointsArray = JSON.stringify (
+  		localStorage.insightEndpointsArray = JSON.stringify(
         this.DEFAULT_INSIGHT_ENDPOINTS_ARRAY
       )
   	}
 
   	if (typeof localStorage.insightWebsocketsArray === 'undefined') {
-      localStorage.insightWebsocketsArray = JSON.stringify (
+      localStorage.insightWebsocketsArray = JSON.stringify(
         this.DEFAULT_INSIGHT_WEBSOCKETS_ARRAY
       )
     }
@@ -61,16 +59,14 @@ export default class Config {
       localStorage.names = JSON.stringify(names)
     }
     if (typeof localStorage.posts === 'undefined') {
-      var posts = [];
+      var posts = []
       localStorage.posts = JSON.stringify(posts)
     }
     if (typeof localStorage.transactions === 'undefined') {
-      var transactions = [];
+      var transactions = []
       localStorage.transactions = JSON.stringify(transactions)
     }
 
     this.highestZIndexUsed = 2
-
   }
-
 }

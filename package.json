@@ -4,8 +4,8 @@
   "description": "Unite.cash - We Stand Against Censorship",
   "main": "index.js",
   "scripts": {
-    "lint": "standard --parser typescript-eslint-parser --plugin typescript ./src/**/*.ts",
-    "lint-javascript": "standard ./src/**/*.js",
+    "lint": "standard --fix --parser typescript-eslint-parser --plugin typescript ./src/**/*.ts",
+    "lint-js": "standard --fix ./src/**/*.js",
     "test": "karma start tests/karma.conf.js",
     "test:feature": "karma start tests/feature/karma.conf.js",
     "test:unit": "karma start tests/unit/karma.conf.js",
@@ -26,6 +26,11 @@
     "censorship",
     "decentralized"
   ],
+  "standard": {
+    "ignore": [
+      "/src/client/lib/*"
+    ]
+  },
   "author": "The Unite.cash Developers",
   "license": "AGPL-3.0",
   "devDependencies": {

@@ -9,42 +9,41 @@
  */
 
 export default class Popup {
-
   /**
 	 * Constructs a Popup object.
 	 *
 	 * @constructor
 	 */
   constructor (options) {
-    if (typeof options === "undefined") {
+    if (typeof options === 'undefined') {
       options = {}
     }
-    if (typeof options.text === "undefined") {
+    if (typeof options.text === 'undefined') {
       options.text = ''
     }
-    if (typeof options.animationSpeed === "undefined") {
+    if (typeof options.animationSpeed === 'undefined') {
       options.animationSpeed = 100
     }
-    if (typeof options.playSound === "undefined") {
+    if (typeof options.playSound === 'undefined') {
       options.playSound = true
     }
-    if (typeof options.showCloseButton === "undefined") {
+    if (typeof options.showCloseButton === 'undefined') {
       options.showCloseButton = false
     }
-    if (typeof options.centered === "undefined") {
+    if (typeof options.centered === 'undefined') {
       options.centered = false
     }
     this.options = options
     this.divID = Utilities.getRandomChars(16)
     this.backgroundID = Utilities.getRandomChars(16)
-    if(this.options.showCloseButton) {
+    if (this.options.showCloseButton) {
       this.closeButtonID = Utilities.getRandomChars(16)
     }
     return this
   }
 
   show () {
-    if(this.options.playSound){
+    if (this.options.playSound) {
       Utilities.pop()
     }
 
@@ -57,21 +56,21 @@ export default class Popup {
     })
 
     var alertHTML = $('<div></div>')
-    alertHTML.attr('style', 'z-index: ' + (app.highestZIndexUsed+1))
+    alertHTML.attr('style', 'z-index: ' + (app.highestZIndexUsed + 1))
     alertHTML.attr('id', this.divID)
-    if(this.options.isCentered){
+    if (this.options.isCentered) {
       alertHTML.attr('class', 'UIAlertWindow center-text hidden')
-    }else{
+    } else {
       alertHTML.attr('class', 'UIAlertWindow hidden')
     }
 
-    if(this.options.titleText != undefined){
+    if (this.options.titleText != undefined) {
       var alertTitle = $('<h1></h1>')
       alertTitle.text(this.options.titleText)
       alertHTML.append(alertTitle)
     }
 
-    if(this.options.showCloseButton){
+    if (this.options.showCloseButton) {
       var closeButton = $('<button></button>')
       closeButton.attr('class', 'UICloseButton')
       closeButton.attr('id', this.closeButtonID)
@@ -82,24 +81,24 @@ export default class Popup {
     }
 
     alertHTML.append(this.options.text)
-		$('body').append(alertBackground)
+    $('body').append(alertBackground)
     $('body').append(alertHTML)
-		$('#' + this.backgroundID).fadeIn(this.options.animationSpeed)
-		$('#' + this.divID).slideDown(this.options.animationSpeed)
+    $('#' + this.backgroundID).fadeIn(this.options.animationSpeed)
+    $('#' + this.divID).slideDown(this.options.animationSpeed)
 
-		document.activeElement.blur()
-		app.highestZIndexUsed += 2
+    document.activeElement.blur()
+    app.highestZIndexUsed += 2
   }
 
   // thanks to https://stackoverflow.com/a/7259663/5860286 for this
   hide () {
-    if(this.options.playSound) {
+    if (this.options.playSound) {
       Utilities.woosh()
     }
-    $.when($('#' + this.divID).fadeOut(this.options.animationSpeed)).done(function() {
+    $.when($('#' + this.divID).fadeOut(this.options.animationSpeed)).done(function () {
       $('#' + this.divID).remove()
     })
-    $.when($('#' + this.backgroundID).fadeOut(this.options.animationSpeed)).done(function() {
+    $.when($('#' + this.backgroundID).fadeOut(this.options.animationSpeed)).done(function () {
       $('#' + this.backgroundID).remove()
     })
   }
@@ -119,23 +118,22 @@ export default class Popup {
     return this
   }
 
-  setAnimationSpeed(speed){
+  setAnimationSpeed (speed) {
     this.options.animationSpeed = speed
     return this
   }
 
-  setIsCentered(centered){
+  setIsCentered (centered) {
     this.options.centered = centered
     return this
   }
 
-  setCloseButtonShown(showCloseButton){
+  setCloseButtonShown (showCloseButton) {
     this.options.showCloseButton = showCloseButton
   }
 
-  setOptions(options){
-    this.options = options;
+  setOptions (options) {
+    this.options = options
     return this
   }
-
 }

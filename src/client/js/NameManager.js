@@ -8,8 +8,6 @@
  * @file Defines the NameManager class
  */
 
- export default class NameManager {
+export default class NameManager {
 
-
-
- }
+}

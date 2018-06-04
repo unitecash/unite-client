@@ -8,8 +8,6 @@
  * @file Defines the TransactionManager class
  */
 
- export default class TransactionManager {
+export default class TransactionManager {
 
-   
-
- }
+}

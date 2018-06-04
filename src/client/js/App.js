@@ -60,26 +60,25 @@ import FormManager from './FormManager'
 window.FormManager = FormManager
 
 export default class App {
-
-	constructor () {
+  constructor () {
     this.init()
-	}
+  }
 
   init () {
-		window.config = new Config()
+    window.config = new Config()
     // check if the user has logged in
-		if(sessionStorage.privateKey !== undefined){
-			window.notificationManager = new NotificationManager()
-			window.networkManager = new NetworkManager()
-			window.formManager = new FormManager()
-			if(typeof pageInit != 'undefined') {
-				pageInit()
-			}
-		}else{
-			if(window.location.pathname.split('/').pop() != 'login.html') {// endsWith
-				Utilities.redirect('login.html')
-			}
-		}
+    if (sessionStorage.privateKey !== undefined) {
+      window.notificationManager = new NotificationManager()
+      window.networkManager = new NetworkManager()
+      window.formManager = new FormManager()
+      if (typeof pageInit !== 'undefined') {
+        pageInit()
+      }
+    } else {
+      if (window.location.pathname.split('/').pop() != 'login.html') { // endsWith
+        Utilities.redirect('login.html')
+      }
+    }
   }
 }
 

@@ -10,42 +10,38 @@
  */
 
 export default class NetworkManager {
-
   /*
   * @constructor
   *
   * Set up and connect to block explorers and WebSockets
   *
   */
-  constructor() {
+  constructor () {
     // connect to the WebSocket
     this.socketStream = io(sessionStorage.webSocketEndpoint)
     this.socketStream.on('connect', () => {
-
       // TODO: an array of addresses the user subscribes to, iterating each one.
 
       this.subscribeAddress('inv')
       this.bindEvents()
     })
-
   }
 
-  bindEvents() {
+  bindEvents () {
     this.socketStream.on('tx', (data) => {
-      //new Transaction(data.txid)
+      // new Transaction(data.txid)
     })
   }
 
-  subscribeAddress(addr) {
+  subscribeAddress (addr) {
     this.socketStream.emit('subscribe', addr)
   }
 
-  unsubscribeAddress(addr) {
+  unsubscribeAddress (addr) {
     this.socketStream.emit('unsubscribe', addr)
   }
 
-  disconnect() {
+  disconnect () {
     this.socketStream.disconnect()
   }
-
 }

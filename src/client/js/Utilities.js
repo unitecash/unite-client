@@ -9,36 +9,35 @@
  */
 
 export default class Utilities {
-
   static pop () {
-		new Audio('./audio/pop.wav').play();
-	}
+    new Audio('./audio/pop.wav').play()
+  }
 
-	static boink () {
-		new Audio('./audio/boink.wav').play();
-	}
+  static boink () {
+    new Audio('./audio/boink.wav').play()
+  }
 
-	static beep () {
-		new Audio('./audio/beep.wav').play();
-	}
+  static beep () {
+    new Audio('./audio/beep.wav').play()
+  }
 
-	static woosh () {
-		new Audio('./audio/woosh.wav').play();
-	}
+  static woosh () {
+    new Audio('./audio/woosh.wav').play()
+  }
 
-	static swooosh () {
-		new Audio('./audio/swooosh.wav').play();
-	}
+  static swooosh () {
+    new Audio('./audio/swooosh.wav').play()
+  }
 
   // thanks to https://stackoverflow.com/a/3745677/5860286 for this
   static hex2a (hexx) {
-		hex = hexx.toString()
-		str = ''
-		for (i = 0; i < hex.length; i += 2) {
-			str += String.fromCharCode(parseInt(hex.substr(i, 2), 16))
-		}
-		return str
-	}
+    hex = hexx.toString()
+    str = ''
+    for (i = 0; i < hex.length; i += 2) {
+      str += String.fromCharCode(parseInt(hex.substr(i, 2), 16))
+    }
+    return str
+  }
 
   // thanks to https://stackoverflow.com/a/1349426/5860286 for this
   static getRandomChars (length) {
@@ -53,7 +52,7 @@ export default class Utilities {
 
   // thanks to https://stackoverflow.com/a/5915122/5860286 for this
   static getRandomFromArray (items) {
-    return items[Math.floor(Math.random()*items.length)]
+    return items[Math.floor(Math.random() * items.length)]
   }
 
   // thanks to https://stackoverflow.com/a/3277417/5860286 for this
@@ -61,30 +60,29 @@ export default class Utilities {
     document.elementFromPoint(10, 10).click()
   }
 
-  static resolveGETParam(parameterName) { // hacky
+  static resolveGETParam (parameterName) { // hacky
     var result = null,
-        tmp = []
-    var items = location.search.substr(1).split("&")
+      tmp = []
+    var items = location.search.substr(1).split('&')
     for (var index = 0; index < items.length; index++) {
-        tmp = items[index].split("=")
-        if (tmp[0] === parameterName) result = decodeURIComponent(tmp[1])
+      tmp = items[index].split('=')
+      if (tmp[0] === parameterName) result = decodeURIComponent(tmp[1])
     }
-    return result;
+    return result
   }
 
-  static redirect(URL) {
+  static redirect (URL) {
     if (typeof networkManager !== 'undefined') {
       networkManager.disconnect()
     }
     window.location.href = URL
   }
 
-  static logOut() {
+  static logOut () {
     $('*').fadeOut(1000)
     delete sessionStorage.privateKey
     setTimeout(() => {
       Utilities.redirect('login.html')
     }, 1100)
   }
-
 }

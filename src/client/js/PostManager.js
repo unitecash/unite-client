@@ -8,8 +8,6 @@
  * @file Defines the PostManager class
  */
 
- export default class PostManager {
+export default class PostManager {
 
-
-
- }
+}
