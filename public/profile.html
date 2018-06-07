@@ -48,14 +48,14 @@ Unless you set it here, your name will show up as 6 random letters and numbers.<
 <h2>YOUR UNITE ADDRESS:</h2>
 <p class="UIPanel" style="font-family:monospace;" id="myaddress"></p>
 <img class="qrcode" id="myqrcode" alt="QR Code" /><br/><br/>
-<button class="UIButton" style="color:red;" onclick="display_html_alert('#showKey')">SHOW PRIVATE KEY</button>
+<button id="privKeyDisplayButton" class="UIButton red">SHOW PRIVATE KEY</button>
 </div>
 <div id="showKey" class="UIAlertWindow hidden">
 <h1>YOUR PRIVATE KEY</h1>
 <p>Never share your key with anyone. With this key, somebody will be able to <span style="color:red;">
 hack your account and steal your money.</span> To show your key, click the button below.
 <span style="color:red;"> Only do this if you know exactly what you are doing and understand the risks!</span></p>
-<button class="UIButton" style="color:red;" onclick="display_html_alert('#showPrivateKey')">I UNDERSTAND</button>
+<button id="keyDisplay" class="UIButton red">I UNDERSTAND</button>
 </div>
 <div id="showPrivateKey" class="UIAlertWindow hidden">
 <p>YOUR PRIVATE KEY:</p>

@@ -105,7 +105,7 @@ window.pageInit = function () {
 window.onPostLoad = function (post) {
   // Only display posts sent by this user
   if (post.sender === user.address) {
-    post.render('#posts')
+    post.render()
   }
 }
 

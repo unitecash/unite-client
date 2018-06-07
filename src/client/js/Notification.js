@@ -40,6 +40,7 @@ export default class Notification {
       this.title = post.sender.substr(0, 6)
       this.body = 'Changed their name to ' + post.name.name
     }
+    return this
   }
 
   show () {

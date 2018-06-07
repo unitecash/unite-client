@@ -13,6 +13,7 @@
     "watch": "webpack --mode development --watch",
     "build": "webpack --mode production",
     "start": "electron .",
+    "start-watch": "concurrently --kill-others \"npm run watch\" \"npm run start\"",
     "package-all": "electron-packager . Unite --all",
     "package-mac": "electron-packager . Unite --overwrite --platform=darwin --arch=x64 --icon=public/images/icon.icns --prune=true --out=build/Release",
     "package-win": "electron-packager . Unite --overwrite --asar=true --platform=win32 --arch=ia32 --icon=public/images/icon.ico --prune=true --out=build/Release --version-string.CompanyName=Unite --version-string.FileDescription=Unite --version-string.ProductName=\"Unite\"",

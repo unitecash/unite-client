@@ -874,18 +874,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _UI_ErrorBanner__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./UI/ErrorBanner */ "./src/client/js/UI/ErrorBanner.js");
 /* harmony import */ var _UI_SuccessBanner__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./UI/SuccessBanner */ "./src/client/js/UI/SuccessBanner.js");
 /* harmony import */ var _Transaction__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./Transaction */ "./src/client/js/Transaction.js");
-/* harmony import */ var _Transaction__WEBPACK_IMPORTED_MODULE_16___default = /*#__PURE__*/__webpack_require__.n(_Transaction__WEBPACK_IMPORTED_MODULE_16__);
 /* harmony import */ var _TransactionManager__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./TransactionManager */ "./src/client/js/TransactionManager.js");
 /* harmony import */ var _Post__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./Post */ "./src/client/js/Post.js");
-/* harmony import */ var _Post__WEBPACK_IMPORTED_MODULE_18___default = /*#__PURE__*/__webpack_require__.n(_Post__WEBPACK_IMPORTED_MODULE_18__);
-/* harmony import */ var _PostManager__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./PostManager */ "./src/client/js/PostManager.js");
-/* harmony import */ var _Name__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./Name */ "./src/client/js/Name.js");
-/* harmony import */ var _Name__WEBPACK_IMPORTED_MODULE_20___default = /*#__PURE__*/__webpack_require__.n(_Name__WEBPACK_IMPORTED_MODULE_20__);
-/* harmony import */ var _NameManager__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ./NameManager */ "./src/client/js/NameManager.js");
-/* harmony import */ var _NetworkManager__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ./NetworkManager */ "./src/client/js/NetworkManager.js");
-/* harmony import */ var _Notification__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! ./Notification */ "./src/client/js/Notification.js");
-/* harmony import */ var _NotificationManager__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! ./NotificationManager */ "./src/client/js/NotificationManager.js");
-/* harmony import */ var _FormManager__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! ./FormManager */ "./src/client/js/FormManager.js");
+/* harmony import */ var _Name__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./Name */ "./src/client/js/Name.js");
+/* harmony import */ var _NameManager__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./NameManager */ "./src/client/js/NameManager.js");
+/* harmony import */ var _NetworkManager__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ./NetworkManager */ "./src/client/js/NetworkManager.js");
+/* harmony import */ var _Notification__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ./Notification */ "./src/client/js/Notification.js");
+/* harmony import */ var _NotificationManager__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! ./NotificationManager */ "./src/client/js/NotificationManager.js");
+/* harmony import */ var _FormManager__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! ./FormManager */ "./src/client/js/FormManager.js");
 /**
  * Unite Client Implementation
  * Author: The Unite.cash Developers
@@ -901,6 +897,7 @@ __webpack_require__.r(__webpack_exports__);
 window.jQuery = _lib_jquery_js__WEBPACK_IMPORTED_MODULE_0___default.a
 window.$ = _lib_jquery_js__WEBPACK_IMPORTED_MODULE_0___default.a
 
+window.bchaddr = _lib_bchaddr_js__WEBPACK_IMPORTED_MODULE_1___default.a
 
 window.bch = _lib_bitcoincash_js__WEBPACK_IMPORTED_MODULE_2___default.a
 
@@ -927,41 +924,36 @@ window.ErrorBanner = _UI_ErrorBanner__WEBPACK_IMPORTED_MODULE_14__["default"]
 
 window.SuccessBanner = _UI_SuccessBanner__WEBPACK_IMPORTED_MODULE_15__["default"]
 
-window.Transaction = _Transaction__WEBPACK_IMPORTED_MODULE_16___default.a
+window.Transaction = _Transaction__WEBPACK_IMPORTED_MODULE_16__["default"]
 
 window.TransactionManager = _TransactionManager__WEBPACK_IMPORTED_MODULE_17__["default"]
 
-window.Post = _Post__WEBPACK_IMPORTED_MODULE_18___default.a
+window.Post = _Post__WEBPACK_IMPORTED_MODULE_18__["default"]
 
-window.PostManager = _PostManager__WEBPACK_IMPORTED_MODULE_19__["default"]
+window.Name = _Name__WEBPACK_IMPORTED_MODULE_19__["default"]
 
-window.Name = _Name__WEBPACK_IMPORTED_MODULE_20___default.a
+window.NameManager = _NameManager__WEBPACK_IMPORTED_MODULE_20__["default"]
 
-window.NameManager = _NameManager__WEBPACK_IMPORTED_MODULE_21__["default"]
+window.NetworkManager = _NetworkManager__WEBPACK_IMPORTED_MODULE_21__["default"]
 
-window.NetworkManager = _NetworkManager__WEBPACK_IMPORTED_MODULE_22__["default"]
+window.AppNotification = _Notification__WEBPACK_IMPORTED_MODULE_22__["default"]
 
-window.AppNotification = _Notification__WEBPACK_IMPORTED_MODULE_23__["default"]
+window.NotificationManager = _NotificationManager__WEBPACK_IMPORTED_MODULE_23__["default"]
 
-window.NotificationManager = _NotificationManager__WEBPACK_IMPORTED_MODULE_24__["default"]
-
-window.FormManager = _FormManager__WEBPACK_IMPORTED_MODULE_25__["default"]
+window.FormManager = _FormManager__WEBPACK_IMPORTED_MODULE_24__["default"]
 
 class App {
   constructor () {
-    this.init()
-  }
-
-  init () {
     window.config = new _Config__WEBPACK_IMPORTED_MODULE_8__["default"]()
-    // check if the user has logged in
     if (sessionStorage.privateKey !== undefined) {
-      window.notificationManager = new _NotificationManager__WEBPACK_IMPORTED_MODULE_24__["default"]()
-      window.networkManager = new _NetworkManager__WEBPACK_IMPORTED_MODULE_22__["default"]()
-      window.formManager = new _FormManager__WEBPACK_IMPORTED_MODULE_25__["default"]()
-      if (typeof pageInit !== 'undefined') {
-        pageInit()
-      }
+      window.notificationManager = new _NotificationManager__WEBPACK_IMPORTED_MODULE_23__["default"]()
+      window.networkManager = new _NetworkManager__WEBPACK_IMPORTED_MODULE_21__["default"]()
+      window.formManager = new _FormManager__WEBPACK_IMPORTED_MODULE_24__["default"]()
+      _lib_jquery_js__WEBPACK_IMPORTED_MODULE_0___default()(document).ready(() => {
+        if (typeof pageInit !== 'undefined') {
+          pageInit()
+        }
+      })
     } else {
       if (window.location.pathname.split('/').pop() != 'login.html') { // endsWith
         _Utilities__WEBPACK_IMPORTED_MODULE_9__["default"].redirect('login.html')
@@ -998,22 +990,24 @@ __webpack_require__.r(__webpack_exports__);
 
 class Config {
   constructor () {
-    this.CENTRAL_CONTENT_ADDRESS = '1HBqvcE3jArLxTe4p2KRaDsRHHtEaqG66z'
-    this.CENTRAL_PROFILE_ADDRESS = '1B4wyiAP3xYx2H8AqMqrwdMfbw7YwFd4C3'
-    this.CENTRAL_GROUPS_ADDRESS = '14F1NbudfgRyEzau29HpexQPzHkghbWUKR'
-    this.CENTRAL_REPORT_ADDRESS = '12xemQTP98jgkAUGuGqHghdVSufqR7htjY'
+    this.CENTRAL_CONTENT_ADDRESS = bchaddr.toCashAddress('1HBqvcE3jArLxTe4p2KRaDsRHHtEaqG66z')
+    this.CENTRAL_PROFILE_ADDRESS = bchaddr.toCashAddress('1B4wyiAP3xYx2H8AqMqrwdMfbw7YwFd4C3')
+    this.CENTRAL_GROUPS_ADDRESS =  bchaddr.toCashAddress('14F1NbudfgRyEzau29HpexQPzHkghbWUKR')
+    this.CENTRAL_REPORT_ADDRESS =  bchaddr.toCashAddress('12xemQTP98jgkAUGuGqHghdVSufqR7htjY')
 
     this.DUST_LIMIT_SIZE = 547
     this.FEE_RATIO = 1.95
 
-    this.DEBUG_MODE = false
+    this.DEBUG_MODE = true
 
     this.DEFAULT_INSIGHT_ENDPOINTS_ARRAY = [
-      'https://bitcoincash.blockexplorer.com/api/'
+      //'https://bitcoincash.blockexplorer.com/api/',
+      'https://bch-insight.bitpay.com/api/'
     ]
 
     this.DEFAULT_INSIGHT_WEBSOCKETS_ARRAY = [
-      'wss://bitcoincash.blockexplorer.com'
+      //'wss://bitcoincash.blockexplorer.com',
+      'wss://bch-insight.bitpay.com'
     ]
 
     if (typeof localStorage.insightEndpointsArray === 'undefined') {
@@ -1037,17 +1031,13 @@ class Config {
 
     if (typeof sessionStorage.privateKey !== 'undefined') {
       this.userPrivateKey = bch.PrivateKey.fromWIF(sessionStorage.privateKey)
-      this.userAddress = this.userPrivateKey.toAddress()
+      this.userAddress = bchaddr.toCashAddress(this.userPrivateKey.toAddress().toString()).substr(12)
     }
 
     // ensure the localStorage data structures are defined
     if (typeof localStorage.names === 'undefined') {
       var names = []
       localStorage.names = JSON.stringify(names)
-    }
-    if (typeof localStorage.posts === 'undefined') {
-      var posts = []
-      localStorage.posts = JSON.stringify(posts)
     }
     if (typeof localStorage.transactions === 'undefined') {
       var transactions = []
@@ -1056,6 +1046,19 @@ class Config {
 
     this.highestZIndexUsed = 2
   }
+
+  randomInsightEndpoint () {
+    return Utilities.getRandomFromArray (
+      JSON.parse (localStorage.insightEndpointsArray)
+    )
+  }
+
+  randomInsightWebsocket () {
+    return Utilities.getRandomFromArray (
+      JSON.parse (localStorage.insightWebsocketsArray)
+    )
+  }
+
 }
 
 
@@ -1223,9 +1226,12 @@ class FormManager {
 /*!*******************************!*\
   !*** ./src/client/js/Name.js ***!
   \*******************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Name; });
 /**
  * Name
  * Author: The Unite.cash Developers
@@ -1236,102 +1242,18 @@ class FormManager {
  * @file Provides the Name class
  */
 
-// Returns the name object given an address. Uses caching, returns first 6 of address if no name.
-/* TODO:
-- unique immutable hash symbol (color and shape) based on address to deter spoofing
-*/
-var get_name = function (addr) {
-  return new Promise(function (resolve, reject) {
-    var success = false
-    var names = JSON.parse(localStorage.names)
-    // declare an empty default name just in case none exists
-    var name = {address: addr, name: addr.substr(0, 6), time: 0, hash: get_name_hash(addr)}
-    for (var i = 0; i < names.length; i++) {
-      if (names[i].address == addr) {
-        success = true
-        resolve(names[i])
-      }
-    }
-    if (!success) {
-      get_transactions(addr).then(function (tx_arr) {
-        var found_name = false
-        for (var j = 0; j < tx_arr.length; j++) {
-          var input = tx_arr[j]
-          var time = input.time
-          for (var i = 0; i < input.vout.length; i++) {
-            if (!input.vout[i].scriptPubKey.asm.startsWith('OP_RETURN')) continue
-            code = input.vout[i].scriptPubKey.asm.substring(10, 14)
-            data = input.vout[i].scriptPubKey.asm.substring(14, input.length)
-            data = hex2a(data)
-            if (code == '5504') {
-              found_name = true
-              set_name(addr, data.substr(0, 24), time)
-              // name = data.substr(0, 24);
-              get_name(addr).then(function (name) { // this should be re-done
-                resolve(name)
-              })
-            }
-          }
-        }
-        if (!found_name) {
-          // set_name(addr, addr.substr(0, 6), 0); // uncomment to reduce load on server
-          resolve(name)
-        }
-      })
-    }
-  })
-}
-
-// Sets a users name and decides if the new name should be kept based on timestamp
-/* TODO:
-- Check for and remove duplicate entries to prevent arbitrary results when cache is queried
-*/
-var set_name = function (addr, name, time) {
-  var names = JSON.parse(localStorage.names)
-  var doesExist = false
-  for (var i = 0; i < names.length; i++) {
-    if (names[i].address == addr) {
-      doesExist = true
-      if (names[i].time < time) { // the stored value is old
-        delete names[i]
-        var new_name = {address: addr, name: name, time: time, hash: get_name_hash(addr)}
-        // change all posts with this sender to the new name
-        var posts = JSON.parse(localStorage.posts)
-        for (var i = 0; i < posts.length; i++) {
-          if (posts[i].sender == addr) {
-            posts[i].name = new_name
-          }
-        }
-        localStorage.posts = JSON.stringify(posts)
-        names[i] = new_name
-      } else {
-        if (debug) {
-          console.log('Not adding name because it already exists.')
-        }
-      }
-    }
+class Name {
+  constructor (addr, name, time) {
+    this.address = addr
+    this.displayName = name
+    this.time = time
+    this.hashData = this.calcHash()
   }
-  if (!doesExist) {
-    var new_name = {address: addr, name: name, time: time, hash: get_name_hash(addr)}
-    // change all posts with this sender to the new name
-    var posts = JSON.parse(localStorage.posts)
-    for (var i = 0; i < posts.length; i++) {
-      if (posts[i].sender == addr) {
-        posts[i].name = new_name
-      }
-    }
-    localStorage.posts = JSON.stringify(posts)
-    names.push(new_name)
+  calcHash(){
+    var addr_h = sha512(this.address).substr(0, 32)
+    var data = new Identicon(addr_h).toString()
+    return 'data:image/png;base64,' + data
   }
-  localStorage.names = JSON.stringify(names)
-}
-
-// Returns a unique "identicon" based on the address given
-var get_name_hash = function (addr) {
-  var addr_h = sha512(addr).substr(0, 32)
-  var data = new Identicon(addr_h).toString()
-  var img = '<img class="UINameIcon" src="data:image/png;base64,' + data + '" alt="Real Address: ' + addr + '" poster="Real Address: ' + addr + '" />'
-  return img
 }
 
 
@@ -1358,6 +1280,70 @@ __webpack_require__.r(__webpack_exports__);
  */
 
 class NameManager {
+
+  static consider (name) {
+    var names = JSON.parse(localStorage.names)
+    var doesExist = false
+    for (var i = 0; i < names.length; i++) {
+      if (names[i].address === name.address) {
+        doesExist = true
+        if (names[i].time < name.time) { // the stored value is old
+          names[i] = name
+        } else {
+          if (config.DEBUG_MODE) {
+            console.log ('Not adding name because it already exists.')
+          }
+        }
+      }
+    }
+    if (!doesExist) {
+      names.push (name)
+    }
+    localStorage.names = JSON.stringify(names)
+  }
+
+  static resolveFromAddress (addr) {
+    return new Promise((resolve, reject) => {
+      var success = false
+      var names = JSON.parse (localStorage.names)
+      for (var i = 0; i < names.length; i++) {
+        if (names[i].address == addr) {
+          success = true
+          resolve(names[i])
+        }
+      }
+      if (!success) {
+        // declare an empty default name just in case none exists for this user
+        var name = new Name(addr, addr.substr(0, 6), 0)
+        var found_name = false
+        networkManager.findCommonTransactions(addr, config.CENTRAL_PROFILE_ADDRESS).then((txid_arr) => {
+          if (txid_arr) {
+            (async function loop(){
+              for (var i = 0; i < txid_arr.length; i++) {
+                  await new Transaction(txid_arr[i])
+              }
+              var names = JSON.parse (localStorage.names)
+              for (var i = 0; i < names.length; i++) {
+                if (names[i].address === addr) {
+                  found_name = true
+                  resolve(names[i])
+                }
+              }
+              if (!found_name) {
+                resolve (name)
+              }
+            })()
+          } else {
+            resolve (name)
+          }
+        })
+      }
+    })
+  }
+
+  static resolveFromName (name) {
+    // finds an address given a name, from CENTRAL_PROFILE_ADDRESS
+  }
 
 }
 
@@ -1393,8 +1379,9 @@ class NetworkManager {
   *
   */
   constructor () {
+    this.isDead = false
     // connect to the WebSocket
-    this.socketStream = io(sessionStorage.webSocketEndpoint)
+    this.socketStream = io(config.randomInsightWebsocket())
     this.socketStream.on('connect', () => {
       // TODO: an array of addresses the user subscribes to, iterating each one.
 
@@ -1405,7 +1392,7 @@ class NetworkManager {
 
   bindEvents () {
     this.socketStream.on('tx', (data) => {
-      // new Transaction(data.txid)
+      new Transaction(data.txid, true)
     })
   }
 
@@ -1418,24 +1405,91 @@ class NetworkManager {
   }
 
   disconnect () {
+    this.isDead = true
     this.socketStream.disconnect()
   }
 
   broadcastTransaction (hex) {
-    $.ajax({
-      type: 'POST',
-      url: config.randomInsightEndpoint() + 'tx/send',
-      data: {rawtx: hex},
-      success: function (data) {
-        console.log('TX broadcast successful.\nTX:\n\n' + tx + '\n\ntxid:\n\n: ' + data.txid + '\n\n')
-      },
-      error: function (data) {
-        Messages.broadcastFailure(hex)
+    if (!this.isDead) {
+      if(!config.DEB_G_MODE) {
+        $.ajax({
+          type: 'POST',
+          url: config.randomInsightEndpoint() + 'tx/send',
+          data: {rawtx: hex},
+          success: function (data) {
+            console.log('Broadcasted! TXID:\n\n' + data.txid)
+          },
+          error: function (data) {
+            Messages.broadcastFailure(hex)
+          }
+        })
+      } else {
+        console.log('Pretend broadcasting TX:\n\n' + hex)
+      }
+    }
+  }
+
+
+  getBalance (addr) {
+    return new Promise ((resolve, reject) => {
+      if (!this.isDead) {
+        $.ajax({
+          type: 'GET',
+          url: config.randomInsightEndpoint() + 'addr/' + addr,
+          success: (data) => {
+            resolve (data.balance)
+          }
+        })
+      } else {
+        resolve (false)
       }
     })
   }
 
-  
+  findCommonTransactions (addr1, addr2) {
+    return new Promise((resolve, reject) => {
+      if (!this.isDead) {
+        $.ajax({
+          type: 'GET',
+          url: config.randomInsightEndpoint() + 'addr/' + addr1 + '?from=0&to=1000',
+          success: (data1) => {
+            $.ajax({
+              type: 'GET',
+              url: config.randomInsightEndpoint() + 'addr/' + addr2 + '?from=0&to=1000',
+              success: (data2) => {
+                resolve(data1.transactions.filter(value => -1 !== data2.transactions.indexOf(value)))
+              },
+              error: (data) => {
+                resolve (false)
+              }
+            })
+          },
+          error: (data) => {
+            resolve (false)
+          }
+        })
+      } else {
+        resolve (false)
+      }
+    })
+  }
+
+  lookupTXID (txid) {
+    return new Promise((resolve, reject) => {
+      if (!this.isDead) {
+        $.ajax({
+          type: 'GET',
+          url: config.randomInsightEndpoint () + 'tx/' + txid,
+          success: (transaction) => {
+            resolve(transaction)
+          },
+          error: () => {
+            resolve(false)
+          }
+        })
+      }
+    })
+  }
 
 }
 
@@ -1494,6 +1548,7 @@ class Notification {
       this.title = post.sender.substr(0, 6)
       this.body = 'Changed their name to ' + post.name.name
     }
+    return this
   }
 
   show () {
@@ -1590,9 +1645,12 @@ class NotificationManager {
 /*!*******************************!*\
   !*** ./src/client/js/Post.js ***!
   \*******************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Post; });
 /**
  * Post
  * Author: The Unite.cash Developers
@@ -1603,238 +1661,228 @@ class NotificationManager {
  * @file Provides the Post class
  */
 
-// Adds a post to localStorage cache if it is not there
-var add_post_to_db = function (post) {
-  // get posts from localStorage
-  var posts = JSON.parse(localStorage.posts)
-  // iterate posts, looking for matching TXIDs
-  for (var i = 0; i < posts.length; i++) {
-    if (posts[i].txid == post.txid) {
-      if (debug) {
-        console.log('Not adding post with redundant TXID to database')
+class Post {
+  constructor (transaction) {
+    return new Promise((resolve, reject) => {
+      // only construct each post once per page.
+      if (typeof window.currentPosts === 'undefined') {
+        window.currentPosts = []
       }
-      return
-    }
-  }
-  // no match in DB, we are good to add it
-  posts.push(post)
-  localStorage.posts = JSON.stringify(posts)
-}
-
-// Renders a post to the #posts div
-/* TODO:
-- elementIndex: indicates where in the HTML the new post is rendered
-- replyIndent [limited to 4?]: The level of indentation to apply to the post
-*/
-/* PARAMS
-- pushToTop: boolean indicating if post should (true) or should not (false) be pushed to
-  the top of the HTML instead of the bottom (default).
-*/
-var render_post = function (post, pushToTop = 0, tag = '#posts') {
-  if (post.type != 5501 && post.type != 5502 && post.type != 5503 && post.type != 5505) return
-  var uid = post.txid.substr(0, 16)
-  var postDiv = $('<div id="' + uid + 'div" class="post"></div>')
-  var nameText = $('<p id="' + uid + 'name" class="name"></p>')
-  nameText.text(post.name.name)
-  var timeText = $('<p id="' + uid + 'time" class="time"></p>')
-  timeText.text(post.time)
-  var nameHash = $(post.name.hash)
-  var container = $('<div></div>')
-  container.append(nameText)
-  container.append(nameHash)
-  container.append(timeText)
-  var postText = $('<div id="' + uid + 'content" class="postText"></div>')
-  var actionBar = $('<div class="actionBar"></div>')
-  actionBar.append($('<p id="' + uid + 'reply" class="UITextButton">reply</p>'))
-  actionBar.append($('<p id="' + uid + 'viewreply" class="UITextButton">show replies</p>'))
-  actionBar.append($('<p id="' + uid + 'tip" class="UITextButton">tip</p>'))
-  actionBar.append($('<p id="' + uid + 'report" class="UITextButton">report</p>'))
-  postText.text(post.displayContent)
-  postDiv.append(postText)
-  postDiv.prepend(container)
-  postDiv.append(actionBar)
-  if (pushToTop) {
-    $(tag).prepend(postDiv)
-  } else {
-    $(tag).append(postDiv)
-  }
-  var newString = '<div id="' + uid + 'tipwindow" class="UIAlertWindow hidden">'
-  newString += '<h1>SEND A TIP</h1>'
-  newString += '<p>Show how much you appreciate ' + post.name.name + '\'s post by sending a tip!</p>'
-  newString += '<form id="' + uid + 'tipform">'
-  newString += '<input type="text" id="' + uid + 'tipamount" class="UITextField center w90"'
-  newString += 'placeholder="Amount (satoshis)" /><br/>'
-  newString += '<input type="submit" class="UIButton center w90" value="SEND" />'
-  newString += '</form></div>'
-  $('body').append($(newString))
-  $('#' + uid + 'name').on('click', function () {
-    window.location.href = 'user.html?address=' + post.sender
-  })
-  $('#' + uid + 'viewreply').on('click', function () {
-    window.location.href = 'post.html?post=' + post.txid
-  })
-  $('#' + uid + 'tip').on('click', function () {
-    display_html_alert('#' + uid + 'tipwindow')
-  })
-  $('#' + uid + 'tipform').on('submit', function (ev) {
-    ev.preventDefault()
-    var tipAmount = $('#' + uid + 'tipamount').val()
-    document.elementFromPoint(10, 10).click()
-    if (post.sender == address.toString()) {
-      display_alert('<h1>NARCISSISM?</h1><p>You just tried to tip yourself. You failed. Miserably.</p>')
-    } else {
-      find_utxo(address.toString(), tipAmount).then(function (utxo) {
-        if (utxo == -1) {
-          var newString = '<h1>ACCOUNT BALANCE</h1>'
-          newString += '<p>Check that you\'ve funded your account before posting!</p>'
-          newString += '<p>We\'re working on a way to fund new users\' posts, it\'ll be '
-          newString += 'out soon!</p><p>In the meantime, here are some ways to fund your account: </p>'
-          newString += '<ul><li>Ask a friend to send you some Bitcoin Cash to your Unite address</li>'
-          newString += '<li>You can get some from the free.bitcoin.com faucet</li>'
-          newString += '<li>You can trade any cryptocurrency for Bitcoin Cash on ShapeShift</li>'
-          newString += '<li>You can be tipped on sites like yours.org or Reddit (r/btc)</li>'
-          newString += '<li>You can buy some on sites like coinbase.com or kraken.com</li></ul>'
-          display_alert(newString)
-        } else {
-          // create dummy tx to find approximate actual TX size with fee
-          transaction = new bch.Transaction()
-          transaction.from(utxo)
-          transaction.to(address.toString(), utxo.satoshis - tipAmount - 300) // approximate
-          transaction.to(post.sender, parseInt(tipAmount))
-          transaction.addData(hex2a('5503') + hex2a(post.txid))
-          transaction.sign(privateKey)
-          var tx_size = parseInt(transaction.toString().length / feeThreshold) // fee threshold
-          // recreate transaction with correct fee
-          transaction = new bch.Transaction()
-          transaction.from(utxo)
-          transaction.to(address.toString(), utxo.satoshis - tipAmount - tx_size) // approximate
-          transaction.to(post.sender, parseInt(tipAmount))
-          transaction.addData(hex2a('5503') + hex2a(post.txid))
-          transaction.sign(privateKey)
-          console.log(transaction.toString())
-          // broadcast_tx(transaction.toString());
-          display_success('Your tip has been sent!')
-          swooosh()
-          $('#' + uid + 'tipamount').val('')
+      var redundant = false
+      for (var i = 0; i < currentPosts.length; i++) {
+        if (transaction.txid === currentPosts[i]) {
+          if (config.DEBUG_MODE) {
+            console.log ('Not constructing existing post redundantly.')
+          }
+          redundant = true
+          resolve (false)
         }
-      })
-    }
-  })
-}
-
-// Given a TXID, returns a post object
-var get_post = function (txid) {
-  return new Promise(function (resolve, reject) {
-    // check if we have the post already in cache
-    var posts = JSON.parse(localStorage.posts)
-    var success = false
-    for (var i = 0; i < posts.length; i++) {
-      if (posts[i].txid == txid) {
-        success = true
-        resolve(posts[i])
-        return
       }
-    }
-    if (!success) {
-      get_tx(txid).then(function (transaction) {
-        parse_tx(transaction).then(function (post) {
-          resolve(post)
-        })
-      })
-    }
-  })
-}
-
-// Gets posts associated with an address
-var get_posts = function (addr) {
-  get_transactions(addr).then(function (tx_arr) {
-    for (var i = 0; i < tx_arr.length; i++) { // for each transaction
-      parse_tx(tx_arr[i])
-    }
-  })
-}
-
-// Initial processing of posts. Assigns the name, finds number of replies, replyy depth etc.
-var init_post = function (post) {
-  return new Promise(function (resolve, reject) {
-    get_name(post.sender).then(function (name) {
-      post.name = name
-      // notifications for live transactions
-      if (post.isLive) {
-        parse_notification(post)
-      }
-
-      // we can also fetch image data, extended messages, parent transactions,
-      // number of replies, tips etc in the same way based on tx type
-
-      if (post.type == '5504') { // set name of sender to their new name
-        set_name(post.sender, post.data, post.time)
-      }
-      if (post.type == '5503') {
-        post.displayContent = post.data.substr(46)
-      }
-      if (post.type == '5501') {
-        post.displayContent = post.data
-      }
-      if (post.type == '5502') {
-        // for this type, the post.data is a magnet link.
-        // post.displayContent will be the contents of the torrent. (get it from webtorrent/webseed)
-      }
-
-      // pass it to the page we are on, so that page can decide how to display it
-      if (typeof handle_new_post !== undefined) {
-        handle_new_post(post)
-      }
-      resolve(post)
-    })
-  })
-}
-
-// Returns an array of posts which are replies to the given post // incomplete and posibly permanently deprecated
-var get_replies = function (post) {
-  return new Promise(function (resolve, reject) {
-    var post_arr = []
-    get_posts(post.sender).then(function (posts) {
-      for (var i = 0; i < posts.length; i++) {
-        if (posts[i].parent == post.sender) {
-          if (posts[i].type == 5503) {
-            console.log(posts[i].data.substr(0, 64))
-            console.log(post.txid)
-            if (posts[i].data.substr(0, 64) == post.txid) {
-              post_arr.push(posts[i])
+      if (!redundant) {
+        currentPosts.push (transaction.txid)
+        var sender = transaction.vin[0].addr
+        var parent = 'none', code = 'none', data = 'none'
+        for (var i = 0; i < transaction.vout.length; i++) {
+          if (!transaction.vout[i].scriptPubKey.asm.startsWith('OP_RETURN')) {
+            if (parseInt(transaction.vout[i].value * 100000000) <= config.DUST_LIMIT_SIZE &&
+    						parseInt(transaction.vout[i].value * 100000000) != 0) {
+              // parent is determined by this small, non-zero output
+              parent = transaction.vout[i].scriptPubKey.addresses[0]
             }
+          } else { // OP_RETURN data parsing
+            code = transaction.vout[i].scriptPubKey.asm.substring(10, 14)
+            data = transaction.vout[i].scriptPubKey.asm.substring(14)
+            data = Utilities.hex2a(data)
           }
         }
+        if (parent != 'none' && code != 'none' && data != 'none') {
+          this.type = code
+          this.sender = sender
+          this.parent = parent
+          this.txid = transaction.txid
+          this.time = transaction.time
+          this.data = data
+          this.isLive = transaction.isLive
+          this.init().then((result) => {
+            resolve (result)
+          })
+        } else {
+          resolve (false)
+        }
       }
-      resolve(post_arr)
     })
-  })
-}
+  }
 
+  init () {
+    return new Promise((resolve, reject) => {
+      NameManager.resolveFromAddress(this.sender).then ((name) => {
+        this.senderName = name
+        // notifications for live transactions
+        if (this.isLive) {
+          new AppNotification(post).show()
+        }
 
-/***/ }),
+        // we can also fetch image data, extended messages, parent transactions,
+        // number of replies, tips etc in the same way based on tx type
 
-/***/ "./src/client/js/PostManager.js":
-/*!**************************************!*\
-  !*** ./src/client/js/PostManager.js ***!
-  \**************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+        if (this.type == '5504') {
+          NameManager.consider (new Name(this.sender, this.data, this.time))
+        } else if (this.type == '5503') {
+          this.displayContent = this.data.substr(46) // hacky
+        } else if (this.type == '5501') {
+          this.displayContent = this.data
+        } else if (this.type == '5502') {
+          // for this type, the post.data is a magnet link.
+          // post.displayContent will be the contents of the torrent.
+          // (get it from webtorrent/webseed)
+        }
+        // if the page supports it and the post contains renderable data,
+        // the page-specific onPostLoad function is called.
+        if (typeof onPostLoad !== 'undefined' &&
+            typeof this.displayContent !== 'undefined') {
+          onPostLoad(this)
+        }
+        resolve(this)
+      })
+    })
+  }
 
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return PostManager; });
-/**
- * PostManager
- * Author: The Unite.cash Developers
- * License: GNU AGPL v3
- *
- * A class for querying, caching, storing, and retrieving Post objects
- *
- * @file Defines the PostManager class
- */
+  render (tag) {
+    if (typeof this.displayContent === 'undefined') { // only render content.
+      return
+    }
+    if (typeof tag === 'undefined') {
+      tag = '#posts'
+    }
+    var uid = this.txid.substr(0, 16)
 
-class PostManager {
+    var postDiv = $('<div></div>')
+    postDiv.attr('id', uid)
+    postDiv.attr('class', 'post')
+
+    var nameText = $('<p></p>')
+    nameText.attr('id', uid + 'name')
+    nameText.attr('class', 'name')
+    nameText.text(this.senderName.displayName)
+
+    var timeText = $('<p></p>')
+    timeText.attr('id', uid + 'time')
+    timeText.attr('class', 'time')
+    timeText.text(this.time)
+
+    var nameHash = $(this.senderName.hash)
+
+    var container = $('<div></div>')
+    container.append(nameText)
+    container.append(nameHash)
+    container.append(timeText)
+
+    var postText = $('<div></div>')
+    postText.attr('id', uid + 'content')
+    postText.attr('class', 'postText')
+    postText.text(this.displayContent)
+
+    var actionBar = $('<div></div>')
+    actionBar.attr('class', 'actionBar')
+
+    var replyButton = $('<p></p>')
+    replyButton.attr('id', uid + 'reply')
+    replyButton.attr('class', 'UITextButton')
+    replyButton.text('reply')
+
+    var viewRepliesButton = $('<p></p>')
+    viewRepliesButton.attr('id', uid + 'viewreplies')
+    viewRepliesButton.attr('class', uid + 'UITextButton')
+    viewRepliesButton.text('show replies')
+
+    var tipButton = $('<p></p>')
+    tipButton.attr('id', uid + 'tip')
+    tipButton.attr('class', 'UITextButton')
+    tipButton.text('tip')
+
+    var reportButton = $('<p></p>')
+    reportButton.attr('id', uid + 'report')
+    reportButton.attr('class', 'UITextButton')
+    reportButton.text('report')
+
+    actionBar.append(replyButton)
+    actionBar.append(viewRepliesButton)
+    actionBar.append(tipButton)
+    actionBar.append(reportButton)
+
+    postDiv.append(postText)
+    postDiv.prepend(container)
+    postDiv.append(actionBar)
+
+    if (this.isLive) {
+      $(tag).prepend(postDiv)
+    } else {
+      $(tag).append(postDiv)
+    }
+
+    var newString = '<div id="' + uid + 'tipwindow" class="UIAlertWindow hidden">'
+    newString += '<h1>SEND A TIP</h1>'
+    newString += '<p>Show how much you appreciate ' + this.senderName.nameText + '\'s post by sending a tip!</p>'
+    newString += '<form id="' + uid + 'tipform">'
+    newString += '<input type="text" id="' + uid + 'tipamount" class="UITextField center w90"'
+    newString += 'placeholder="Amount (satoshis)" /><br/>'
+    newString += '<input type="submit" class="UIButton center w90" value="SEND" />'
+    newString += '</form></div>'
+    $('body').append($(newString))
+    $('#' + uid + 'name').on('click', function () {
+      window.location.href = 'user.html?address=' + this.sender
+    })
+    $('#' + uid + 'viewreply').on('click', function () {
+      window.location.href = 'post.html?post=' + this.txid
+    })
+    $('#' + uid + 'tip').on('click', function () {
+      display_html_alert('#' + uid + 'tipwindow')
+    })
+    $('#' + uid + 'tipform').on('submit', function (ev) {
+      ev.preventDefault()
+      var tipAmount = $('#' + uid + 'tipamount').val()
+      document.elementFromPoint(10, 10).click()
+      if (this.sender == config.userAddress.toString()) {
+        new Popup('<h1>NARCISSISM?</h1><p>You just tried to tip yourself. You failed. Miserably.</p>').show()
+      } else {
+        find_utxo(address.toString(), tipAmount).then(function (utxo) {
+          if (utxo == -1) {
+            var newString = '<h1>ACCOUNT BALANCE</h1>'
+            newString += '<p>Check that you\'ve funded your account before posting!</p>'
+            newString += '<p>We\'re working on a way to fund new users\' posts, it\'ll be '
+            newString += 'out soon!</p><p>In the meantime, here are some ways to fund your account: </p>'
+            newString += '<ul><li>Ask a friend to send you some Bitcoin Cash to your Unite address</li>'
+            newString += '<li>You can get some from the free.bitcoin.com faucet</li>'
+            newString += '<li>You can trade any cryptocurrency for Bitcoin Cash on ShapeShift</li>'
+            newString += '<li>You can be tipped on sites like yours.org or Reddit (r/btc)</li>'
+            newString += '<li>You can buy some on sites like coinbase.com or kraken.com</li></ul>'
+            display_alert(newString)
+          } else {
+            // create dummy tx to find approximate actual TX size with fee
+            transaction = new bch.Transaction()
+            transaction.from(utxo)
+            transaction.to(address.toString(), utxo.satoshis - tipAmount - 300) // approximate
+            transaction.to(post.sender, parseInt(tipAmount))
+            transaction.addData(hex2a('5503') + hex2a(post.txid))
+            transaction.sign(privateKey)
+            var tx_size = parseInt(transaction.toString().length / feeThreshold) // fee threshold
+            // recreate transaction with correct fee
+            transaction = new bch.Transaction()
+            transaction.from(utxo)
+            transaction.to(address.toString(), utxo.satoshis - tipAmount - tx_size) // approximate
+            transaction.to(post.sender, parseInt(tipAmount))
+            transaction.addData(hex2a('5503') + hex2a(post.txid))
+            transaction.sign(privateKey)
+            console.log(transaction.toString())
+            // broadcast_tx(transaction.toString());
+            display_success('Your tip has been sent!')
+            swooosh()
+            $('#' + uid + 'tipamount').val('')
+          }
+        })
+      }
+    })
+  }
 
 }
 
@@ -1845,9 +1893,12 @@ class PostManager {
 /*!**************************************!*\
   !*** ./src/client/js/Transaction.js ***!
   \**************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Transaction; });
 /**
  * Transaction
  * Author: The Unite.cash Developers
@@ -1858,69 +1909,39 @@ class PostManager {
  * @file Provides the Transaction class
  */
 
-// takes a transaction as input and returns a post after adding the post to posts cache
-/* PARAMS:
-- isLive: a boolean indicating if the transaction came in over WebSocket (true),
-  or not (false).
-*/
-var parse_tx = function (input, isLive) {
-  return new Promise(function (resolve, reject) {
-    var time = input.time
-    var tx_from_addr = input.vin[0].addr
-    var parent = 'none', code = 'none', data = 'none'
-    for (var i = 0; i < input.vout.length; i++) { // for each output
-      if (!input.vout[i].scriptPubKey.asm.startsWith('OP_RETURN')) {
-        if (parseInt(input.vout[i].value * 100000000) <= dustLimitSize &&
-						parseInt(input.vout[i].value * 100000000) != 0) { // this is the parent reference output
-          parent = input.vout[i].scriptPubKey.addresses[0]
-        }
-      } else { // OP_RETURN data parsing
-        code = input.vout[i].scriptPubKey.asm.substring(10, 14)
-        data = input.vout[i].scriptPubKey.asm.substring(14, input.length)
-        data = hex2a(data)
-      }
-    }
-    if (parent != 'none' && code != 'none' && data != 'none') {
-      var post = {
-        type: code,
-        sender: tx_from_addr,
-        parent: parent,
-        txid: input.txid,
-        time: time,
-        data: data,
-        isLive: isLive
-      }
-      init_post(post).then(function (updated_post) {
-        add_post_to_db(updated_post)
-        resolve(updated_post)
-      })
+class Transaction {
+  constructor (txid, isLive) {
+    if (typeof isLive === 'undefined') {
+      this.isLive = false
     } else {
-      resolve(-1)
+      this.isLive = isLive
     }
-  })
-}
-
-// Returns an array of Unite transactions by address, adding them to cache
-/* TODO:
-- A better way of handling multiple pages of transactions than just requesting
-  the first 1000 from insight
-*/
-var get_transactions = function (addr) {
-  return new Promise(function (resolve, reject) {
-    var tx_arr = []
-    $.ajax({
-      type: 'GET',
-      url: insightBaseURL + 'addr/' + addr + '?from=0&to=1000', // TODO a better solution than a hard limit
-      success: function (data) {
-        for (var i = 0; i < data.transactions.length; i++) { // for each transaction
-          get_tx(data.transactions[i]).then(function (tx) {
-            tx_arr.push(tx)
+    return new Promise ((resolve, reject) => {
+      // check if it exists in the DB already
+      var transactions = JSON.parse (localStorage.transactions)
+      var success = false
+      for (var i = 0; i < transactions.length && !success; i++) {
+        if (transactions[i].txid == txid && !success) {
+          success = true
+          new Post (transactions[i]).then((result) => {
+            resolve (result)
           })
         }
-        resolve(tx_arr)
+      }
+      if (!success) { // look it up from the network and add it to cache
+        networkManager.lookupTXID(txid).then((transaction) => {
+          if (TransactionManager.validate (transaction)) {
+            TransactionManager.remember(transaction)
+            new Post(transaction).then((result) => {
+              resolve (result)
+            })
+          } else {
+            resolve (false)
+          }
+        })
       }
     })
-  })
+  }
 }
 
 // returns a UTXO suitable for spending given an address
@@ -1932,6 +1953,7 @@ var get_transactions = function (addr) {
   just the UTXO.
 - Rename the function from find_utxo(address string) to add_utxos(bch.Transaction)
 */
+// move to User class
 var find_utxo = function (address, amount = 1000) {
   return new Promise(function (resolve, reject) {
     $.ajax({
@@ -1958,73 +1980,6 @@ var find_utxo = function (address, amount = 1000) {
   })
 }
 
-// Adds transaction to localStorage transactions cache, if it is not already there
-var add_tx_to_db = function (tx) {
-  // get the tx db
-  var transactions = JSON.parse(localStorage.transactions)
-  // check if it exists
-  for (var i = 0; i < transactions.length; i++) {
-    if (transactions[i].txid == tx.txid) {
-      if (debug) {
-        console.log('Not adding transaction, it is a duplicate.')
-      }
-      return
-    }
-  }
-  transactions.push(tx)
-  localStorage.transactions = JSON.stringify(transactions)
-}
-
-// Returns a transaction given a TXID. first searches the cache, then the network
-var get_tx = function (txid) {
-  return new Promise(function (resolve, reject) {
-    // check if it exists in the DB already
-    var transactions = JSON.parse(localStorage.transactions)
-    var success = false
-    for (var i = 0; i < transactions.length; i++) {
-      if (transactions[i].txid == txid) {
-        success = true
-        resolve(transactions[i])
-        return
-      }
-    }
-    if (!success) { // look it up from the network and add it to cache
-      $.ajax({
-        type: 'GET',
-        url: insightBaseURL + 'tx/' + txid,
-        success: function (transaction) {
-          if (is_univo_tx(transaction)) {
-            add_tx_to_db(transaction)
-            resolve(transaction)
-          } else {
-            resolve(-1)
-          }
-        }
-      })
-    }
-  })
-}
-
-// Determines if the given transaction is a Unite transaction
-var is_univo_tx = function (transaction) {
-  var parent = 'none', code = 'none'
-  for (var i = 0; i < transaction.vout.length; i++) { // for each output
-    if (!transaction.vout[i].scriptPubKey.asm.startsWith('OP_RETURN')) {
-      if (parseInt(transaction.vout[i].value * 100000000) <= dustLimitSize &&
-					parseInt(transaction.vout[i].value * 100000000) != 0) { // this is the parent reference output
-        parent = transaction.vout[i].scriptPubKey.addresses[0]
-      }
-    } else { // OP_RETURN data parsing
-      code = transaction.vout[i].scriptPubKey.asm.substring(10, 14)
-    }
-  }
-  if (code.startsWith('55') && parent != 'none') {
-    return true
-  } else {
-    return false
-  }
-}
-
 
 /***/ }),
 
@@ -2049,6 +2004,67 @@ __webpack_require__.r(__webpack_exports__);
  */
 
 class TransactionManager {
+  static validate (transaction) {
+    var parent = 'none', code = 'none'
+    for (var i = 0; i < transaction.vout.length; i++) { // for each output
+      if (!transaction.vout[i].scriptPubKey.asm.startsWith('OP_RETURN')) {
+        if (parseInt(transaction.vout[i].value * 100000000) <= config.DUST_LIMIT_SIZE &&
+  					parseInt(transaction.vout[i].value * 100000000) != 0) {
+          // this finds the parent output of the transaction.
+          parent = transaction.vout[i].scriptPubKey.addresses[0]
+        }
+      } else { // OP_RETURN data parsing
+        code = transaction.vout[i].scriptPubKey.asm.substring(10, 14)
+      }
+    }
+    if (code.startsWith('55') && parent != 'none') {
+      return true
+    }
+    return false
+  }
+
+  static remember (transaction) {
+    var transactions = JSON.parse(localStorage.transactions)
+    // check if it exists
+    for (var i = 0; i < transactions.length; i++) {
+      if (transactions[i].txid == transaction.txid) {
+        if (config.DEBUG_MODE) {
+          console.log('Not adding transaction, it is a duplicate.')
+        }
+        return
+      }
+    }
+    transactions.push(transaction)
+    localStorage.transactions = JSON.stringify(transactions)
+  }
+
+  static forget (txid) {
+    var transactions = JSON.parse(localStorage.transactions)
+    for (var i = 0; i < transactions.length; i++) {
+      if (transactions[i].txid == txid) {
+        transactions.splice(i, 1)
+      }
+    }
+    localStorage.transactions = JSON.stringify (transactions)
+  }
+
+  static loadTransactionsByAddress (addr) {
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        type: 'GET',
+        url: config.randomInsightEndpoint() + 'addr/' + addr + '?from=0&to=1000', // TODO a better solution than a hard limit
+        success: (data) => {
+          for (var i = 0; i < data.transactions.length; i++) { // for each transaction
+            new Transaction(data.transactions[i])
+          }
+          resolve (true)
+        },
+        error: (data) => {
+          resolve (false)
+        }
+      })
+    })
+  }
 
 }
 
@@ -2240,7 +2256,7 @@ class InteractivePopup {
     }
 
     var alertBackground = $('<div></div>')
-    alertBackground.attr('style', 'z-index: ' + app.highestZIndexUsed)
+    alertBackground.attr('style', 'z-index: ' + config.highestZIndexUsed)
     alertBackground.attr('class', 'UIDimmedBackground hidden')
     alertBackground.attr('id', this.backgroundID)
     $('body').on('click', '#' + this.backgroundID, () => {
@@ -2250,11 +2266,11 @@ class InteractivePopup {
     $('body').append(alertBackground)
     $('#' + this.backgroundID).fadeIn(this.options.animationSpeed)
     $(this.tag).slideDown(this.options.animationSpeed)
-    $(this.tag).attr('style', 'z-index:' + (app.highestZIndexUsed + 1))
+    $(this.tag).attr('style', 'z-index:' + (config.highestZIndexUsed + 1))
     $(this.tag).css('display', 'inline')
 
     document.activeElement.blur()
-    app.highestZIndexUsed += 2
+    config.highestZIndexUsed += 2
   }
 
   // thanks to https://stackoverflow.com/a/7259663/5860286 for this
@@ -2437,7 +2453,7 @@ class Popup {
     }
 
     var alertBackground = $('<div></div>')
-    alertBackground.attr('style', 'z-index: ' + app.highestZIndexUsed)
+    alertBackground.attr('style', 'z-index: ' + config.highestZIndexUsed)
     alertBackground.attr('class', 'UIDimmedBackground hidden')
     alertBackground.attr('id', this.backgroundID)
     $('body').on('click', '#' + this.backgroundID, () => {
@@ -2445,7 +2461,7 @@ class Popup {
     })
 
     var alertHTML = $('<div></div>')
-    alertHTML.attr('style', 'z-index: ' + (app.highestZIndexUsed + 1))
+    alertHTML.attr('style', 'z-index: ' + (config.highestZIndexUsed + 1))
     alertHTML.attr('id', this.divID)
     if (this.options.isCentered) {
       alertHTML.attr('class', 'UIAlertWindow center-text hidden')
@@ -2476,7 +2492,7 @@ class Popup {
     $('#' + this.divID).slideDown(this.options.animationSpeed)
 
     document.activeElement.blur()
-    app.highestZIndexUsed += 2
+    config.highestZIndexUsed += 2
   }
 
   // thanks to https://stackoverflow.com/a/7259663/5860286 for this
@@ -2612,9 +2628,9 @@ class Utilities {
 
   // thanks to https://stackoverflow.com/a/3745677/5860286 for this
   static hex2a (hexx) {
-    hex = hexx.toString()
-    str = ''
-    for (i = 0; i < hex.length; i += 2) {
+    var hex = hexx.toString()
+    var str = ''
+    for (var i = 0; i < hex.length; i += 2) {
       str += String.fromCharCode(parseInt(hex.substr(i, 2), 16))
     }
     return str

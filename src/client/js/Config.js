@@ -11,22 +11,24 @@
 
 export default class Config {
   constructor () {
-    this.CENTRAL_CONTENT_ADDRESS = '1HBqvcE3jArLxTe4p2KRaDsRHHtEaqG66z'
-    this.CENTRAL_PROFILE_ADDRESS = '1B4wyiAP3xYx2H8AqMqrwdMfbw7YwFd4C3'
-    this.CENTRAL_GROUPS_ADDRESS = '14F1NbudfgRyEzau29HpexQPzHkghbWUKR'
-    this.CENTRAL_REPORT_ADDRESS = '12xemQTP98jgkAUGuGqHghdVSufqR7htjY'
+    this.CENTRAL_CONTENT_ADDRESS = bchaddr.toCashAddress('1HBqvcE3jArLxTe4p2KRaDsRHHtEaqG66z')
+    this.CENTRAL_PROFILE_ADDRESS = bchaddr.toCashAddress('1B4wyiAP3xYx2H8AqMqrwdMfbw7YwFd4C3')
+    this.CENTRAL_GROUPS_ADDRESS =  bchaddr.toCashAddress('14F1NbudfgRyEzau29HpexQPzHkghbWUKR')
+    this.CENTRAL_REPORT_ADDRESS =  bchaddr.toCashAddress('12xemQTP98jgkAUGuGqHghdVSufqR7htjY')
 
     this.DUST_LIMIT_SIZE = 547
     this.FEE_RATIO = 1.95
 
-    this.DEBUG_MODE = false
+    this.DEBUG_MODE = true
 
     this.DEFAULT_INSIGHT_ENDPOINTS_ARRAY = [
-      'https://bitcoincash.blockexplorer.com/api/'
+      //'https://bitcoincash.blockexplorer.com/api/',
+      'https://bch-insight.bitpay.com/api/'
     ]
 
     this.DEFAULT_INSIGHT_WEBSOCKETS_ARRAY = [
-      'wss://bitcoincash.blockexplorer.com'
+      //'wss://bitcoincash.blockexplorer.com',
+      'wss://bch-insight.bitpay.com'
     ]
 
     if (typeof localStorage.insightEndpointsArray === 'undefined') {
@@ -50,17 +52,13 @@ export default class Config {
 
     if (typeof sessionStorage.privateKey !== 'undefined') {
       this.userPrivateKey = bch.PrivateKey.fromWIF(sessionStorage.privateKey)
-      this.userAddress = this.userPrivateKey.toAddress()
+      this.userAddress = bchaddr.toCashAddress(this.userPrivateKey.toAddress().toString()).substr(12)
     }
 
     // ensure the localStorage data structures are defined
     if (typeof localStorage.names === 'undefined') {
       var names = []
       localStorage.names = JSON.stringify(names)
-    }
-    if (typeof localStorage.posts === 'undefined') {
-      var posts = []
-      localStorage.posts = JSON.stringify(posts)
     }
     if (typeof localStorage.transactions === 'undefined') {
       var transactions = []

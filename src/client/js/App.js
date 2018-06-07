@@ -13,6 +13,7 @@ import $ from './lib/jquery.js'
 window.jQuery = $
 window.$ = $
 import bchaddr from './lib/bchaddr.js'
+window.bchaddr = bchaddr
 import bitcoincash from './lib/bitcoincash.js'
 window.bch = bitcoincash
 import './lib/pnglib.js'
@@ -44,8 +45,6 @@ import TransactionManager from './TransactionManager'
 window.TransactionManager = TransactionManager
 import Post from './Post'
 window.Post = Post
-import PostManager from './PostManager'
-window.PostManager = PostManager
 import Name from './Name'
 window.Name = Name
 import NameManager from './NameManager'
@@ -61,19 +60,16 @@ window.FormManager = FormManager
 
 export default class App {
   constructor () {
-    this.init()
-  }
-
-  init () {
     window.config = new Config()
-    // check if the user has logged in
     if (sessionStorage.privateKey !== undefined) {
       window.notificationManager = new NotificationManager()
       window.networkManager = new NetworkManager()
       window.formManager = new FormManager()
-      if (typeof pageInit !== 'undefined') {
-        pageInit()
-      }
+      $(document).ready(() => {
+        if (typeof pageInit !== 'undefined') {
+          pageInit()
+        }
+      })
     } else {
       if (window.location.pathname.split('/').pop() != 'login.html') { // endsWith
         Utilities.redirect('login.html')

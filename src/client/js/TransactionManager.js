@@ -32,7 +32,7 @@ export default class TransactionManager {
     var transactions = JSON.parse(localStorage.transactions)
     // check if it exists
     for (var i = 0; i < transactions.length; i++) {
-      if (transactions[i].txid == tx.txid) {
+      if (transactions[i].txid == transaction.txid) {
         if (config.DEBUG_MODE) {
           console.log('Not adding transaction, it is a duplicate.')
         }
