@@ -85,4 +85,18 @@ export default class Utilities {
       Utilities.redirect('login.html')
     }, 1100)
   }
+
+  static obtainFocus () {
+    // attempt to get focus from the browser
+    parent.focus()
+    // if applicable, attempt to get focus on the Electron app window
+    if (typeof require !== undefined) {
+      var win = require('electron').remote.getCurrentWindow()
+      win.show()
+      win.setAlwaysOnTop(true)
+      win.focus()
+      win.setAlwaysOnTop(false)
+    }
+  }
+  
 }

@@ -9,7 +9,7 @@
  */
 
 export default class Post {
-  constructor (transaction) {
+  constructor (transaction, isLive) {
     return new Promise((resolve, reject) => {
       // only construct each post once per page.
       if (typeof window.currentPosts === 'undefined') {
@@ -24,6 +24,9 @@ export default class Post {
           redundant = true
           resolve (false)
         }
+      }
+      if (typeof isLive === 'undefined') {
+        isLive = false
       }
       if (!redundant) {
         currentPosts.push (transaction.txid)
@@ -49,7 +52,7 @@ export default class Post {
           this.txid = transaction.txid
           this.time = transaction.time
           this.data = data
-          this.isLive = transaction.isLive
+          this.isLive = isLive
           this.init().then((result) => {
             resolve (result)
           })
@@ -66,7 +69,7 @@ export default class Post {
         this.senderName = name
         // notifications for live transactions
         if (this.isLive) {
-          new AppNotification(post).show()
+          new AppNotification (this).show()
         }
 
         // we can also fetch image data, extended messages, parent transactions,
@@ -117,12 +120,17 @@ export default class Post {
     timeText.attr('class', 'time')
     timeText.text(this.time)
 
-    var nameHash = $(this.senderName.hash)
+    var nameHash = $('<img></img>')
+    nameHash.attr('src', this.senderName.hashData)
+    nameHash.attr('alt', 'True Address: ' + this.sender)
+    nameHash.attr('title', 'True Address: ' + this.sender)
+    nameHash.attr('id', uid + 'namehash')
+    nameHash.attr('class', 'UIPostNameHash')
 
-    var container = $('<div></div>')
-    container.append(nameText)
-    container.append(nameHash)
-    container.append(timeText)
+    var postHeader = $('<div></div>')
+    postHeader.append(nameHash)
+    postHeader.append(nameText)
+    postHeader.append(timeText)
 
     var postText = $('<div></div>')
     postText.attr('id', uid + 'content')
@@ -158,7 +166,7 @@ export default class Post {
     actionBar.append(reportButton)
 
     postDiv.append(postText)
-    postDiv.prepend(container)
+    postDiv.prepend(postHeader)
     postDiv.append(actionBar)
 
     if (this.isLive) {

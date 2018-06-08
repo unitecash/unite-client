@@ -17,7 +17,7 @@ export default class Config {
     this.CENTRAL_REPORT_ADDRESS =  bchaddr.toCashAddress('12xemQTP98jgkAUGuGqHghdVSufqR7htjY')
 
     this.DUST_LIMIT_SIZE = 547
-    this.FEE_RATIO = 1.95
+    this.DEFAULT_FEE_PER_BYTE = 1.05
 
     this.DEBUG_MODE = true
 

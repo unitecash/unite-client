@@ -32,13 +32,14 @@ export default class Notification {
     if (typeof options.playSound === 'undefined') {
       options.playSound = true
     }
-    if (post.type == '5501') {
-      this.title = post.name.name
-      this.body = post.data
+    this.options = options
+    if (post.type === '5501') {
+      this.title = post.senderName.displayName
+      this.body = post.displayContent
     }
-    if (post.type == '5504') {
+    if (post.type === '5504') {
       this.title = post.sender.substr(0, 6)
-      this.body = 'Changed their name to ' + post.name.name
+      this.body = 'Changed their name to ' + post.senderName.displayName
     }
     return this
   }
@@ -50,26 +51,17 @@ export default class Notification {
     if (!document.hasFocus()) { // the user is not using the application
       var n = new Notification(
         this.title,
-        {icon: './images/icon.png',
-          body: this.body})
+        {
+          icon: './images/icon.png',
+          body: this.body.substr(0, this.options.maxLength)
+        }
+      )
       n.onclick = function (ev) {
-        this.obtainFocus()
+        Utilities.obtainFocus()
       }
     } else { // the user is using the application
       new SuccessBanner(this.title + ': ' + this.body).show()
     }
   }
-
-  obtainFocus () {
-    // attempt to get focus from the browser
-    parent.focus()
-    // if applicable, attempt to get focus on the Electron app window
-    if (typeof require !== undefined) {
-      var win = require('electron').remote.getCurrentWindow()
-      win.show()
-      win.setAlwaysOnTop(true)
-      win.focus()
-      win.setAlwaysOnTop(false)
-    }
-  }
+  
 }

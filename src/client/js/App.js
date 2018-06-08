@@ -57,15 +57,17 @@ import NotificationManager from './NotificationManager'
 window.NotificationManager = NotificationManager
 import FormManager from './FormManager'
 window.FormManager = FormManager
+import PostBuilder from './PostBuilder'
+window.PostBuilder = PostBuilder
 
 export default class App {
   constructor () {
     window.config = new Config()
     if (sessionStorage.privateKey !== undefined) {
-      window.notificationManager = new NotificationManager()
-      window.networkManager = new NetworkManager()
-      window.formManager = new FormManager()
       $(document).ready(() => {
+        window.notificationManager = new NotificationManager()
+        window.networkManager = new NetworkManager()
+        window.formManager = new FormManager()
         if (typeof pageInit !== 'undefined') {
           pageInit()
         }

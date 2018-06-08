@@ -49,7 +49,7 @@ export default class NetworkManager {
 
   broadcastTransaction (hex) {
     if (!this.isDead) {
-      if(!config.DEB_G_MODE) {
+      if(config.DEBUG_MODE === false) {
         $.ajax({
           type: 'POST',
           url: config.randomInsightEndpoint() + 'tx/send',
@@ -125,6 +125,25 @@ export default class NetworkManager {
             resolve(false)
           }
         })
+      }
+    })
+  }
+
+  findUTXOsByAddress (address) {
+    return new Promise((resolve, reject) => {
+      if (!this.isDead) {
+        $.ajax({
+          type: 'GET',
+          url: config.randomInsightEndpoint() + 'addr/' + address + '/utxo',
+          success: (data) => {
+            resolve (data)
+          },
+          error: () => {
+            resolve (false)
+          }
+        })
+      } else {
+        resolve (false)
       }
     })
   }

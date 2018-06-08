@@ -882,6 +882,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Notification__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ./Notification */ "./src/client/js/Notification.js");
 /* harmony import */ var _NotificationManager__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! ./NotificationManager */ "./src/client/js/NotificationManager.js");
 /* harmony import */ var _FormManager__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! ./FormManager */ "./src/client/js/FormManager.js");
+/* harmony import */ var _PostBuilder__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! ./PostBuilder */ "./src/client/js/PostBuilder.js");
 /**
  * Unite Client Implementation
  * Author: The Unite.cash Developers
@@ -942,14 +943,16 @@ window.NotificationManager = _NotificationManager__WEBPACK_IMPORTED_MODULE_23__[
 
 window.FormManager = _FormManager__WEBPACK_IMPORTED_MODULE_24__["default"]
 
+window.PostBuilder = _PostBuilder__WEBPACK_IMPORTED_MODULE_25__["default"]
+
 class App {
   constructor () {
     window.config = new _Config__WEBPACK_IMPORTED_MODULE_8__["default"]()
     if (sessionStorage.privateKey !== undefined) {
-      window.notificationManager = new _NotificationManager__WEBPACK_IMPORTED_MODULE_23__["default"]()
-      window.networkManager = new _NetworkManager__WEBPACK_IMPORTED_MODULE_21__["default"]()
-      window.formManager = new _FormManager__WEBPACK_IMPORTED_MODULE_24__["default"]()
       _lib_jquery_js__WEBPACK_IMPORTED_MODULE_0___default()(document).ready(() => {
+        window.notificationManager = new _NotificationManager__WEBPACK_IMPORTED_MODULE_23__["default"]()
+        window.networkManager = new _NetworkManager__WEBPACK_IMPORTED_MODULE_21__["default"]()
+        window.formManager = new _FormManager__WEBPACK_IMPORTED_MODULE_24__["default"]()
         if (typeof pageInit !== 'undefined') {
           pageInit()
         }
@@ -996,7 +999,7 @@ class Config {
     this.CENTRAL_REPORT_ADDRESS =  bchaddr.toCashAddress('12xemQTP98jgkAUGuGqHghdVSufqR7htjY')
 
     this.DUST_LIMIT_SIZE = 547
-    this.FEE_RATIO = 1.95
+    this.DEFAULT_FEE_PER_BYTE = 1.05
 
     this.DEBUG_MODE = true
 
@@ -1086,10 +1089,6 @@ __webpack_require__.r(__webpack_exports__);
 
 class FormManager {
   constructor () {
-    this.bindEvents()
-  }
-
-  bindEvents () {
     this.bindLogout()
     this.bindBackButtons()
     this.bindSendAction()
@@ -1122,31 +1121,12 @@ class FormManager {
       if (post_text.length < 1 || post_text.length > 217) {
         Messages.tempCharLimit(217)
       } else {
-        find_utxo(address.toString()).then((utxo) => {
-          if (utxo == -1) {
-            Messages.notEnoughFunds()
-          } else {
-            // create dummy tx to find approximate actual TX size with fee
-            transaction = new bch.Transaction()
-            transaction.from(utxo)
-            transaction.to(address.toString(), utxo.satoshis - 768) // approximate
-            transaction.to(central_posts_address, dustLimitSize)
-            transaction.addData(hex2a('5501') + post_text)
-            transaction.sign(privateKey)
-            var tx_size = parseInt(transaction.toString().length / feeThreshold) // fee threshold
-            // recreate transaction with correct fee
-            transaction = new bch.Transaction()
-            transaction.from(utxo)
-            transaction.to(address.toString(), utxo.satoshis - dustLimitSize - tx_size)
-            transaction.to(central_posts_address, dustLimitSize)
-            transaction.addData(hex2a('5501') + post_text)
-            transaction.sign(privateKey)
-            broadcast_tx(transaction.toString())
-            new SuccessBanner('Your post has been sent!').show()
-            swooosh()
-            $('#newpost').val('')
-          }
-        })
+        PostBuilder.build(
+          '5501',
+          post_text,
+          config.CENTRAL_CONTENT_ADDRESS,
+          config.DUST_LIMIT_SIZE
+        )
       }
     })
   }
@@ -1157,26 +1137,12 @@ class FormManager {
       if (name.length < 5 || name.length > 24) {
         new Popup('Your name should be between 5 and 24 characters.').show()
       } else {
-        find_utxo(address.toString()).then(function (utxo) {
-          // create dummy tx to find approx size with fee
-          transaction = new bch.Transaction()
-          transaction.from(utxo)
-          transaction.to(address.toString(), utxo.satoshis - dustLimitSize - 280) // approximate
-          transaction.to(central_profiles_address, dustLimitSize)
-          transaction.addData(hex2a('5504') + name)
-          transaction.sign(privateKey)
-          var tx_size = parseInt(transaction.toString().length / feeThreshold)
-          // recreate transaction with correct fee
-          transaction = new bch.Transaction()
-          transaction.from(utxo)
-          transaction.to(address.toString(), utxo.satoshis - dustLimitSize - tx_size)
-          transaction.to(central_profiles_address, dustLimitSize)
-          transaction.addData(hex2a('5504') + name)
-          transaction.sign(privateKey)
-          broadcast_tx(transaction.toString())
-          display_success('Name updated!')
-          $('#newName').val('')
-        })
+        PostBuilder.build(
+          '5504',
+          name,
+          config.CENTRAL_PROFILE_ADDRESS,
+          config.DUST_LIMIT_SIZE
+        )
       }
     })
   }
@@ -1188,32 +1154,12 @@ class FormManager {
       if (post_text.length < 1 || post_text.length > 45) {
         Messages.tempCharLimit()
       } else {
-        find_utxo(address.toString()).then(function (utxo) {
-          if (utxo == -1) {
-            Messages.notEnoughFunds()
-          } else {
-            // TODO [IMPORTANT!] verify this is set in the URL
-            // create dummy tx to find approximate actual TX size with fee
-            transaction = new bch.Transaction()
-            transaction.from(utxo)
-            transaction.to(address.toString(), utxo.satoshis - dustLimitSize - 300) // approximate
-            transaction.to(topPost.sender, dustLimitSize)
-            transaction.addData(hex2a('5503') + hex2a(topPost.txid) + post_text)
-            transaction.sign(privateKey)
-            var tx_size = parseInt(transaction.toString().length / feeThreshold) // fee threshold
-            // recreate transaction with correct fee
-            transaction = new bch.Transaction()
-            transaction.from(utxo)
-            transaction.to(address.toString(), utxo.satoshis - dustLimitSize - tx_size) // approximate
-            transaction.to(topPost.sender, dustLimitSize)
-            transaction.addData(hex2a('5503') + hex2a(topPost.txid) + post_text)
-            transaction.sign(privateKey)
-            broadcast_tx(transaction.toString())
-            new SuccessBanner('Your reply has been sent!').show()
-            swooosh()
-            $('#newpost').val('')
-          }
-        })
+        PostBuilder.build(
+          '5503',
+          post_text,
+          topPost.sender,
+          config.DUST_LIMIT_SIZE
+        )
       }
     })
   }
@@ -1411,7 +1357,7 @@ class NetworkManager {
 
   broadcastTransaction (hex) {
     if (!this.isDead) {
-      if(!config.DEB_G_MODE) {
+      if(config.DEBUG_MODE === false) {
         $.ajax({
           type: 'POST',
           url: config.randomInsightEndpoint() + 'tx/send',
@@ -1491,6 +1437,25 @@ class NetworkManager {
     })
   }
 
+  findUTXOsByAddress (address) {
+    return new Promise((resolve, reject) => {
+      if (!this.isDead) {
+        $.ajax({
+          type: 'GET',
+          url: config.randomInsightEndpoint() + 'addr/' + address + '/utxo',
+          success: (data) => {
+            resolve (data)
+          },
+          error: () => {
+            resolve (false)
+          }
+        })
+      } else {
+        resolve (false)
+      }
+    })
+  }
+
 }
 
 
@@ -1540,13 +1505,14 @@ class Notification {
     if (typeof options.playSound === 'undefined') {
       options.playSound = true
     }
-    if (post.type == '5501') {
-      this.title = post.name.name
-      this.body = post.data
+    this.options = options
+    if (post.type === '5501') {
+      this.title = post.senderName.displayName
+      this.body = post.displayContent
     }
-    if (post.type == '5504') {
+    if (post.type === '5504') {
       this.title = post.sender.substr(0, 6)
-      this.body = 'Changed their name to ' + post.name.name
+      this.body = 'Changed their name to ' + post.senderName.displayName
     }
     return this
   }
@@ -1558,28 +1524,19 @@ class Notification {
     if (!document.hasFocus()) { // the user is not using the application
       var n = new Notification(
         this.title,
-        {icon: './images/icon.png',
-          body: this.body})
+        {
+          icon: './images/icon.png',
+          body: this.body.substr(0, this.options.maxLength)
+        }
+      )
       n.onclick = function (ev) {
-        this.obtainFocus()
+        Utilities.obtainFocus()
       }
     } else { // the user is using the application
       new SuccessBanner(this.title + ': ' + this.body).show()
     }
   }
-
-  obtainFocus () {
-    // attempt to get focus from the browser
-    parent.focus()
-    // if applicable, attempt to get focus on the Electron app window
-    if ("function" !== undefined) {
-      var win = __webpack_require__(/*! electron */ "./node_modules/electron/index.js").remote.getCurrentWindow()
-      win.show()
-      win.setAlwaysOnTop(true)
-      win.focus()
-      win.setAlwaysOnTop(false)
-    }
-  }
+  
 }
 
 
@@ -1662,7 +1619,7 @@ __webpack_require__.r(__webpack_exports__);
  */
 
 class Post {
-  constructor (transaction) {
+  constructor (transaction, isLive) {
     return new Promise((resolve, reject) => {
       // only construct each post once per page.
       if (typeof window.currentPosts === 'undefined') {
@@ -1677,6 +1634,9 @@ class Post {
           redundant = true
           resolve (false)
         }
+      }
+      if (typeof isLive === 'undefined') {
+        isLive = false
       }
       if (!redundant) {
         currentPosts.push (transaction.txid)
@@ -1702,7 +1662,7 @@ class Post {
           this.txid = transaction.txid
           this.time = transaction.time
           this.data = data
-          this.isLive = transaction.isLive
+          this.isLive = isLive
           this.init().then((result) => {
             resolve (result)
           })
@@ -1719,7 +1679,7 @@ class Post {
         this.senderName = name
         // notifications for live transactions
         if (this.isLive) {
-          new AppNotification(post).show()
+          new AppNotification (this).show()
         }
 
         // we can also fetch image data, extended messages, parent transactions,
@@ -1770,12 +1730,17 @@ class Post {
     timeText.attr('class', 'time')
     timeText.text(this.time)
 
-    var nameHash = $(this.senderName.hash)
+    var nameHash = $('<img></img>')
+    nameHash.attr('src', this.senderName.hashData)
+    nameHash.attr('alt', 'True Address: ' + this.sender)
+    nameHash.attr('title', 'True Address: ' + this.sender)
+    nameHash.attr('id', uid + 'namehash')
+    nameHash.attr('class', 'UIPostNameHash')
 
-    var container = $('<div></div>')
-    container.append(nameText)
-    container.append(nameHash)
-    container.append(timeText)
+    var postHeader = $('<div></div>')
+    postHeader.append(nameHash)
+    postHeader.append(nameText)
+    postHeader.append(timeText)
 
     var postText = $('<div></div>')
     postText.attr('id', uid + 'content')
@@ -1811,7 +1776,7 @@ class Post {
     actionBar.append(reportButton)
 
     postDiv.append(postText)
-    postDiv.prepend(container)
+    postDiv.prepend(postHeader)
     postDiv.append(actionBar)
 
     if (this.isLive) {
@@ -1889,6 +1854,101 @@ class Post {
 
 /***/ }),
 
+/***/ "./src/client/js/PostBuilder.js":
+/*!**************************************!*\
+  !*** ./src/client/js/PostBuilder.js ***!
+  \**************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return PostBuilder; });
+/**
+ * Post Builder
+ * Author: The Unite.cash Developers
+ * License: GNU AGPL v3
+ *
+ * Constructs posts containing data and publishes them to the network, using
+ * WebSeeds to seed large torrent payloads when necessary.
+ *
+ * @file Defines the PostBuilder class.
+ */
+
+class PostBuilder {
+
+  static build (type, content, parent, amount, fee) {
+    if (typeof type === 'undefined' ||
+        typeof content === 'undefined' ||
+        typeof parent === 'undefined') {
+      return false
+    }
+
+    if (typeof amount === 'undefined') {
+      amount = config.DUST_LIMIT_SIZE
+    }
+
+    if (typeof fee === 'undefined') {
+      fee = config.DEFAULT_FEE_PER_BYTE
+    }
+
+    networkManager.findUTXOsByAddress(config.userAddress).then((data) => {
+      var transaction = new bch.Transaction()
+      transaction.to(bchaddr.toLegacyAddress(parent), amount)
+      transaction.addData(Utilities.hex2a(type) + content)
+      var success = false
+      var totalAdded = 0
+      var utxo_arr = []
+      for (var i = 0; i < data.length; i++) {
+        var utxo = {
+          txId: data[i].txid,
+          outputIndex: data[i].vout,
+          address: bchaddr.toLegacyAddress(data[i].address),
+          script: data[i].scriptPubKey,
+          satoshis: data[i].satoshis
+        }
+        transaction.from(utxo)
+        utxo_arr.push(utxo)
+        totalAdded += data[i].satoshis
+        if (totalAdded >= amount + (768 * fee)) { // approximate
+          success = true
+          if (totalAdded - amount - (768 * fee) >= config.DUST_LIMIT_SIZE) {
+            transaction.to(
+              bchaddr.toLegacyAddress(config.userAddress),
+              Math.floor(totalAdded - amount - (768 * fee))
+            )
+          }
+          transaction.sign(config.userPrivateKey)
+          var txSize = transaction.toString().length / 2
+          var transaction = new bch.Transaction()
+          transaction.to(bchaddr.toLegacyAddress(parent), amount)
+          transaction.addData(Utilities.hex2a(type) + content)
+          for (var i = 0; i < utxo_arr.length; i++) {
+            transaction.from(utxo_arr[i])
+          }
+          if (totalAdded - amount - (768 * fee) >= config.DUST_LIMIT_SIZE) {
+            transaction.to(
+              bchaddr.toLegacyAddress(config.userAddress),
+              Math.floor(totalAdded - amount - (txSize * fee))
+            )
+          }
+          transaction.sign(config.userPrivateKey)
+          networkManager.broadcastTransaction(transaction.toString())
+          i = data.length + 1 // to stop the loop from executing
+          break
+        }
+      }
+      if (!success) {
+        return false
+      }
+    })
+  }
+
+}
+
+
+/***/ }),
+
 /***/ "./src/client/js/Transaction.js":
 /*!**************************************!*\
   !*** ./src/client/js/Transaction.js ***!
@@ -1923,7 +1983,7 @@ class Transaction {
       for (var i = 0; i < transactions.length && !success; i++) {
         if (transactions[i].txid == txid && !success) {
           success = true
-          new Post (transactions[i]).then((result) => {
+          new Post (transactions[i], this.isLive).then((result) => {
             resolve (result)
           })
         }
@@ -1932,7 +1992,7 @@ class Transaction {
         networkManager.lookupTXID(txid).then((transaction) => {
           if (TransactionManager.validate (transaction)) {
             TransactionManager.remember(transaction)
-            new Post(transaction).then((result) => {
+            new Post(transaction, this.isLive).then((result) => {
               resolve (result)
             })
           } else {
@@ -1942,42 +2002,6 @@ class Transaction {
       }
     })
   }
-}
-
-// returns a UTXO suitable for spending given an address
-// returns -1 if none are found (insufficient funds)
-/* TODO:
-- Return multiple small UTXOs if a large one is not found.
-- Accept a bitcoincash.js transaction as a parameter, append the relevant UTXOs,
-  then return the modified bitcoincash.js "bch.Transaction" object instead of
-  just the UTXO.
-- Rename the function from find_utxo(address string) to add_utxos(bch.Transaction)
-*/
-// move to User class
-var find_utxo = function (address, amount = 1000) {
-  return new Promise(function (resolve, reject) {
-    $.ajax({
-      type: 'GET',
-      url: insightBaseURL + 'addr/' + address.toString() + '/utxo',
-      success: function (data) {
-        var utxo = -1
-        for (var i = 0; i < data.length; i++) {
-          if (data[i].satoshis > amount) { // TODO other checks, precision
-            utxo = {
-              txId: data[i].txid,
-              outputIndex: data[i].vout,
-              address: data[i].address,
-              script: data[i].scriptPubKey,
-              satoshis: data[i].satoshis
-            }
-            resolve(utxo)
-            i = data.length + 1 // stop loop
-          }
-        }
-        resolve(utxo)
-      }
-    })
-  })
 }
 
 
@@ -2682,6 +2706,20 @@ class Utilities {
       Utilities.redirect('login.html')
     }, 1100)
   }
+
+  static obtainFocus () {
+    // attempt to get focus from the browser
+    parent.focus()
+    // if applicable, attempt to get focus on the Electron app window
+    if ("function" !== undefined) {
+      var win = __webpack_require__(/*! electron */ "./node_modules/electron/index.js").remote.getCurrentWindow()
+      win.show()
+      win.setAlwaysOnTop(true)
+      win.focus()
+      win.setAlwaysOnTop(false)
+    }
+  }
+  
 }
 
 

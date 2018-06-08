@@ -56,7 +56,7 @@ body {
 }
 .content {
 	padding:0.5em;
-	padding-top:5em;
+	padding-top:7em;
 }
 #headericon {
 	height:2em;
@@ -109,6 +109,9 @@ body {
 }
 .mono {
 	font-family: monospace;
+}
+.red {
+	color:red;
 }
 .UIPanel {
 	background-color:#002;
@@ -198,11 +201,19 @@ body {
 	opacity:0.7;
 	display:none;
 }
-.UINameIcon {
+
+.UIPostNameHash {
 	height:1.5em;
 	float:left;
 	margin-left:-0.25em;
 	margin-top:-0.5em;
+}
+.UIInlineNameHash {
+	height:1em;
+	display:inline;
+	margin-right:0.3em;
+	margin-left:0.4em;
+	margin-bottom:-0.15em;
 }
 
 .UIImageButton {
@@ -343,7 +354,7 @@ body {
 		padding-top:0.5em;
 	}
 	.content {
-		padding-top:3em;
+		padding-top:4em;
 		margin-bottom:4em;
 	}
 	.navlink {
