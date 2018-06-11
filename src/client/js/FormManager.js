@@ -10,18 +10,10 @@
 
 export default class FormManager {
   constructor () {
-    this.bindLogout()
     this.bindBackButtons()
     this.bindSendAction()
     this.bindSendReplyAction()
     this.bindNameChangeAction()
-  }
-
-  bindLogout () {
-    $('#logout').on('click', (ev) => {
-      ev.preventDefault()
-      Utilities.logOut()
-    })
   }
 
   bindBackButtons () {

@@ -91,12 +91,11 @@ export default class Utilities {
     parent.focus()
     // if applicable, attempt to get focus on the Electron app window
     if (typeof require !== undefined) {
-      var win = require('electron').remote.getCurrentWindow()
-      win.show()
-      win.setAlwaysOnTop(true)
-      win.focus()
-      win.setAlwaysOnTop(false)
+      require('electron').remote.getCurrentWindow().show()
+      require('electron').remote.getCurrentWindow().setAlwaysOnTop(true)
+      require('electron').remote.getCurrentWindow().focus()
+      require('electron').remote.getCurrentWindow().setAlwaysOnTop(false)
     }
   }
-  
+
 }

@@ -39,6 +39,10 @@ import ErrorBanner from './UI/ErrorBanner'
 window.ErrorBanner = ErrorBanner
 import SuccessBanner from './UI/SuccessBanner'
 window.SuccessBanner = SuccessBanner
+
+import SettingsWindow from './UI/SettingsWindow'
+window.SettingsWindow = SettingsWindow
+
 import Transaction from './Transaction'
 window.Transaction = Transaction
 import TransactionManager from './TransactionManager'

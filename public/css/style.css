@@ -13,6 +13,8 @@ body {
 	border-radius:0.25em;
 	font-weight:bold;
 	padding:0.8em;
+	margin-top:0.5em;
+	margin-bottom:0.5em;
 	outline:none;
 }
 .UIButton:hover {
@@ -240,7 +242,8 @@ body {
 	display:none;
 }
 .center {
-	margin:0 auto;
+	margin-left:auto;
+	margin-right:auto;
 	display:block;
 }
 .center-text {

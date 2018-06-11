@@ -79,16 +79,13 @@
 /***/ (function(module, exports) {
 
 window.pageInit = function () {
-  $('#mybalance').on('click', () => {
-    new InteractivePopup('#moreProfileInfo').show()
-  })
 
   $('#changename').on('click', () => {
     new InteractivePopup('#changeNameDiv').show()
   })
 
-  $('#settingsbutton').on('click', () => {
-    new InteractivePopup('#settings').show()
+  $(document).on('click', '#settingsButton', () => {
+    new SettingsWindow()
   })
 
   $('#privKeyDisplayButton').on('click', () => {
@@ -102,19 +99,15 @@ window.pageInit = function () {
   // set address text
   $('#myaddress').text(config.userAddress)
 
-  networkManager.getBalance(config.userAddress).then((balance) => {
-    $('#mybalance').text('BALANCE: ' + balance + ' BCH')
-  })
-
   // get posts this user has written in the past
-  //TransactionManager.loadTransactionsByAddress(config.userAddress)
+  TransactionManager.loadTransactionsByAddress(config.userAddress)
 
   // get the user's name and display italic
   NameManager.resolveFromAddress(config.userAddress).then((name) => {
     var nameHash = $('<img></img>')
     nameHash.attr('src', name.hashData)
-    nameHash.attr('alt', 'True Address: ' + name.address)
-    nameHash.attr('title', 'True Address: ' + name.address)
+    nameHash.attr('alt', 'Address: ' + name.address)
+    nameHash.attr('title', 'Address: ' + name.address)
     nameHash.attr('class', 'UIInlineNameHash')
     $('#myName').text('')
     $('#myName').append('Hi, ')

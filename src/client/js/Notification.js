@@ -35,12 +35,13 @@ export default class Notification {
     this.options = options
     if (post.type === '5501') {
       this.title = post.senderName.displayName
-      this.body = post.displayContent
+      this.body = post.data
     }
     if (post.type === '5504') {
       this.title = post.sender.substr(0, 6)
       this.body = 'Changed their name to ' + post.senderName.displayName
     }
+    console.log(this)
     return this
   }
 
@@ -49,7 +50,7 @@ export default class Notification {
       Utilities.pop()
     }
     if (!document.hasFocus()) { // the user is not using the application
-      var n = new Notification(
+      var n = new window.Notification(
         this.title,
         {
           icon: './images/icon.png',
@@ -63,5 +64,5 @@ export default class Notification {
       new SuccessBanner(this.title + ': ' + this.body).show()
     }
   }
-  
+
 }

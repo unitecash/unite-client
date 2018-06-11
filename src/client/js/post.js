@@ -122,8 +122,8 @@ export default class Post {
 
     var nameHash = $('<img></img>')
     nameHash.attr('src', this.senderName.hashData)
-    nameHash.attr('alt', 'True Address: ' + this.sender)
-    nameHash.attr('title', 'True Address: ' + this.sender)
+    nameHash.attr('alt', 'Address: ' + this.sender)
+    nameHash.attr('title', 'Address: ' + this.sender)
     nameHash.attr('id', uid + 'namehash')
     nameHash.attr('class', 'UIPostNameHash')
 
@@ -191,50 +191,25 @@ export default class Post {
       window.location.href = 'post.html?post=' + this.txid
     })
     $('#' + uid + 'tip').on('click', function () {
-      display_html_alert('#' + uid + 'tipwindow')
+      new InteractivePopup('#' + uid + 'tipwindow').show()
     })
-    $('#' + uid + 'tipform').on('submit', function (ev) {
+    $('#' + uid + 'tipform').on('submit', (ev) => {
       ev.preventDefault()
       var tipAmount = $('#' + uid + 'tipamount').val()
-      document.elementFromPoint(10, 10).click()
-      if (this.sender == config.userAddress.toString()) {
-        new Popup('<h1>NARCISSISM?</h1><p>You just tried to tip yourself. You failed. Miserably.</p>').show()
+      Utilities.closePopup()
+      console.log(this.txid)
+      if (this.sender === config.userAddress) {
+        new Popup().setTitle('NARCISSISM?')
+        .addText('You just tried to tip yourself. You failed. Miserably.')
+        .show()
       } else {
-        find_utxo(address.toString(), tipAmount).then(function (utxo) {
-          if (utxo == -1) {
-            var newString = '<h1>ACCOUNT BALANCE</h1>'
-            newString += '<p>Check that you\'ve funded your account before posting!</p>'
-            newString += '<p>We\'re working on a way to fund new users\' posts, it\'ll be '
-            newString += 'out soon!</p><p>In the meantime, here are some ways to fund your account: </p>'
-            newString += '<ul><li>Ask a friend to send you some Bitcoin Cash to your Unite address</li>'
-            newString += '<li>You can get some from the free.bitcoin.com faucet</li>'
-            newString += '<li>You can trade any cryptocurrency for Bitcoin Cash on ShapeShift</li>'
-            newString += '<li>You can be tipped on sites like yours.org or Reddit (r/btc)</li>'
-            newString += '<li>You can buy some on sites like coinbase.com or kraken.com</li></ul>'
-            display_alert(newString)
-          } else {
-            // create dummy tx to find approximate actual TX size with fee
-            transaction = new bch.Transaction()
-            transaction.from(utxo)
-            transaction.to(address.toString(), utxo.satoshis - tipAmount - 300) // approximate
-            transaction.to(post.sender, parseInt(tipAmount))
-            transaction.addData(hex2a('5503') + hex2a(post.txid))
-            transaction.sign(privateKey)
-            var tx_size = parseInt(transaction.toString().length / feeThreshold) // fee threshold
-            // recreate transaction with correct fee
-            transaction = new bch.Transaction()
-            transaction.from(utxo)
-            transaction.to(address.toString(), utxo.satoshis - tipAmount - tx_size) // approximate
-            transaction.to(post.sender, parseInt(tipAmount))
-            transaction.addData(hex2a('5503') + hex2a(post.txid))
-            transaction.sign(privateKey)
-            console.log(transaction.toString())
-            // broadcast_tx(transaction.toString());
-            display_success('Your tip has been sent!')
-            swooosh()
-            $('#' + uid + 'tipamount').val('')
-          }
-        })
+        PostBuilder.build(
+          '5503',
+          Utilities.hex2a(this.txid),
+          this.sender,
+          parseInt(tipAmount)
+        )
+        $('#' + uid + 'tipamount').val('')
       }
     })
   }

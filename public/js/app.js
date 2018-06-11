@@ -873,16 +873,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _UI_Banner__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./UI/Banner */ "./src/client/js/UI/Banner.js");
 /* harmony import */ var _UI_ErrorBanner__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./UI/ErrorBanner */ "./src/client/js/UI/ErrorBanner.js");
 /* harmony import */ var _UI_SuccessBanner__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./UI/SuccessBanner */ "./src/client/js/UI/SuccessBanner.js");
-/* harmony import */ var _Transaction__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./Transaction */ "./src/client/js/Transaction.js");
-/* harmony import */ var _TransactionManager__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./TransactionManager */ "./src/client/js/TransactionManager.js");
-/* harmony import */ var _Post__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./Post */ "./src/client/js/Post.js");
-/* harmony import */ var _Name__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./Name */ "./src/client/js/Name.js");
-/* harmony import */ var _NameManager__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./NameManager */ "./src/client/js/NameManager.js");
-/* harmony import */ var _NetworkManager__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ./NetworkManager */ "./src/client/js/NetworkManager.js");
-/* harmony import */ var _Notification__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ./Notification */ "./src/client/js/Notification.js");
-/* harmony import */ var _NotificationManager__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! ./NotificationManager */ "./src/client/js/NotificationManager.js");
-/* harmony import */ var _FormManager__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! ./FormManager */ "./src/client/js/FormManager.js");
-/* harmony import */ var _PostBuilder__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! ./PostBuilder */ "./src/client/js/PostBuilder.js");
+/* harmony import */ var _UI_SettingsWindow__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./UI/SettingsWindow */ "./src/client/js/UI/SettingsWindow.js");
+/* harmony import */ var _Transaction__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./Transaction */ "./src/client/js/Transaction.js");
+/* harmony import */ var _TransactionManager__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./TransactionManager */ "./src/client/js/TransactionManager.js");
+/* harmony import */ var _Post__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./Post */ "./src/client/js/Post.js");
+/* harmony import */ var _Name__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./Name */ "./src/client/js/Name.js");
+/* harmony import */ var _NameManager__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ./NameManager */ "./src/client/js/NameManager.js");
+/* harmony import */ var _NetworkManager__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ./NetworkManager */ "./src/client/js/NetworkManager.js");
+/* harmony import */ var _Notification__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! ./Notification */ "./src/client/js/Notification.js");
+/* harmony import */ var _NotificationManager__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! ./NotificationManager */ "./src/client/js/NotificationManager.js");
+/* harmony import */ var _FormManager__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! ./FormManager */ "./src/client/js/FormManager.js");
+/* harmony import */ var _PostBuilder__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(/*! ./PostBuilder */ "./src/client/js/PostBuilder.js");
 /**
  * Unite Client Implementation
  * Author: The Unite.cash Developers
@@ -925,34 +926,38 @@ window.ErrorBanner = _UI_ErrorBanner__WEBPACK_IMPORTED_MODULE_14__["default"]
 
 window.SuccessBanner = _UI_SuccessBanner__WEBPACK_IMPORTED_MODULE_15__["default"]
 
-window.Transaction = _Transaction__WEBPACK_IMPORTED_MODULE_16__["default"]
 
-window.TransactionManager = _TransactionManager__WEBPACK_IMPORTED_MODULE_17__["default"]
+window.SettingsWindow = _UI_SettingsWindow__WEBPACK_IMPORTED_MODULE_16__["default"]
 
-window.Post = _Post__WEBPACK_IMPORTED_MODULE_18__["default"]
 
-window.Name = _Name__WEBPACK_IMPORTED_MODULE_19__["default"]
+window.Transaction = _Transaction__WEBPACK_IMPORTED_MODULE_17__["default"]
 
-window.NameManager = _NameManager__WEBPACK_IMPORTED_MODULE_20__["default"]
+window.TransactionManager = _TransactionManager__WEBPACK_IMPORTED_MODULE_18__["default"]
 
-window.NetworkManager = _NetworkManager__WEBPACK_IMPORTED_MODULE_21__["default"]
+window.Post = _Post__WEBPACK_IMPORTED_MODULE_19__["default"]
 
-window.AppNotification = _Notification__WEBPACK_IMPORTED_MODULE_22__["default"]
+window.Name = _Name__WEBPACK_IMPORTED_MODULE_20__["default"]
 
-window.NotificationManager = _NotificationManager__WEBPACK_IMPORTED_MODULE_23__["default"]
+window.NameManager = _NameManager__WEBPACK_IMPORTED_MODULE_21__["default"]
 
-window.FormManager = _FormManager__WEBPACK_IMPORTED_MODULE_24__["default"]
+window.NetworkManager = _NetworkManager__WEBPACK_IMPORTED_MODULE_22__["default"]
 
-window.PostBuilder = _PostBuilder__WEBPACK_IMPORTED_MODULE_25__["default"]
+window.AppNotification = _Notification__WEBPACK_IMPORTED_MODULE_23__["default"]
+
+window.NotificationManager = _NotificationManager__WEBPACK_IMPORTED_MODULE_24__["default"]
+
+window.FormManager = _FormManager__WEBPACK_IMPORTED_MODULE_25__["default"]
+
+window.PostBuilder = _PostBuilder__WEBPACK_IMPORTED_MODULE_26__["default"]
 
 class App {
   constructor () {
     window.config = new _Config__WEBPACK_IMPORTED_MODULE_8__["default"]()
     if (sessionStorage.privateKey !== undefined) {
       _lib_jquery_js__WEBPACK_IMPORTED_MODULE_0___default()(document).ready(() => {
-        window.notificationManager = new _NotificationManager__WEBPACK_IMPORTED_MODULE_23__["default"]()
-        window.networkManager = new _NetworkManager__WEBPACK_IMPORTED_MODULE_21__["default"]()
-        window.formManager = new _FormManager__WEBPACK_IMPORTED_MODULE_24__["default"]()
+        window.notificationManager = new _NotificationManager__WEBPACK_IMPORTED_MODULE_24__["default"]()
+        window.networkManager = new _NetworkManager__WEBPACK_IMPORTED_MODULE_22__["default"]()
+        window.formManager = new _FormManager__WEBPACK_IMPORTED_MODULE_25__["default"]()
         if (typeof pageInit !== 'undefined') {
           pageInit()
         }
@@ -1089,18 +1094,10 @@ __webpack_require__.r(__webpack_exports__);
 
 class FormManager {
   constructor () {
-    this.bindLogout()
     this.bindBackButtons()
     this.bindSendAction()
     this.bindSendReplyAction()
     this.bindNameChangeAction()
-  }
-
-  bindLogout () {
-    $('#logout').on('click', (ev) => {
-      ev.preventDefault()
-      Utilities.logOut()
-    })
   }
 
   bindBackButtons () {
@@ -1508,12 +1505,13 @@ class Notification {
     this.options = options
     if (post.type === '5501') {
       this.title = post.senderName.displayName
-      this.body = post.displayContent
+      this.body = post.data
     }
     if (post.type === '5504') {
       this.title = post.sender.substr(0, 6)
       this.body = 'Changed their name to ' + post.senderName.displayName
     }
+    console.log(this)
     return this
   }
 
@@ -1522,7 +1520,7 @@ class Notification {
       Utilities.pop()
     }
     if (!document.hasFocus()) { // the user is not using the application
-      var n = new Notification(
+      var n = new window.Notification(
         this.title,
         {
           icon: './images/icon.png',
@@ -1536,7 +1534,7 @@ class Notification {
       new SuccessBanner(this.title + ': ' + this.body).show()
     }
   }
-  
+
 }
 
 
@@ -1732,8 +1730,8 @@ class Post {
 
     var nameHash = $('<img></img>')
     nameHash.attr('src', this.senderName.hashData)
-    nameHash.attr('alt', 'True Address: ' + this.sender)
-    nameHash.attr('title', 'True Address: ' + this.sender)
+    nameHash.attr('alt', 'Address: ' + this.sender)
+    nameHash.attr('title', 'Address: ' + this.sender)
     nameHash.attr('id', uid + 'namehash')
     nameHash.attr('class', 'UIPostNameHash')
 
@@ -1801,50 +1799,25 @@ class Post {
       window.location.href = 'post.html?post=' + this.txid
     })
     $('#' + uid + 'tip').on('click', function () {
-      display_html_alert('#' + uid + 'tipwindow')
+      new InteractivePopup('#' + uid + 'tipwindow').show()
     })
-    $('#' + uid + 'tipform').on('submit', function (ev) {
+    $('#' + uid + 'tipform').on('submit', (ev) => {
       ev.preventDefault()
       var tipAmount = $('#' + uid + 'tipamount').val()
-      document.elementFromPoint(10, 10).click()
-      if (this.sender == config.userAddress.toString()) {
-        new Popup('<h1>NARCISSISM?</h1><p>You just tried to tip yourself. You failed. Miserably.</p>').show()
+      Utilities.closePopup()
+      console.log(this.txid)
+      if (this.sender === config.userAddress) {
+        new Popup().setTitle('NARCISSISM?')
+        .addText('You just tried to tip yourself. You failed. Miserably.')
+        .show()
       } else {
-        find_utxo(address.toString(), tipAmount).then(function (utxo) {
-          if (utxo == -1) {
-            var newString = '<h1>ACCOUNT BALANCE</h1>'
-            newString += '<p>Check that you\'ve funded your account before posting!</p>'
-            newString += '<p>We\'re working on a way to fund new users\' posts, it\'ll be '
-            newString += 'out soon!</p><p>In the meantime, here are some ways to fund your account: </p>'
-            newString += '<ul><li>Ask a friend to send you some Bitcoin Cash to your Unite address</li>'
-            newString += '<li>You can get some from the free.bitcoin.com faucet</li>'
-            newString += '<li>You can trade any cryptocurrency for Bitcoin Cash on ShapeShift</li>'
-            newString += '<li>You can be tipped on sites like yours.org or Reddit (r/btc)</li>'
-            newString += '<li>You can buy some on sites like coinbase.com or kraken.com</li></ul>'
-            display_alert(newString)
-          } else {
-            // create dummy tx to find approximate actual TX size with fee
-            transaction = new bch.Transaction()
-            transaction.from(utxo)
-            transaction.to(address.toString(), utxo.satoshis - tipAmount - 300) // approximate
-            transaction.to(post.sender, parseInt(tipAmount))
-            transaction.addData(hex2a('5503') + hex2a(post.txid))
-            transaction.sign(privateKey)
-            var tx_size = parseInt(transaction.toString().length / feeThreshold) // fee threshold
-            // recreate transaction with correct fee
-            transaction = new bch.Transaction()
-            transaction.from(utxo)
-            transaction.to(address.toString(), utxo.satoshis - tipAmount - tx_size) // approximate
-            transaction.to(post.sender, parseInt(tipAmount))
-            transaction.addData(hex2a('5503') + hex2a(post.txid))
-            transaction.sign(privateKey)
-            console.log(transaction.toString())
-            // broadcast_tx(transaction.toString());
-            display_success('Your tip has been sent!')
-            swooosh()
-            $('#' + uid + 'tipamount').val('')
-          }
-        })
+        PostBuilder.build(
+          '5503',
+          Utilities.hex2a(this.txid),
+          this.sender,
+          parseInt(tipAmount)
+        )
+        $('#' + uid + 'tipamount').val('')
       }
     })
   }
@@ -2570,6 +2543,94 @@ class Popup {
 
 /***/ }),
 
+/***/ "./src/client/js/UI/SettingsWindow.js":
+/*!********************************************!*\
+  !*** ./src/client/js/UI/SettingsWindow.js ***!
+  \********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return SettingsWindow; });
+/**
+ * Settings window
+ * Author: The Unite.cash Developers
+ * License: GNU AGPL v3
+ *
+ * Defines and displays the Settings window
+ */
+
+class SettingsWindow {
+  constructor () {
+    if ($('#settings').length === 0) {
+      var settings = $('<div></div>')
+      settings.attr('id', 'settings')
+      settings.attr('class', 'UIAlertWindow hidden')
+
+      var settingsTitle = $('<h3></h3>')
+      settingsTitle.attr('class', 'center center-text')
+      settingsTitle.attr('id', 'settingsTitle')
+      settingsTitle.text('SETTINGS')
+      settings.append(settingsTitle)
+
+      var balanceButton = $('<button></button>')
+      balanceButton.attr('class', 'UIButton center w90')
+      balanceButton.attr('id', 'balanceButton')
+      networkManager.getBalance(config.userAddress).then((balance) => {
+        balanceButton.text('BALANCE: ' + balance + ' BCH')
+        // this appends it to the div only after the balance is retrieved
+        balanceButton.insertAfter('#settingsTitle')
+      })
+      $(document).on('click', '#balanceButton', () => {
+        new BalanceWindow()
+      })
+
+      var changeNameButton = $('<button></button>')
+      changeNameButton.attr('class', 'UIButton center w90')
+      changeNameButton.attr('id', 'changeNameButton')
+      changeNameButton.text('CHANGE NAME')
+      settings.append(changeNameButton)
+      $(document).on('click', '#changeNameButton', () => {
+        new NameChangeWindow()
+      })
+
+      var soundsButton = $('<button></button>')
+      soundsButton.attr('class', 'UIButton center w90')
+      soundsButton.attr('id', 'soundsButton')
+      soundsButton.text('SOUNDS')
+      settings.append(soundsButton)
+      $(document).on('click', '#soundsButton', () => {
+        new SoundSettingsWindow()
+      })
+
+      var notificationsButton = $('<button></button>')
+      notificationsButton.attr('class', 'UIButton center w90')
+      notificationsButton.attr('id', 'notificationsButton')
+      notificationsButton.text('NOTIFICATIONS')
+      settings.append(notificationsButton)
+      $(document).on('click', '#notificationsButton', () => {
+        new NotificationSettingsWindow()
+      })
+
+      var logoutButton = $('<button></button>')
+      logoutButton.attr('class', 'UIButton center w90')
+      logoutButton.attr('id', 'logoutButton')
+      logoutButton.text('SIGN OUT')
+      settings.append(logoutButton)
+      $(document).on('click', '#logoutButton', () => {
+        Utilities.logOut()
+      })
+
+      $('body').append(settings)
+    }
+    new InteractivePopup('#settings').show()
+  }
+}
+
+
+/***/ }),
+
 /***/ "./src/client/js/UI/SuccessBanner.js":
 /*!*******************************************!*\
   !*** ./src/client/js/UI/SuccessBanner.js ***!
@@ -2712,14 +2773,13 @@ class Utilities {
     parent.focus()
     // if applicable, attempt to get focus on the Electron app window
     if ("function" !== undefined) {
-      var win = __webpack_require__(/*! electron */ "./node_modules/electron/index.js").remote.getCurrentWindow()
-      win.show()
-      win.setAlwaysOnTop(true)
-      win.focus()
-      win.setAlwaysOnTop(false)
+      __webpack_require__(/*! electron */ "./node_modules/electron/index.js").remote.getCurrentWindow().show()
+      __webpack_require__(/*! electron */ "./node_modules/electron/index.js").remote.getCurrentWindow().setAlwaysOnTop(true)
+      __webpack_require__(/*! electron */ "./node_modules/electron/index.js").remote.getCurrentWindow().focus()
+      __webpack_require__(/*! electron */ "./node_modules/electron/index.js").remote.getCurrentWindow().setAlwaysOnTop(false)
     }
   }
-  
+
 }
 
 
