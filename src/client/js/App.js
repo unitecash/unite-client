@@ -42,6 +42,8 @@ window.SuccessBanner = SuccessBanner
 
 import SettingsWindow from './UI/SettingsWindow'
 window.SettingsWindow = SettingsWindow
+import NameChangeWindow from './UI/NameChangeWindow'
+window.NameChangeWindow = NameChangeWindow
 
 import Transaction from './Transaction'
 window.Transaction = Transaction

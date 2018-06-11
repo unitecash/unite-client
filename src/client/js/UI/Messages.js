@@ -25,7 +25,7 @@ export default class Messages {
       .addText('<li>You can buy some on sites like coinbase.com or ')
       .addText('kraken.com</li></ul>')
       .addText('<p>Your Unite.cash Address: </p>')
-      .addText('')
+      .addText('<div class="UIPanel mono">bitcoincash:' + config.userAddress + '</div>')
       .show()
   }
 

@@ -3,14 +3,14 @@
  * Author: The Unite.cash Developers
  * License: GNU AGPL v3
  *
- * Defines and displays the Settings window
+ * @file Defines and displays the Settings window
  */
 
 export default class SettingsWindow {
   constructor () {
     if ($('#settings').length === 0) {
       var settings = $('<div></div>')
-      settings.attr('id', 'settings')
+      settings.attr('id', 'settingsWindow')
       settings.attr('class', 'UIAlertWindow hidden')
 
       var settingsTitle = $('<h3></h3>')
@@ -69,6 +69,6 @@ export default class SettingsWindow {
 
       $('body').append(settings)
     }
-    new InteractivePopup('#settings').show()
+    new InteractivePopup('#settingsWindow').show()
   }
 }

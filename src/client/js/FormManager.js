@@ -13,7 +13,6 @@ export default class FormManager {
     this.bindBackButtons()
     this.bindSendAction()
     this.bindSendReplyAction()
-    this.bindNameChangeAction()
   }
 
   bindBackButtons () {
@@ -38,22 +37,6 @@ export default class FormManager {
           '5501',
           post_text,
           config.CENTRAL_CONTENT_ADDRESS,
-          config.DUST_LIMIT_SIZE
-        )
-      }
-    })
-  }
-
-  bindNameChangeAction () {
-    $('#namechangesubmit').on('click', function () {
-      var name = $('#newName').val()
-      if (name.length < 5 || name.length > 24) {
-        new Popup('Your name should be between 5 and 24 characters.').show()
-      } else {
-        PostBuilder.build(
-          '5504',
-          name,
-          config.CENTRAL_PROFILE_ADDRESS,
           config.DUST_LIMIT_SIZE
         )
       }

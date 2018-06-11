@@ -874,16 +874,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _UI_ErrorBanner__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./UI/ErrorBanner */ "./src/client/js/UI/ErrorBanner.js");
 /* harmony import */ var _UI_SuccessBanner__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./UI/SuccessBanner */ "./src/client/js/UI/SuccessBanner.js");
 /* harmony import */ var _UI_SettingsWindow__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./UI/SettingsWindow */ "./src/client/js/UI/SettingsWindow.js");
-/* harmony import */ var _Transaction__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./Transaction */ "./src/client/js/Transaction.js");
-/* harmony import */ var _TransactionManager__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./TransactionManager */ "./src/client/js/TransactionManager.js");
-/* harmony import */ var _Post__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./Post */ "./src/client/js/Post.js");
-/* harmony import */ var _Name__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./Name */ "./src/client/js/Name.js");
-/* harmony import */ var _NameManager__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ./NameManager */ "./src/client/js/NameManager.js");
-/* harmony import */ var _NetworkManager__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ./NetworkManager */ "./src/client/js/NetworkManager.js");
-/* harmony import */ var _Notification__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! ./Notification */ "./src/client/js/Notification.js");
-/* harmony import */ var _NotificationManager__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! ./NotificationManager */ "./src/client/js/NotificationManager.js");
-/* harmony import */ var _FormManager__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! ./FormManager */ "./src/client/js/FormManager.js");
-/* harmony import */ var _PostBuilder__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(/*! ./PostBuilder */ "./src/client/js/PostBuilder.js");
+/* harmony import */ var _UI_NameChangeWindow__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./UI/NameChangeWindow */ "./src/client/js/UI/NameChangeWindow.js");
+/* harmony import */ var _Transaction__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./Transaction */ "./src/client/js/Transaction.js");
+/* harmony import */ var _TransactionManager__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./TransactionManager */ "./src/client/js/TransactionManager.js");
+/* harmony import */ var _Post__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./Post */ "./src/client/js/Post.js");
+/* harmony import */ var _Name__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ./Name */ "./src/client/js/Name.js");
+/* harmony import */ var _NameManager__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ./NameManager */ "./src/client/js/NameManager.js");
+/* harmony import */ var _NetworkManager__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! ./NetworkManager */ "./src/client/js/NetworkManager.js");
+/* harmony import */ var _Notification__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! ./Notification */ "./src/client/js/Notification.js");
+/* harmony import */ var _NotificationManager__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! ./NotificationManager */ "./src/client/js/NotificationManager.js");
+/* harmony import */ var _FormManager__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(/*! ./FormManager */ "./src/client/js/FormManager.js");
+/* harmony import */ var _PostBuilder__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__(/*! ./PostBuilder */ "./src/client/js/PostBuilder.js");
 /**
  * Unite Client Implementation
  * Author: The Unite.cash Developers
@@ -929,35 +930,37 @@ window.SuccessBanner = _UI_SuccessBanner__WEBPACK_IMPORTED_MODULE_15__["default"
 
 window.SettingsWindow = _UI_SettingsWindow__WEBPACK_IMPORTED_MODULE_16__["default"]
 
+window.NameChangeWindow = _UI_NameChangeWindow__WEBPACK_IMPORTED_MODULE_17__["default"]
 
-window.Transaction = _Transaction__WEBPACK_IMPORTED_MODULE_17__["default"]
 
-window.TransactionManager = _TransactionManager__WEBPACK_IMPORTED_MODULE_18__["default"]
+window.Transaction = _Transaction__WEBPACK_IMPORTED_MODULE_18__["default"]
 
-window.Post = _Post__WEBPACK_IMPORTED_MODULE_19__["default"]
+window.TransactionManager = _TransactionManager__WEBPACK_IMPORTED_MODULE_19__["default"]
 
-window.Name = _Name__WEBPACK_IMPORTED_MODULE_20__["default"]
+window.Post = _Post__WEBPACK_IMPORTED_MODULE_20__["default"]
 
-window.NameManager = _NameManager__WEBPACK_IMPORTED_MODULE_21__["default"]
+window.Name = _Name__WEBPACK_IMPORTED_MODULE_21__["default"]
 
-window.NetworkManager = _NetworkManager__WEBPACK_IMPORTED_MODULE_22__["default"]
+window.NameManager = _NameManager__WEBPACK_IMPORTED_MODULE_22__["default"]
 
-window.AppNotification = _Notification__WEBPACK_IMPORTED_MODULE_23__["default"]
+window.NetworkManager = _NetworkManager__WEBPACK_IMPORTED_MODULE_23__["default"]
 
-window.NotificationManager = _NotificationManager__WEBPACK_IMPORTED_MODULE_24__["default"]
+window.AppNotification = _Notification__WEBPACK_IMPORTED_MODULE_24__["default"]
 
-window.FormManager = _FormManager__WEBPACK_IMPORTED_MODULE_25__["default"]
+window.NotificationManager = _NotificationManager__WEBPACK_IMPORTED_MODULE_25__["default"]
 
-window.PostBuilder = _PostBuilder__WEBPACK_IMPORTED_MODULE_26__["default"]
+window.FormManager = _FormManager__WEBPACK_IMPORTED_MODULE_26__["default"]
+
+window.PostBuilder = _PostBuilder__WEBPACK_IMPORTED_MODULE_27__["default"]
 
 class App {
   constructor () {
     window.config = new _Config__WEBPACK_IMPORTED_MODULE_8__["default"]()
     if (sessionStorage.privateKey !== undefined) {
       _lib_jquery_js__WEBPACK_IMPORTED_MODULE_0___default()(document).ready(() => {
-        window.notificationManager = new _NotificationManager__WEBPACK_IMPORTED_MODULE_24__["default"]()
-        window.networkManager = new _NetworkManager__WEBPACK_IMPORTED_MODULE_22__["default"]()
-        window.formManager = new _FormManager__WEBPACK_IMPORTED_MODULE_25__["default"]()
+        window.notificationManager = new _NotificationManager__WEBPACK_IMPORTED_MODULE_25__["default"]()
+        window.networkManager = new _NetworkManager__WEBPACK_IMPORTED_MODULE_23__["default"]()
+        window.formManager = new _FormManager__WEBPACK_IMPORTED_MODULE_26__["default"]()
         if (typeof pageInit !== 'undefined') {
           pageInit()
         }
@@ -1097,7 +1100,6 @@ class FormManager {
     this.bindBackButtons()
     this.bindSendAction()
     this.bindSendReplyAction()
-    this.bindNameChangeAction()
   }
 
   bindBackButtons () {
@@ -1122,22 +1124,6 @@ class FormManager {
           '5501',
           post_text,
           config.CENTRAL_CONTENT_ADDRESS,
-          config.DUST_LIMIT_SIZE
-        )
-      }
-    })
-  }
-
-  bindNameChangeAction () {
-    $('#namechangesubmit').on('click', function () {
-      var name = $('#newName').val()
-      if (name.length < 5 || name.length > 24) {
-        new Popup('Your name should be between 5 and 24 characters.').show()
-      } else {
-        PostBuilder.build(
-          '5504',
-          name,
-          config.CENTRAL_PROFILE_ADDRESS,
           config.DUST_LIMIT_SIZE
         )
       }
@@ -2332,7 +2318,7 @@ class Messages {
       .addText('<li>You can buy some on sites like coinbase.com or ')
       .addText('kraken.com</li></ul>')
       .addText('<p>Your Unite.cash Address: </p>')
-      .addText('')
+      .addText('<div class="UIPanel mono">bitcoincash:' + config.userAddress + '</div>')
       .show()
   }
 
@@ -2384,6 +2370,90 @@ class Messages {
       <li>Contains lowercase and uppercase letters</li>
     </ul>`)
       .show()
+  }
+}
+
+
+/***/ }),
+
+/***/ "./src/client/js/UI/NameChangeWindow.js":
+/*!**********************************************!*\
+  !*** ./src/client/js/UI/NameChangeWindow.js ***!
+  \**********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return NameChangeWindow; });
+/**
+ * Name Change Window
+ * Author: The Unite.cash Developers
+ * License: GNU AGPL v3
+ *
+ * @file Defines and displays the Name Change Window
+ */
+
+class NameChangeWindow {
+  constructor () {
+    if ($('#nameChangeWindow').length === 0) {
+      var nameChangeWindow = $('<div></div>')
+      nameChangeWindow.attr('id', 'nameChangeWindow')
+      nameChangeWindow.attr('class', 'UIAlertWindow hidden')
+
+      var nameChangeTitle = $('<h2></h2>')
+      nameChangeTitle.text('CHANGE NAME')
+      nameChangeWindow.append(nameChangeTitle)
+
+      var nameChangeLabel = $('<p></p>')
+      nameChangeLabel.text(`Your name is NOT the username that you use when you
+        log into your account. Your name is what others see when you write
+        posts, send tips, or leave replies. Unless you set it here, your name
+        will show up as 6 random letters and numbers.`)
+      nameChangeWindow.append(nameChangeLabel)
+
+      var nameChangeForm = $('<form></form>')
+      nameChangeForm.attr('id', 'nameChangeForm')
+
+      var nameChangeField = $('<input></input>')
+      nameChangeField.attr('type', 'text')
+      nameChangeField.attr('id', 'newName')
+      nameChangeField.attr('class', 'UITextField center w90')
+      nameChangeField.attr('placeholder', 'New name...')
+      nameChangeForm.append(nameChangeField)
+
+      var nameChangeSubmit = $('<button></button>')
+      nameChangeSubmit.attr('type', 'submit')
+      nameChangeSubmit.attr('class', 'UIButton center w90')
+      nameChangeSubmit.text('CHANGE NAME')
+      nameChangeForm.append(nameChangeSubmit)
+
+      nameChangeWindow.append(nameChangeForm)
+
+      $(document).on('submit', '#nameChangeForm', (ev) => {
+        console.log($(this))
+        ev.preventDefault()
+        var newName = $('#newName').val()
+        if (newName.length < 5 || name.length > 24) {
+          new Popup({
+            text: 'Your name should be between 5 and 24 characters.'
+          }).show()
+        } else {
+          PostBuilder.build(
+            '5504',
+            newName,
+            config.CENTRAL_PROFILE_ADDRESS,
+            config.DUST_LIMIT_SIZE
+          )
+          $('#newName').val('')
+          Utilities.closePopup()
+          new SuccessBanner('Name changed! It should take effect in a few moments.').show()
+        }
+      })
+
+      $('body').append(nameChangeWindow)
+    }
+    new InteractivePopup('#nameChangeWindow').show()
   }
 }
 
@@ -2558,14 +2628,14 @@ __webpack_require__.r(__webpack_exports__);
  * Author: The Unite.cash Developers
  * License: GNU AGPL v3
  *
- * Defines and displays the Settings window
+ * @file Defines and displays the Settings window
  */
 
 class SettingsWindow {
   constructor () {
     if ($('#settings').length === 0) {
       var settings = $('<div></div>')
-      settings.attr('id', 'settings')
+      settings.attr('id', 'settingsWindow')
       settings.attr('class', 'UIAlertWindow hidden')
 
       var settingsTitle = $('<h3></h3>')
@@ -2624,7 +2694,7 @@ class SettingsWindow {
 
       $('body').append(settings)
     }
-    new InteractivePopup('#settings').show()
+    new InteractivePopup('#settingsWindow').show()
   }
 }
 
