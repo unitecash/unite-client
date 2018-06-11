@@ -30,29 +30,12 @@ if(typeof module === 'object'){window.module=module;module=undefined;}
 </div>
 </div>
 <div class="content">
-<center>
+<center class="UIPanel">
 <!--- TODO profile photos --->
 <img id="profileImage" src="./images/icon.svg" class="ProfileImage center" />
 <p id="myName">loading...</p>
 <p id="profileText">No tagline set</p>
 <p id="editButton" class="center">Edit...</p>
-<div id="moreProfileInfo" class="UIAlertWindow hidden">
-<h2>YOUR UNITE ADDRESS:</h2>
-<p class="UIPanel" style="font-family:monospace;" id="myaddress"></p>
-<img class="qrcode" id="myqrcode" alt="QR Code" /><br/><br/>
-<button id="privKeyDisplayButton" class="UIButton red">SHOW PRIVATE KEY</button>
-</div>
-<div id="showKey" class="UIAlertWindow hidden">
-<h1>YOUR PRIVATE KEY</h1>
-<p>Never share your key with anyone. With this key, somebody will be able to <span style="color:red;">
-hack your account and steal your money.</span> To show your key, click the button below.
-<span style="color:red;"> Only do this if you know exactly what you are doing and understand the risks!</span></p>
-<button id="keyDisplay" class="UIButton red">I UNDERSTAND</button>
-</div>
-<div id="showPrivateKey" class="UIAlertWindow hidden">
-<p>YOUR PRIVATE KEY:</p>
-<p id="privateKeyText" class="UIPanel" style="color:red; font-family:monospace;font-weight:bold;"></p>
-</div>
 </center>
 <form id="sendpost">
 <p>Write a Post</p>

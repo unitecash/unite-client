@@ -249,6 +249,9 @@ body {
 .center-text {
 	text-align:center;
 }
+.bold {
+	font-weight:bold;
+}
 .w90 {
 	width:90%;
 }

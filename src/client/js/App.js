@@ -44,6 +44,8 @@ import SettingsWindow from './UI/SettingsWindow'
 window.SettingsWindow = SettingsWindow
 import NameChangeWindow from './UI/NameChangeWindow'
 window.NameChangeWindow = NameChangeWindow
+import BalanceWindow from './UI/BalanceWindow'
+window.BalanceWindow = BalanceWindow
 
 import Transaction from './Transaction'
 window.Transaction = Transaction

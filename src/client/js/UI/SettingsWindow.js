@@ -8,7 +8,7 @@
 
 export default class SettingsWindow {
   constructor () {
-    if ($('#settings').length === 0) {
+    if ($('#settingsWindow').length === 0) {
       var settings = $('<div></div>')
       settings.attr('id', 'settingsWindow')
       settings.attr('class', 'UIAlertWindow hidden')

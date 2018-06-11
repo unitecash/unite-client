@@ -875,16 +875,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _UI_SuccessBanner__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./UI/SuccessBanner */ "./src/client/js/UI/SuccessBanner.js");
 /* harmony import */ var _UI_SettingsWindow__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./UI/SettingsWindow */ "./src/client/js/UI/SettingsWindow.js");
 /* harmony import */ var _UI_NameChangeWindow__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./UI/NameChangeWindow */ "./src/client/js/UI/NameChangeWindow.js");
-/* harmony import */ var _Transaction__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./Transaction */ "./src/client/js/Transaction.js");
-/* harmony import */ var _TransactionManager__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./TransactionManager */ "./src/client/js/TransactionManager.js");
-/* harmony import */ var _Post__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./Post */ "./src/client/js/Post.js");
-/* harmony import */ var _Name__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ./Name */ "./src/client/js/Name.js");
-/* harmony import */ var _NameManager__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ./NameManager */ "./src/client/js/NameManager.js");
-/* harmony import */ var _NetworkManager__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! ./NetworkManager */ "./src/client/js/NetworkManager.js");
-/* harmony import */ var _Notification__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! ./Notification */ "./src/client/js/Notification.js");
-/* harmony import */ var _NotificationManager__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! ./NotificationManager */ "./src/client/js/NotificationManager.js");
-/* harmony import */ var _FormManager__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(/*! ./FormManager */ "./src/client/js/FormManager.js");
-/* harmony import */ var _PostBuilder__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__(/*! ./PostBuilder */ "./src/client/js/PostBuilder.js");
+/* harmony import */ var _UI_BalanceWindow__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./UI/BalanceWindow */ "./src/client/js/UI/BalanceWindow.js");
+/* harmony import */ var _Transaction__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./Transaction */ "./src/client/js/Transaction.js");
+/* harmony import */ var _TransactionManager__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./TransactionManager */ "./src/client/js/TransactionManager.js");
+/* harmony import */ var _Post__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ./Post */ "./src/client/js/Post.js");
+/* harmony import */ var _Name__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ./Name */ "./src/client/js/Name.js");
+/* harmony import */ var _NameManager__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! ./NameManager */ "./src/client/js/NameManager.js");
+/* harmony import */ var _NetworkManager__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! ./NetworkManager */ "./src/client/js/NetworkManager.js");
+/* harmony import */ var _Notification__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! ./Notification */ "./src/client/js/Notification.js");
+/* harmony import */ var _NotificationManager__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(/*! ./NotificationManager */ "./src/client/js/NotificationManager.js");
+/* harmony import */ var _FormManager__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__(/*! ./FormManager */ "./src/client/js/FormManager.js");
+/* harmony import */ var _PostBuilder__WEBPACK_IMPORTED_MODULE_28__ = __webpack_require__(/*! ./PostBuilder */ "./src/client/js/PostBuilder.js");
 /**
  * Unite Client Implementation
  * Author: The Unite.cash Developers
@@ -932,35 +933,37 @@ window.SettingsWindow = _UI_SettingsWindow__WEBPACK_IMPORTED_MODULE_16__["defaul
 
 window.NameChangeWindow = _UI_NameChangeWindow__WEBPACK_IMPORTED_MODULE_17__["default"]
 
+window.BalanceWindow = _UI_BalanceWindow__WEBPACK_IMPORTED_MODULE_18__["default"]
 
-window.Transaction = _Transaction__WEBPACK_IMPORTED_MODULE_18__["default"]
 
-window.TransactionManager = _TransactionManager__WEBPACK_IMPORTED_MODULE_19__["default"]
+window.Transaction = _Transaction__WEBPACK_IMPORTED_MODULE_19__["default"]
 
-window.Post = _Post__WEBPACK_IMPORTED_MODULE_20__["default"]
+window.TransactionManager = _TransactionManager__WEBPACK_IMPORTED_MODULE_20__["default"]
 
-window.Name = _Name__WEBPACK_IMPORTED_MODULE_21__["default"]
+window.Post = _Post__WEBPACK_IMPORTED_MODULE_21__["default"]
 
-window.NameManager = _NameManager__WEBPACK_IMPORTED_MODULE_22__["default"]
+window.Name = _Name__WEBPACK_IMPORTED_MODULE_22__["default"]
 
-window.NetworkManager = _NetworkManager__WEBPACK_IMPORTED_MODULE_23__["default"]
+window.NameManager = _NameManager__WEBPACK_IMPORTED_MODULE_23__["default"]
 
-window.AppNotification = _Notification__WEBPACK_IMPORTED_MODULE_24__["default"]
+window.NetworkManager = _NetworkManager__WEBPACK_IMPORTED_MODULE_24__["default"]
 
-window.NotificationManager = _NotificationManager__WEBPACK_IMPORTED_MODULE_25__["default"]
+window.AppNotification = _Notification__WEBPACK_IMPORTED_MODULE_25__["default"]
 
-window.FormManager = _FormManager__WEBPACK_IMPORTED_MODULE_26__["default"]
+window.NotificationManager = _NotificationManager__WEBPACK_IMPORTED_MODULE_26__["default"]
 
-window.PostBuilder = _PostBuilder__WEBPACK_IMPORTED_MODULE_27__["default"]
+window.FormManager = _FormManager__WEBPACK_IMPORTED_MODULE_27__["default"]
+
+window.PostBuilder = _PostBuilder__WEBPACK_IMPORTED_MODULE_28__["default"]
 
 class App {
   constructor () {
     window.config = new _Config__WEBPACK_IMPORTED_MODULE_8__["default"]()
     if (sessionStorage.privateKey !== undefined) {
       _lib_jquery_js__WEBPACK_IMPORTED_MODULE_0___default()(document).ready(() => {
-        window.notificationManager = new _NotificationManager__WEBPACK_IMPORTED_MODULE_25__["default"]()
-        window.networkManager = new _NetworkManager__WEBPACK_IMPORTED_MODULE_23__["default"]()
-        window.formManager = new _FormManager__WEBPACK_IMPORTED_MODULE_26__["default"]()
+        window.notificationManager = new _NotificationManager__WEBPACK_IMPORTED_MODULE_26__["default"]()
+        window.networkManager = new _NetworkManager__WEBPACK_IMPORTED_MODULE_24__["default"]()
+        window.formManager = new _FormManager__WEBPACK_IMPORTED_MODULE_27__["default"]()
         if (typeof pageInit !== 'undefined') {
           pageInit()
         }
@@ -2054,6 +2057,111 @@ class TransactionManager {
 
 /***/ }),
 
+/***/ "./src/client/js/UI/BalanceWindow.js":
+/*!*******************************************!*\
+  !*** ./src/client/js/UI/BalanceWindow.js ***!
+  \*******************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return BalanceWindow; });
+/**
+ * Balance Window
+ * Author: The Unite.cash Developers
+ * License: GNU AGPL v3
+ *
+ * @file Defines and displays the Name Change Window
+ */
+
+class BalanceWindow {
+  constructor () {
+    if ($('#balanceWindow').length === 0) {
+      var balanceWindow = $('<div></div>')
+      balanceWindow.attr('id', 'balanceWindow')
+      balanceWindow.attr('class', 'UIAlertWindow hidden')
+
+      var balanceTitle = $('<h3></h3>')
+      balanceTitle.attr('class', 'center-text')
+      balanceTitle.text('YOUR UNITE ADDRESS')
+      balanceWindow.append(balanceTitle)
+
+      var balanceAddress = $('<p></p>')
+      balanceAddress.attr('class', 'UIPanel mono center-text bold')
+      balanceAddress.text('bitcoincash:' + config.userAddress)
+      balanceWindow.append(balanceAddress)
+
+      var balanceQR = $('<img></img>')
+      balanceQR.attr('class', 'qrcode center')
+      balanceQR.attr('alt', 'QR Code: bitcoincash:' + config.userAddress)
+      balanceQR.attr(
+        'src',
+        'https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl=bitcoincash:' +
+        config.userAddress
+      )
+      balanceWindow.append(balanceQR)
+
+      var privateKeyDisplayButton = $('<button></button>')
+      privateKeyDisplayButton.attr('id', 'privateKeyDisplayButton')
+      privateKeyDisplayButton.attr('class', 'UIButton center w90 red')
+      privateKeyDisplayButton.text('SHOW PRIVATE KEY')
+      $(document).on('click', '#privateKeyDisplayButton', () => {
+        new InteractivePopup('#privateKeyConfirmWindow').show()
+      })
+      balanceWindow.append(privateKeyDisplayButton)
+
+      var privateKeyConfirmWindow = $('<div></div>')
+      privateKeyConfirmWindow.attr('id', 'privateKeyConfirmWindow')
+      privateKeyConfirmWindow.attr('class', 'UIAlertWindow hidden')
+
+      var privateKeyConfirmTitle = $('<h3></h3>')
+      privateKeyConfirmTitle.text('YOUR PRIVATE KEY')
+      privateKeyConfirmTitle.attr('class', 'center-text')
+      privateKeyConfirmWindow.append(privateKeyConfirmTitle)
+
+      var privateKeyConfirmLabel = $('<p></p>')
+      privateKeyConfirmLabel.html(`Never share your key with anyone. With this
+        key, somebody would be able to <span class="red bold">HACK YOUR ACCOUNT
+        AND STEAL YOUR MONEY.</span> To show your key, click the button below.
+        <span class="red bold">Only do this if you know exactly what you are
+        doing and understand the risks!</span>`)
+      privateKeyConfirmWindow.append(privateKeyConfirmLabel)
+
+      var privateKeyConfirmButton = $('<button></button>')
+      privateKeyConfirmButton.attr('id', 'privateKeyConfirmButton')
+      privateKeyConfirmButton.attr('class', 'UIButton center red w90')
+      privateKeyConfirmButton.text('I UNDERSTAND')
+      $(document).on('click', '#privateKeyConfirmButton', () => {
+        new InteractivePopup('#privateKeyWindow').show()
+      })
+      privateKeyConfirmWindow.append(privateKeyConfirmButton)
+
+      var privateKeyWindow = $('<div></div>')
+      privateKeyWindow.attr('id', 'privateKeyWindow')
+      privateKeyWindow.attr('class', 'UIAlertWindow hidden')
+
+      var privateKeyTitle = $('<h3></h3>')
+      privateKeyTitle.attr('class', 'center-text')
+      privateKeyTitle.text('YOUR PRIVATE KEY')
+      privateKeyWindow.append(privateKeyTitle)
+
+      var privateKeyText = $('<p></p>')
+      privateKeyText.attr('class', 'UIPanel red mono bold center-text')
+      privateKeyText.text(config.userPrivateKey.toWIF())
+      privateKeyWindow.append(privateKeyText)
+
+      $('body').append(balanceWindow)
+      $('body').append(privateKeyConfirmWindow)
+      $('body').append(privateKeyWindow)
+    }
+    new InteractivePopup('#balanceWindow').show()
+  }
+}
+
+
+/***/ }),
+
 /***/ "./src/client/js/UI/Banner.js":
 /*!************************************!*\
   !*** ./src/client/js/UI/Banner.js ***!
@@ -2633,7 +2741,7 @@ __webpack_require__.r(__webpack_exports__);
 
 class SettingsWindow {
   constructor () {
-    if ($('#settings').length === 0) {
+    if ($('#settingsWindow').length === 0) {
       var settings = $('<div></div>')
       settings.attr('id', 'settingsWindow')
       settings.attr('class', 'UIAlertWindow hidden')
