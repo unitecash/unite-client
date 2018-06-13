@@ -112,8 +112,12 @@ export default class Post {
 
     var nameText = $('<p></p>')
     nameText.attr('id', uid + 'name')
-    nameText.attr('class', 'name')
+    nameText.attr('class', 'name UITextButton')
     nameText.text(this.senderName.displayName)
+    $(document).on('click', '#' + uid + 'name', () => {
+      Utilities.redirect('user.html?addr=' + this.sender)
+    })
+
 
     var timeText = $('<p></p>')
     timeText.attr('id', uid + 'time')
@@ -125,7 +129,10 @@ export default class Post {
     nameHash.attr('alt', 'Address: ' + this.sender)
     nameHash.attr('title', 'Address: ' + this.sender)
     nameHash.attr('id', uid + 'namehash')
-    nameHash.attr('class', 'UIPostNameHash')
+    nameHash.attr('class', 'UIPostNameHash UITextButton')
+    $(document).on('click', '#' + uid + 'namehash', () => {
+      Utilities.redirect('user.html?addr=' + this.sender)
+    })
 
     var postHeader = $('<div></div>')
     postHeader.append(nameHash)
@@ -135,7 +142,7 @@ export default class Post {
     var postText = $('<div></div>')
     postText.attr('id', uid + 'content')
     postText.attr('class', 'postText')
-    postText.text(this.displayContent)
+    postText.text(this.displayContent) // .html, TODO XSS protection
 
     var actionBar = $('<div></div>')
     actionBar.attr('class', 'actionBar')
@@ -144,21 +151,34 @@ export default class Post {
     replyButton.attr('id', uid + 'reply')
     replyButton.attr('class', 'UITextButton')
     replyButton.text('reply')
+    $(document).on('click', '#' + uid + 'reply', () => {
+      new CompositionWindow(this)
+    })
 
     var viewRepliesButton = $('<p></p>')
     viewRepliesButton.attr('id', uid + 'viewreplies')
-    viewRepliesButton.attr('class', uid + 'UITextButton')
+    viewRepliesButton.attr('class', 'UITextButton')
     viewRepliesButton.text('show replies')
+    $(document).on('click', '#' + uid + 'reply', () => {
+      Utilities.redirect('post.html?txid=' + this.txid)
+    })
 
     var tipButton = $('<p></p>')
     tipButton.attr('id', uid + 'tip')
     tipButton.attr('class', 'UITextButton')
     tipButton.text('tip')
+    $(document).on('click', '#' + uid + 'tip', () => {
+      new TipWindow(this)
+    })
+
 
     var reportButton = $('<p></p>')
     reportButton.attr('id', uid + 'report')
     reportButton.attr('class', 'UITextButton')
     reportButton.text('report')
+    $(document).on('click', '#' + uid + 'report', () => {
+      new ReportWindow(this)
+    })
 
     actionBar.append(replyButton)
     actionBar.append(viewRepliesButton)
@@ -169,49 +189,11 @@ export default class Post {
     postDiv.prepend(postHeader)
     postDiv.append(actionBar)
 
-    if (this.isLive) {
+    if (this.isLive) { // TODO optional threading of posts
       $(tag).prepend(postDiv)
     } else {
       $(tag).append(postDiv)
     }
-
-    var newString = '<div id="' + uid + 'tipwindow" class="UIAlertWindow hidden">'
-    newString += '<h1>SEND A TIP</h1>'
-    newString += '<p>Show how much you appreciate ' + this.senderName.nameText + '\'s post by sending a tip!</p>'
-    newString += '<form id="' + uid + 'tipform">'
-    newString += '<input type="text" id="' + uid + 'tipamount" class="UITextField center w90"'
-    newString += 'placeholder="Amount (satoshis)" /><br/>'
-    newString += '<input type="submit" class="UIButton center w90" value="SEND" />'
-    newString += '</form></div>'
-    $('body').append($(newString))
-    $('#' + uid + 'name').on('click', function () {
-      window.location.href = 'user.html?address=' + this.sender
-    })
-    $('#' + uid + 'viewreply').on('click', function () {
-      window.location.href = 'post.html?post=' + this.txid
-    })
-    $('#' + uid + 'tip').on('click', function () {
-      new InteractivePopup('#' + uid + 'tipwindow').show()
-    })
-    $('#' + uid + 'tipform').on('submit', (ev) => {
-      ev.preventDefault()
-      var tipAmount = $('#' + uid + 'tipamount').val()
-      Utilities.closePopup()
-      console.log(this.txid)
-      if (this.sender === config.userAddress) {
-        new Popup().setTitle('NARCISSISM?')
-        .addText('You just tried to tip yourself. You failed. Miserably.')
-        .show()
-      } else {
-        PostBuilder.build(
-          '5503',
-          Utilities.hex2a(this.txid),
-          this.sender,
-          parseInt(tipAmount)
-        )
-        $('#' + uid + 'tipamount').val('')
-      }
-    })
   }
 
 }

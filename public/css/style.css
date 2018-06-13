@@ -16,6 +16,7 @@ body {
 	margin-top:0.5em;
 	margin-bottom:0.5em;
 	outline:none;
+	cursor:pointer;
 }
 .UIButton:hover {
 	color:#ddf;
@@ -101,6 +102,8 @@ body {
 	background-color:#112;
 	color:#ddf;
 	padding:0.5em;
+	margin-top:0.5em;
+	margin-bottom:0.5em;
 	outline:none;
 	border-radius:0.25em;
 	border:0px solid #666688;
@@ -285,7 +288,7 @@ body {
 	padding-left:0.5em;
 	padding-right:0.5em;
 }
-.UItextButton {
+.UITextButton {
 	cursor:pointer;
 }
 

@@ -98,4 +98,21 @@ export default class Utilities {
     }
   }
 
+  // converts hex into buffer array
+  static hex2buf (hex) {
+    var arr = []
+    for (var i = 0; i < hex.length; i+=2) {
+      arr.push (parseInt ('' + hex[i] + hex[i+1], 16))
+    }
+    return arr
+  }
+
+  static ascii2buf (ascii) {
+    var arr = []
+    for (var i = 0; i < ascii.length; i++) {
+      arr.push (ascii.charCodeAt(i))
+    }
+    return arr
+  }
+
 }

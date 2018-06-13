@@ -43,51 +43,56 @@ export default class Popup {
   }
 
   show () {
-    if (this.options.playSound) {
-      Utilities.pop()
-    }
+    return new Promise((resolve, reject) => {
+      if (this.options.playSound) {
+        Utilities.pop()
+      }
 
-    var alertBackground = $('<div></div>')
-    alertBackground.attr('style', 'z-index: ' + config.highestZIndexUsed)
-    alertBackground.attr('class', 'UIDimmedBackground hidden')
-    alertBackground.attr('id', this.backgroundID)
-    $('body').on('click', '#' + this.backgroundID, () => {
-      this.hide()
-    })
-
-    var alertHTML = $('<div></div>')
-    alertHTML.attr('style', 'z-index: ' + (config.highestZIndexUsed + 1))
-    alertHTML.attr('id', this.divID)
-    if (this.options.isCentered) {
-      alertHTML.attr('class', 'UIAlertWindow center-text hidden')
-    } else {
-      alertHTML.attr('class', 'UIAlertWindow hidden')
-    }
-
-    if (this.options.titleText != undefined) {
-      var alertTitle = $('<h1></h1>')
-      alertTitle.text(this.options.titleText)
-      alertHTML.append(alertTitle)
-    }
-
-    if (this.options.showCloseButton) {
-      var closeButton = $('<button></button>')
-      closeButton.attr('class', 'UICloseButton')
-      closeButton.attr('id', this.closeButtonID)
-      $('body').on('click', '#' + this.closeButtonID, () => {
+      var alertBackground = $('<div></div>')
+      alertBackground.attr('style', 'z-index: ' + config.highestZIndexUsed)
+      alertBackground.attr('class', 'UIDimmedBackground hidden')
+      alertBackground.attr('id', this.backgroundID)
+      $('body').on('click', '#' + this.backgroundID, () => {
+        resolve ()
         this.hide()
       })
-      alertHTML.append(closeButton)
-    }
 
-    alertHTML.append(this.options.text)
-    $('body').append(alertBackground)
-    $('body').append(alertHTML)
-    $('#' + this.backgroundID).fadeIn(this.options.animationSpeed)
-    $('#' + this.divID).slideDown(this.options.animationSpeed)
+      var alertHTML = $('<div></div>')
+      alertHTML.attr('style', 'z-index: ' + (config.highestZIndexUsed + 1))
+      alertHTML.attr('id', this.divID)
+      if (this.options.isCentered) {
+        alertHTML.attr('class', 'UIAlertWindow center center-text hidden')
+      } else {
+        alertHTML.attr('class', 'UIAlertWindow hidden')
+      }
 
-    document.activeElement.blur()
-    config.highestZIndexUsed += 2
+      if (this.options.titleText != undefined) {
+        var alertTitle = $('<h3></h3>')
+        alertTitle.attr('class', 'center-text')
+        alertTitle.text(this.options.titleText)
+        alertHTML.append(alertTitle)
+      }
+
+      if (this.options.showCloseButton) {
+        var closeButton = $('<button></button>')
+        closeButton.attr('class', 'UICloseButton')
+        closeButton.attr('id', this.closeButtonID)
+        $('body').on('click', '#' + this.closeButtonID, () => {
+          resolve ()
+          this.hide()
+        })
+        alertHTML.append(closeButton)
+      }
+
+      alertHTML.append(this.options.text)
+      $('body').append(alertBackground)
+      $('body').append(alertHTML)
+      $('#' + this.backgroundID).fadeIn(this.options.animationSpeed)
+      $('#' + this.divID).slideDown(this.options.animationSpeed)
+
+      document.activeElement.blur()
+      config.highestZIndexUsed += 2
+    })
   }
 
   // thanks to https://stackoverflow.com/a/7259663/5860286 for this

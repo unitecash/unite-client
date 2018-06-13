@@ -14,6 +14,9 @@ export default class Name {
     this.displayName = name
     this.time = time
     this.hashData = this.calcHash()
+
+    // TODO create integrated name hash image and inline HTML display variables
+
   }
   calcHash(){
     var addr_h = sha512(this.address).substr(0, 32)

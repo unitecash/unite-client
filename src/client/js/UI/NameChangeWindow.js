@@ -43,7 +43,6 @@ export default class NameChangeWindow {
       nameChangeWindow.append(nameChangeForm)
 
       $(document).on('submit', '#nameChangeForm', (ev) => {
-        console.log($(this))
         ev.preventDefault()
         var newName = $('#newName').val()
         if (newName.length < 5 || name.length > 24) {

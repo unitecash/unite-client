@@ -9,6 +9,8 @@
  */
 
 export default class TransactionManager {
+
+
   static validate (transaction) {
     var parent = 'none', code = 'none'
     for (var i = 0; i < transaction.vout.length; i++) { // for each output

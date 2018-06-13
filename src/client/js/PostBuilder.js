@@ -11,9 +11,8 @@
 
 export default class PostBuilder {
 
-  static build (type, content, parent, amount, fee) {
+  static build (type, content, parent, amount, fee, parentTXID) {
     if (typeof type === 'undefined' ||
-        typeof content === 'undefined' ||
         typeof parent === 'undefined') {
       return false
     }
@@ -26,10 +25,21 @@ export default class PostBuilder {
       fee = config.DEFAULT_FEE_PER_BYTE
     }
 
+    if (typeof content === 'undefined') {
+      content = '';
+    }
+
     networkManager.findUTXOsByAddress(config.userAddress).then((data) => {
       var transaction = new bch.Transaction()
       transaction.to(bchaddr.toLegacyAddress(parent), amount)
-      transaction.addData(Utilities.hex2a(type) + content)
+      if (typeof parentTXID === undefined) {
+        transaction.addData(Utilities.hex2a(type) + content)
+      } else {
+        var txData = Utilities.ascii2buf(type)
+        txData = txData.concat(Utilities.hex2buf(parentTXID))
+        txData = txData.concat(Utilities.ascii2buf(content))
+        transaction.addData(new Buffer(data))
+      }
       var success = false
       var totalAdded = 0
       var utxo_arr = []
@@ -56,7 +66,14 @@ export default class PostBuilder {
           var txSize = transaction.toString().length / 2
           var transaction = new bch.Transaction()
           transaction.to(bchaddr.toLegacyAddress(parent), amount)
-          transaction.addData(Utilities.hex2a(type) + content)
+          if (typeof parentTXID === undefined) {
+            transaction.addData(Utilities.hex2a(type) + content)
+          } else {
+            var data = Utilities.hex2buf(type)
+            data = data.concat(Utilities.hex2buf(parentTXID))
+            data = data.concat(Utilities.ascii2buf(content))
+            transaction.addData(new Buffer(data))
+          }
           for (var i = 0; i < utxo_arr.length; i++) {
             transaction.from(utxo_arr[i])
           }
@@ -73,6 +90,7 @@ export default class PostBuilder {
         }
       }
       if (!success) {
+        Messages.notEnoughFunds()
         return false
       }
     })
