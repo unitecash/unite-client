@@ -1,58 +1,56 @@
 # Unite Project TODO:
 
-This list outlines some basic things that need to be completed.
-This list is not complete. Most urgent things at the top.
+This list outlines some things that need to be done.
 
-## Short Term
+## Misc
 
-- improve find_utxo as specified
 - skeleton of the unite.cash homepage
 - get a code signing certificate
 - setup, installation, uninstallation wizards
 
-## Medium Term
+## Short-term
 
-- tip/report UIs
-- following/feed actions
-- get_num_followers(addr)
-- get_num_following(addr)
-- get_tips(txid)
-- updates and network management actions
-- report action with own centralReportAddress
-- reply action
-- post composition dialog box
-- extended posts (WebTorrent)
-- images
-- limits on how much data can be received by AJAX to stop spam
-- limits to the files which can be received
-- key stretching improvements?
-- "Remember Me" with quicker login options, passcodes
+- The User class
+- User.follow(address)
+- User.unfollow(address)
+- User.listFollowers()
+- User.listFollowing()
+- User.getNumFollowers()
+- User.getNumFollowing()
+- networkManager.getTotalTipped(post)
+- networkManager.getTotalTipped(User)
+- Signed (potentially automated) updates from the developers
+- Reporting of posts and content
+- Post composition dialog box
+- IPFS node integrations
+- Define data structure for IPFS content
+- IPFS node "client pin requests" to ensure content availability
+- Profile photos, taglines
+- Sanity checks for IPFS and AJAX data (size, no 1x100000-pixel images, etc)
+- Persistant cross-session logins with short 6-digit PIN and localStorage
+- Build system for native iOS, Android apps
+- Watch towers for active push notifications relating to on-chain actions
+- Name-to-address resolution with various schemes (first-come-first-serve,
+  amount-backed * time, etc)
+- Name "backing" in which users can vote on contentious names with their money
+- Mentions/tagging by-name and by-address
+- Trustless linking of Reddit, Discord, Twitter, YouTube accounts
+- Portability tools allowing for people to move tweets
+- Subreddit-mirroring allowing for people to contribute to the discussion
+  occurring in a reddit thread, but their contribution is exclusively
+  available on Unite
 
-## Long Term
+## Medium-term
 
 - popular posts (popularity=numReplies*tips/age?)
 - new users screen (encourage people to tip and interact with them)
-- set up a faucet to onboard new users, donation system
- - funds from central addresses (posts, profile, reporting, group)
- - whenever a user logs in (1 in 100 chance), if their balance is
-   high enough they get a message asking for donations "1/10th of
-   your balance could pay for 5754 new users to join!"
- - centralized faucet service
-- subreddits/forums/groups
- - centralGroupAddress
- - group creation
- - groups tab / UI
- - implement listing of groups from CentralGroupsAddress
- - group homepage UI
- - implement group name setting
- - group background-image, reddit-like custom CSS actions
- - add the ability to create threads in a group
- - add comments in threads
- - add comment replies, nested reply rendering with parent-child,...
- - tips and reporting (up-downvotes)
- - popularity ranking algorithms
- - moderation styles
-- encrypted messaging between BCH privkeys
- - core simple feature
- - groups of encrypted messaging participants
- - anonymous messaging with ringsig
+- Integrate credit card payments (simplex.com)
+- set up a faucet to on-board new users, donation system:
+  whenever a user logs in (1 in 100 chance), if their balance is
+  high enough they get a message asking for donations "1/10th of
+  your balance could pay for 5754 new users to join!"
+- Forums, markdown, blogging, threading, comments
+- popularity ranking algorithms
+- differing, customizable moderation styles and creator&viewer-specified comment
+  viewership settings/thresholds
+- encrypted messaging between BCH privkeys, group keys

@@ -15,7 +15,8 @@ window.pageInit = function () {
       onclick: () => {
         new ComposeWindow()
       }
-    }).render()
+    }).render(),
+    showBackButton: true
   })
 
   // get posts this user has written in the past

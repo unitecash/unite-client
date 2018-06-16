@@ -39,6 +39,23 @@ export default class Utilities {
     return str
   }
 
+  // converts hex into buffer array
+  static hex2buf (hex) {
+    var arr = []
+    for (var i = 0; i < hex.length; i+=2) {
+      arr.push (parseInt ('' + hex[i] + hex[i+1], 16))
+    }
+    return arr
+  }
+
+  static ascii2buf (ascii) {
+    var arr = []
+    for (var i = 0; i < ascii.length; i++) {
+      arr.push (ascii.charCodeAt(i))
+    }
+    return arr
+  }
+
   // thanks to https://stackoverflow.com/a/1349426/5860286 for this
   static getRandomChars (length) {
     var text = ''
@@ -98,21 +115,10 @@ export default class Utilities {
     }
   }
 
-  // converts hex into buffer array
-  static hex2buf (hex) {
-    var arr = []
-    for (var i = 0; i < hex.length; i+=2) {
-      arr.push (parseInt ('' + hex[i] + hex[i+1], 16))
-    }
-    return arr
-  }
-
-  static ascii2buf (ascii) {
-    var arr = []
-    for (var i = 0; i < ascii.length; i++) {
-      arr.push (ascii.charCodeAt(i))
-    }
-    return arr
+  static goBack () {
+    sessionStorage.playBackAnimation = true
+    $('#content').animate({"marginLeft": "100%"}, 250)
+    history.back()
   }
 
 }

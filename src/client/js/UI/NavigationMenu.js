@@ -24,6 +24,9 @@ export default class NavigationMenu {
     if (typeof options.rightButton === 'undefined') {
       options.rightButton = ''
     }
+    if (typeof options.showBackButton === 'undefined') {
+      options.showBackButton = false
+    }
 
     console.log(options.leftButton)
 
@@ -49,6 +52,17 @@ export default class NavigationMenu {
 
     var leftButton = $('<div></div>')
     leftButton.attr('class', 'leftButton')
+    // Add a back button on the left if appropriate
+    if (options.showBackButton) {
+      var backButton = new ImageButton({
+        text: 'Back',
+        image: 'images/back_icon.svg',
+        onclick: () => {
+          Utilities.goBack()
+        }
+      }).render()
+      leftButton.append(backButton)
+    }
     leftButton.append(options.leftButton)
     navigationMenu.append(leftButton)
 
