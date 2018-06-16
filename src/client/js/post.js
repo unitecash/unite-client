@@ -9,7 +9,7 @@
  */
 
 export default class Post {
-  constructor (transaction, isLive) {
+  constructor (transaction) {
     return new Promise((resolve, reject) => {
       // only construct each post once per page.
       if (typeof window.currentPosts === 'undefined') {
@@ -25,9 +25,7 @@ export default class Post {
           resolve (false)
         }
       }
-      if (typeof isLive === 'undefined') {
-        isLive = false
-      }
+
       if (!redundant) {
         currentPosts.push (transaction.txid)
         var sender = transaction.vin[0].addr
@@ -35,7 +33,7 @@ export default class Post {
         for (var i = 0; i < transaction.vout.length; i++) {
           if (!transaction.vout[i].scriptPubKey.asm.startsWith('OP_RETURN')) {
             if (parseInt(transaction.vout[i].value * 100000000) <= config.DUST_LIMIT_SIZE &&
-    						parseInt(transaction.vout[i].value * 100000000) != 0) {
+                parseInt(transaction.vout[i].value * 100000000) != 0) {
               // parent is determined by this small, non-zero output
               parent = transaction.vout[i].scriptPubKey.addresses[0]
             }
@@ -52,7 +50,7 @@ export default class Post {
           this.txid = transaction.txid
           this.time = transaction.time
           this.data = data
-          this.isLive = isLive
+          this.options = transaction.options
           this.init().then((result) => {
             resolve (result)
           })
@@ -67,27 +65,56 @@ export default class Post {
     return new Promise((resolve, reject) => {
       NameManager.resolveFromAddress(this.sender).then ((name) => {
         this.senderName = name
-        // notifications for live transactions
-        if (this.isLive) {
-          new AppNotification (this).show()
-        }
 
-        // we can also fetch image data, extended messages, parent transactions,
-        // number of replies, tips etc in the same way based on tx type
+        // TODO check if the reply is a child of an already-rendered post,
+        // setting replyIndex and renderPosition as necessary
 
         if (this.type == '5504') {
           NameManager.consider (new Name(this.sender, this.data, this.time))
         } else if (this.type == '5503') {
-          this.displayContent = this.data.substr(46) // hacky
+          this.parentTXID = this.data.substr(0, 32)
+          this.displayContent = this.data.substr(32)
         } else if (this.type == '5501') {
           this.displayContent = this.data
         } else if (this.type == '5502') {
-          // for this type, the post.data is a magnet link.
-          // post.displayContent will be the contents of the torrent.
-          // (get it from webtorrent/webseed)
+          //networkManager.resolveHash(this.data).then((data) => {
+          //  this.resolvedData = data
+          //  ...
+          //})
         }
-        // if the page supports it and the post contains renderable data,
-        // the page-specific onPostLoad function is called.
+
+        // Parse the transaction.options object
+        if (typeof this.options === 'undefined') {
+          this.options = {}
+        }
+        if (typeof this.options.isLive === 'undefined') {
+          this.options.isLive = false
+        }
+        if (typeof this.options.UIReplyIndent === 'undefined') {
+          /* If this post is live, check if it is the child of any other
+           * post currently on the page. If so, set indent to be under
+           * the post.
+           */
+          if (this.options.isLive == 1) {
+            this.options.UIReplyIndent = 0
+          } else {
+            this.options.UIDisplayIndent = 0
+          }
+        }
+
+        // Notifications for live transactions
+        if (this.options.isLive) {
+          new AppNotification (this).show()
+        }
+
+        /*
+         * if the page supports it and the post contains renderable data,
+         * the page-specific onPostLoad function is called.
+         *
+         * Note that for DHT/torrent-based content, dispayContent will remain
+         * undefined until the retrieval process is complete, at which
+         * time the onPostLoad function is called from within that promise.
+         */
         if (typeof onPostLoad !== 'undefined' &&
             typeof this.displayContent !== 'undefined') {
           onPostLoad(this)
@@ -171,13 +198,12 @@ export default class Post {
       new TipWindow(this)
     })
 
-
     var reportButton = $('<p></p>')
     reportButton.attr('id', uid + 'report')
     reportButton.attr('class', 'UITextButton')
     reportButton.text('report')
     $(document).on('click', '#' + uid + 'report', () => {
-      new ReportWindow(this)
+      new ReportWindow (this)
     })
 
     actionBar.append(replyButton)

@@ -11,9 +11,9 @@
 
 export default class PostBuilder {
 
-  static build (type, content, parent, amount, fee, parentTXID) {
+  static build (type, content, parentAddress, amount, fee, parentTXID) {
     if (typeof type === 'undefined' ||
-        typeof parent === 'undefined') {
+        typeof parentAddress === 'undefined') {
       return false
     }
 

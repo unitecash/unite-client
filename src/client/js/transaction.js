@@ -9,11 +9,9 @@
  */
 
 export default class Transaction {
-  constructor (txid, isLive) {
-    if (typeof isLive === 'undefined') {
-      this.isLive = false
-    } else {
-      this.isLive = isLive
+  constructor (txid, options) {
+    if (typeof options === 'undefined') {
+      options = {}
     }
     return new Promise ((resolve, reject) => {
       // check if it exists in the DB already
@@ -22,7 +20,8 @@ export default class Transaction {
       for (var i = 0; i < transactions.length && !success; i++) {
         if (transactions[i].txid == txid && !success) {
           success = true
-          new Post (transactions[i], this.isLive).then((result) => {
+          transactions[i].options = options
+          new Post (transactions[i]).then((result) => {
             resolve (result)
           })
         }
@@ -31,7 +30,8 @@ export default class Transaction {
         networkManager.lookupTXID(txid).then((transaction) => {
           if (TransactionManager.validate (transaction)) {
             TransactionManager.remember(transaction)
-            new Post(transaction, this.isLive).then((result) => {
+            transactions[i].options = options
+            new Post(transaction).then((result) => {
               resolve (result)
             })
           } else {

@@ -17,7 +17,8 @@
     "package-all": "electron-packager . Unite --all",
     "package-mac": "electron-packager . Unite --overwrite --platform=darwin --arch=x64 --icon=public/images/icon.icns --prune=true --out=build/Release",
     "package-win": "electron-packager . Unite --overwrite --asar=true --platform=win32 --arch=ia32 --icon=public/images/icon.ico --prune=true --out=build/Release --version-string.CompanyName=Unite --version-string.FileDescription=Unite --version-string.ProductName=\"Unite\"",
-    "package-linux": "electron-packager . Unite --overwrite --asar=true --platform=linux --arch=x64 --icon=public/images/icon.png --prune=true --out=build/Release"
+    "package-linux": "electron-packager . Unite --overwrite --asar=true --platform=linux --arch=x64 --icon=public/images/icon.png --prune=true --out=build/Release",
+    "build-setup-win": "electron-installer-windows --src build/Release/Unite-win32-x64/ --dest dist/installers/"
   },
   "repository": "https://github.com/unitecash/unite-client.git",
   "keywords": [
@@ -72,6 +73,12 @@
     "webpack-dev-server": "^3.1.4"
   },
   "dependencies": {
-    "npm": "^6.0.0"
+    "bchaddrjs": "^0.2.1",
+    "bitcoincashjs": "^0.1.10",
+    "electron-winstaller": "^2.6.4",
+    "ipfs": "^0.29.3",
+    "jquery": "^3.3.1",
+    "npm": "^6.0.0",
+    "socket.io": "^2.1.1"
   }
 }

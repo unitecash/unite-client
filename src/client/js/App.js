@@ -9,19 +9,20 @@
  * @file Provides the App class.
  */
 
-import $ from './lib/jquery.js'
+import $ from 'jquery'
 window.jQuery = $
 window.$ = $
-import bchaddr from './lib/bchaddr.js'
+import bchaddr from 'bchaddrjs'
 window.bchaddr = bchaddr
-import bitcoincash from './lib/bitcoincash.js'
+import bitcoincash from 'bitcoincashjs'
 window.bch = bitcoincash
 import './lib/pnglib.js'
 import './lib/identicon.js'
-import io from './lib/socket.io.js'
+import io from 'socket.io-client'
 window.io = io
 import './lib/sha512.js'
-import './lib/webtorrent.js'
+import IPFS from 'ipfs'
+window.IPFS = IPFS
 
 import Config from './Config'
 window.Config = Config
