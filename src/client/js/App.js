@@ -49,7 +49,10 @@ import BalanceWindow from './UI/BalanceWindow'
 window.BalanceWindow = BalanceWindow
 import TipWindow from './UI/TipWindow'
 window.TipWindow = TipWindow
-
+import ImageButton from './UI/ImageButton'
+window.ImageButton = ImageButton
+import NavigationMenu from './UI/NavigationMenu'
+window.NavigationMenu = NavigationMenu
 
 import Transaction from './Transaction'
 window.Transaction = Transaction

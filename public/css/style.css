@@ -21,20 +21,20 @@ body {
 .UIButton:hover {
 	color:#ddf;
 }
-.navlink {
+.navigationLink {
 	padding:0.375em;
 	outline:none;
 }
-.navlink span {
+.navigationLink span {
 	text-decoration:none;
 	color:#9999bb;
 	font-weight:bold;
 	text-transform:uppercase;
 }
-.navlink img {
+.navigationLink img {
 	display:none;
 }
-.nav {
+.navigationMenu {
 	width:100%;
 	background-color:#112;
 	padding-top:0.25em;
@@ -44,15 +44,15 @@ body {
 	left:0px;
 	border-bottom:1px solid #334;
 }
-.nav * {
+.navigationMenu * {
 	display:inline-block;
 }
-.heading {
+.navigationHeader {
 	float:left;
 	margin-top:-0.5em;
 	margin-left:0.5em;
 }
-.navlinks {
+.navigationLinks {
 	float:right;
 	margin-top:1em;
 	margin-right:1em;
@@ -61,12 +61,12 @@ body {
 	padding:0.5em;
 	padding-top:7em;
 }
-#headericon {
+.headingIcon {
 	height:2em;
 	float:left;
 	margin-top:1.5em;
 }
-#headertitle {
+.headingTitle {
 	margin-left:0.5em;
 	text-transform:uppercase;
 }
@@ -231,14 +231,14 @@ body {
 	border:none;
 	outline:none;
 }
-.rightbuttons {
+.rightButton {
 	float:right;
 	margin-top:1em;
 	margin-right:1em;
 }
-.leftbuttons {
+.leftButton {
 	float:left;
-	margin-top:1.5em;
+	margin-top:1em;
 	margin-left:1em;
 }
 .hidden {
@@ -293,10 +293,10 @@ body {
 }
 
 @media only screen and (max-width: 50em) {
-    #headericon {
+  .headingIcon {
 		display:none;
 	}
-	.heading {
+	.navigationHeader {
 		width:100%;
 		text-align:center;
 		align:center;
@@ -304,7 +304,7 @@ body {
 		float:default;
 		margin-left:auto;
 	}
-	.navlinks {
+	.navigationLinks {
 		display:block;
 		width:100%;
 		align:center;
@@ -313,7 +313,7 @@ body {
 		margin-left:auto;
 		margin-top:auto;
 	}
-	#headertitle {
+	.headingTitle {
 		margin-left:auto;
 		margin-right:auto;
 		margin-bottom:0.25em;
@@ -321,16 +321,16 @@ body {
 	.content {
 		padding-top:7em;
 	}
-	.rightbuttons {
+	.rightButton {
 		margin-top:-3em;
 	}
-	.leftbuttons {
+	.leftButton {
 		margin-top:-3em;
 	}
 }
 
 @media only screen and (max-width: 30em) {
-	.nav {
+	.navigationMenu {
 		background-color:transparent;
 		pointer-events:none;
 		height:100%;
@@ -338,7 +338,7 @@ body {
 		bottom:0px;
 		border-bottom:none;
 	}
-	.heading {
+	.navigationHeader {
 		pointer-events:auto;
 		left:0px;
 		top:0px;
@@ -347,11 +347,11 @@ body {
 		padding-bottom:0.75em;
 		border-bottom:1px solid #334;
 	}
-	#headertitle {
+	.headingTitle {
 		text-transform:none;
 		font-size:1.2em;
 	}
-	.navlinks {
+	.navigationLinks {
 		pointer-events:auto;
 		left:0px;
 		bottom:0px;
@@ -366,16 +366,16 @@ body {
 		padding-top:4em;
 		margin-bottom:4em;
 	}
-	.navlink {
+	.navigationLink {
 		padding-left:1em;
 		padding-right:1em;
 	}
-	.navlink span {
+	.navigationLink span {
 		text-transform:none;
 		font-weight:normal;
 		font-size:0.8em;
 	}
-	.navlink img {
+	.navigationLink img {
 		display:block;
 		height:1.5em;
 		width:1.5em;
@@ -383,24 +383,24 @@ body {
 		margin-left:auto;
 		margin-right:auto;
 	}
-	.rightbuttons {
+	.rightButton {
 		pointer-events:auto;
 		margin-top:-2.75em;
 	}
-	.leftbuttons {
+	.leftButton {
 		pointer-events:auto;
 		margin-top:-2.75em;
 	}
 }
 @media only screen and (max-width: 27em) {
-	.navlink {
+	.navigationLink {
 		padding-left:0.5em;
 		padding-right:0.5em;
 	}
 }
 @media only screen and (max-width: 21em) {
-	.navlink {
-		padding-left:0em;
-		padding-right:0em;
+	.navigationLink {
+		padding-left:0.2em;
+		padding-right:0.2em;
 	}
 }

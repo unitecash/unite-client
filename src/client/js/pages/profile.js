@@ -1,13 +1,29 @@
 window.pageInit = function () {
-
-  $(document).on('click', '#settingsButton', () => {
-    new SettingsWindow()
+  new NavigationMenu({
+    pageTitle: 'Profile',
+    pageIcon: './images/profile_icon.svg',
+    leftButton: new ImageButton({
+      text: 'Settings',
+      image: './images/settings_icon.svg',
+      onclick: () => {
+        new SettingsWindow()
+      }
+    }).render(),
+    rightButton: new ImageButton({
+      text: 'New Post',
+      image: './images/compose_icon.svg',
+      onclick: () => {
+        new ComposeWindow()
+      }
+    }).render()
   })
 
   // get posts this user has written in the past
   TransactionManager.loadTransactionsByAddress(config.userAddress)
 
-  // get the user's name and display italic
+
+  // TODO modularize, clean this up a bit
+  // get the user's name and display info
   NameManager.resolveFromAddress(config.userAddress).then((name) => {
     var nameHash = $('<img></img>')
     nameHash.attr('src', name.hashData)

@@ -26,6 +26,8 @@ export default class NetworkManager {
       this.subscribeAddress('inv')
       this.bindEvents()
     })
+
+    // TODO init the IPFS node
   }
 
   bindEvents () {
