@@ -53,6 +53,8 @@ import ImageButton from './UI/ImageButton'
 window.ImageButton = ImageButton
 import NavigationMenu from './UI/NavigationMenu'
 window.NavigationMenu = NavigationMenu
+import CompositionWindow from './UI/CompositionWindow'
+window.CompositionWindow = CompositionWindow
 
 import Transaction from './Transaction'
 window.Transaction = Transaction

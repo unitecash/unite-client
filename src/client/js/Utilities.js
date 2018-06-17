@@ -116,7 +116,6 @@ export default class Utilities {
   }
 
   static goBack () {
-    sessionStorage.playBackAnimation = true
     $('#content').animate({"marginLeft": "100%"}, 250)
     history.back()
   }

@@ -6,11 +6,11 @@ window.pageInit = function () {
       text: 'New Post',
       image: './images/compose_icon.svg',
       onclick: () => {
-        new ComposeWindow()
+        new CompositionWindow()
       }
     }).render()
   })
-  
+
   TransactionManager.loadTransactionsByAddress(config.CENTRAL_CONTENT_ADDRESS)
 }
 window.onPostLoad = function (post) {

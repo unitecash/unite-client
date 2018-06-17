@@ -52,17 +52,19 @@ export default class NetworkManager {
   broadcastTransaction (hex) {
     if (!this.isDead) {
       if(config.DEBUG_MODE === false) {
-        $.ajax({
-          type: 'POST',
-          url: config.randomInsightEndpoint() + 'tx/send',
-          data: {rawtx: hex},
-          success: function (data) {
-            console.log('Broadcasted! TXID:\n\n' + data.txid)
-          },
-          error: function (data) {
-            Messages.broadcastFailure(hex)
-          }
-        })
+        for (var i = 0; i < config.DEFAULT_INSIGHT_ENDPOINTS_ARRAY; i++) {
+          $.ajax({
+            type: 'POST',
+            url: config.DEFAULT_INSIGHT_ENDPOINTS_ARRAY[i] + 'tx/send',
+            data: {rawtx: hex},
+            success: function (data) {
+              console.log('Broadcasted! TXID:\n\n' + data.txid)
+            },
+            error: function (data) {
+              Messages.broadcastFailure(hex)
+            }
+          })
+        }
       } else {
         console.log('Pretend broadcasting TX:\n\n' + hex)
       }

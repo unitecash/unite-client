@@ -31,8 +31,8 @@ export default class PostBuilder {
 
     networkManager.findUTXOsByAddress(config.userAddress).then((data) => {
       var transaction = new bch.Transaction()
-      transaction.to(bchaddr.toLegacyAddress(parent), amount)
-      if (typeof parentTXID === undefined) {
+      transaction.to(bchaddr.toLegacyAddress(parentAddress), amount)
+      if (typeof parentTXID === 'undefined') {
         transaction.addData(Utilities.hex2a(type) + content)
       } else {
         var txData = Utilities.ascii2buf(type)
@@ -65,8 +65,8 @@ export default class PostBuilder {
           transaction.sign(config.userPrivateKey)
           var txSize = transaction.toString().length / 2
           var transaction = new bch.Transaction()
-          transaction.to(bchaddr.toLegacyAddress(parent), amount)
-          if (typeof parentTXID === undefined) {
+          transaction.to(bchaddr.toLegacyAddress(parentAddress), amount)
+          if (typeof parentTXID === 'undefined') {
             transaction.addData(Utilities.hex2a(type) + content)
           } else {
             var data = Utilities.hex2buf(type)

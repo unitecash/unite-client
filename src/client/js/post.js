@@ -187,7 +187,7 @@ export default class Post {
     viewRepliesButton.attr('id', uid + 'viewreplies')
     viewRepliesButton.attr('class', 'UITextButton')
     viewRepliesButton.text('show replies')
-    $(document).on('click', '#' + uid + 'reply', () => {
+    $(document).on('click', '#' + uid + 'viewreplies', () => {
       Utilities.redirect('post.html?txid=' + this.txid)
     })
 

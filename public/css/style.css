@@ -61,6 +61,13 @@ body {
 	padding:0.5em;
 	padding-top:7em;
 }
+.right {
+	float:right;
+}
+.UIAlertHeader {
+	width:100%;
+	border-bottom:1px solid #999;
+}
 .headingIcon {
 	height:2em;
 	float:left;

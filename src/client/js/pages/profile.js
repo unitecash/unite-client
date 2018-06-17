@@ -13,7 +13,7 @@ window.pageInit = function () {
       text: 'New Post',
       image: './images/compose_icon.svg',
       onclick: () => {
-        new ComposeWindow()
+        new CompositionWindow()
       }
     }).render()
   })
