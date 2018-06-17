@@ -15,26 +15,21 @@ window.pageInit = function () {
       onclick: () => {
         new ComposeWindow()
       }
-    }).render(),
-    showBackButton: true
+    }).render()
   })
 
-  // get posts this user has written in the past
-  TransactionManager.loadTransactionsByAddress(config.userAddress)
-
-
-  // TODO modularize, clean this up a bit
-  // get the user's name and display info
-  NameManager.resolveFromAddress(config.userAddress).then((name) => {
+  new User(config.userAddress).then((user) => {
+    user.loadPosts()
+    // TODO modularize, externalize this
     var nameHash = $('<img></img>')
-    nameHash.attr('src', name.hashData)
-    nameHash.attr('alt', 'Address: ' + name.address)
-    nameHash.attr('title', 'Address: ' + name.address)
+    nameHash.attr('src', user.name.hashData)
+    nameHash.attr('alt', 'Address: ' + user.name.address)
+    nameHash.attr('title', 'Address: ' + user.name.address)
     nameHash.attr('class', 'UIInlineNameHash')
     $('#myName').text('')
     $('#myName').append('Hi, ')
     $('#myName').append(nameHash)
-    $('#myName').append(name.displayName)
+    $('#myName').append(user.name.displayName)
     $('#myName').append('!')
   })
 }

@@ -96,6 +96,7 @@ export default class Post {
            * the post.
            */
           if (this.options.isLive == 1) {
+            // TODO traverse the document for a parent, updating UIReplyIndent
             this.options.UIReplyIndent = 0
           } else {
             this.options.UIDisplayIndent = 0

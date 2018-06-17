@@ -74,6 +74,8 @@ import FormManager from './FormManager'
 window.FormManager = FormManager
 import PostBuilder from './PostBuilder'
 window.PostBuilder = PostBuilder
+import User from './User'
+window.User = User
 
 export default class App {
   constructor () {
