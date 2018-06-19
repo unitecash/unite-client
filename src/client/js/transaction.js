@@ -30,7 +30,7 @@ export default class Transaction {
         networkManager.lookupTXID(txid).then((transaction) => {
           if (TransactionManager.validate (transaction)) {
             TransactionManager.remember(transaction)
-            transactions[i].options = options
+            transaction.options = options
             new Post(transaction).then((result) => {
               resolve (result)
             })

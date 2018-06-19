@@ -28,8 +28,6 @@ export default class NavigationMenu {
       options.showBackButton = false
     }
 
-    console.log(options.leftButton)
-
     var navigationMenu = $('<div></div>')
     navigationMenu.attr('class', 'navigationMenu')
 

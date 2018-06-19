@@ -18,6 +18,8 @@ export default class NetworkManager {
   */
   constructor () {
     this.isDead = false
+    this.isIPFSReady = false
+
     // connect to the WebSocket
     this.socketStream = io(config.randomInsightWebsocket())
     this.socketStream.on('connect', () => {
@@ -27,7 +29,25 @@ export default class NetworkManager {
       this.bindEvents()
     })
 
-    // TODO init the IPFS node
+    // start IPFS
+    this.IPFSNode = new IPFS()
+    this.IPFSNode.on('ready', () => {
+      if (config.DEBUG_MODE) {
+        console.log('IPFS is ready!')
+      }
+      this.isIPFSReady = true
+      this.IPFSNode.version((err, version) => {
+        if (err) { console.error(err) }
+        if (config.DEBUG_MODE) {
+          console.log('IPFS Version:', version.version)
+        }
+
+        // connect to the IPFS peers
+        for (var i = 0; i < config.DEFAULT_IPFS_ENDPOINT_ARRAY.length; i++){
+          this.IPFSNode.swarm.connect(config.DEFAULT_IPFS_ENDPOINT_ARRAY[i])
+        }
+      })
+    })
   }
 
   bindEvents () {
@@ -145,6 +165,44 @@ export default class NetworkManager {
           error: () => {
             resolve (false)
           }
+        })
+      } else {
+        resolve (false)
+      }
+    })
+  }
+
+  // Adds a file to IPFS with the data provided, notifying pin-servers who will
+  // then pin the content for reliable access.
+  publishToIPFS (data) {
+    return new Promise ((resolve, reject) => {
+      if (this.isIPFSReady && !this.isDead) {
+        this.IPFSNode.files.add({
+          path: '',
+          content: Buffer.from(data)
+        }, (err, filesAdded) => {
+          if (err) { console.error(err) }
+          if (config.DEBUG_MODE) {
+            console.log('Added to IPFS:', filesAdded[0].hash)
+          }
+          resolve (filesAdded[0].hash)
+        })
+      } else if (!this.isIPFSReady) {
+        // TODO wait 2 seconds for IPFS to be ready, then try again
+        if (config.DEBUG_MODE) {
+          console.log('IPFS was not ready, waiting 2 seconds...')
+        }
+        resolve (false)
+      }
+    })
+  }
+
+  // Retrieves a file's contents from IPFS
+  retrieveFromIPFS (hash) {
+    return new Promise ((resolve, reject) => {
+      if (this.isIPFSReady && !this.isDead) {
+        this.IPFSNode.files.cat(hash).then((data) => {
+          resolve (data.toString())
         })
       } else {
         resolve (false)

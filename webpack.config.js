@@ -16,8 +16,7 @@ const config = {
     login: "./src/client/js/pages/login.js",
     newPosts: "./src/client/js/pages/newPosts.js",
     profile: "./src/client/js/pages/profile.js",
-    post: "./src/client/js/pages/post.js",
-    user: "./src/client/js/pages/user.js"
+    post: "./src/client/js/pages/post.js"
   },
   resolve: {
     extensions: ['.tsx', '.ts', '.js']

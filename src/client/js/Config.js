@@ -31,6 +31,10 @@ export default class Config {
       'wss://bch-insight.bitpay.com'
     ]
 
+    this.DEFAULT_IPFS_ENDPOINT_ARRAY = [
+      '/ip4/127.0.0.1/tcp/9999/ws/ipfs/QmbpX2EBFU9wYQ2hRg93mn6rm7pYyNJGrEkn8XJ3TK2FVB'
+    ]
+
     if (typeof localStorage.insightEndpointsArray === 'undefined') {
   		localStorage.insightEndpointsArray = JSON.stringify(
         this.DEFAULT_INSIGHT_ENDPOINTS_ARRAY

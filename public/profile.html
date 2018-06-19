@@ -5,30 +5,18 @@
 <title>Unite</title>
 <link rel="shortcut icon" href="./images/icon.png" />
 <link rel="stylesheet" type="text/css" href="./css/style.css" />
-<script>
-if(typeof module === 'object'){window.module=module;module=undefined;}
-</script>
 <script src="./js/app.js"></script>
 <script src="./js/profile.js"></script>
-<script>if (window.module) module = window.module;</script>
 </head>
 <body>
 <div id="content">
+<!--- TODO modularize, clean this up --->
 <div class="UIPanel center center-text">
-<!--- TODO profile photos --->
 <img id="profileImage" src="./images/icon.svg" class="ProfileImage center" />
 <p id="myName">loading...</p>
 <p id="profileText">No tagline set</p>
 <p id="editButton" class="center">Edit...</p>
 </div>
-<form id="sendpost">
-<p>Write a Post</p>
-<center>
-<textarea class="UITextArea" id="newpost"></textarea>
-</center>
-<input type="submit" id="sendbutton" class="UIButton" value="SEND" />
-</form>
-<h1>Your Posts</h1>
 <div id="posts"></div>
 </div>
 </body>

@@ -10,7 +10,6 @@ This list outlines some things that need to be done.
 
 ## Short-term
 
-- The User class
 - User.follow(address)
 - User.unfollow(address)
 - User.listFollowers()

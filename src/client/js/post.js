@@ -143,7 +143,7 @@ export default class Post {
     nameText.attr('class', 'name UITextButton')
     nameText.text(this.senderName.displayName)
     $(document).on('click', '#' + uid + 'name', () => {
-      Utilities.redirect('user.html?addr=' + this.sender)
+      Utilities.redirect('./profile.html?addr=' + this.sender)
     })
 
 
@@ -159,7 +159,7 @@ export default class Post {
     nameHash.attr('id', uid + 'namehash')
     nameHash.attr('class', 'UIPostNameHash UITextButton')
     $(document).on('click', '#' + uid + 'namehash', () => {
-      Utilities.redirect('user.html?addr=' + this.sender)
+      Utilities.redirect('./profile.html?addr=' + this.sender)
     })
 
     var postHeader = $('<div></div>')
@@ -196,7 +196,7 @@ export default class Post {
     tipButton.attr('class', 'UITextButton')
     tipButton.text('tip')
     $(document).on('click', '#' + uid + 'tip', () => {
-      new TipWindow(this)
+      new TipWindow (this)
     })
 
     var reportButton = $('<p></p>')
@@ -221,6 +221,10 @@ export default class Post {
     } else {
       $(tag).append(postDiv)
     }
+  }
+
+  loadReplies () {
+    TransactionManager.loadTransactionsByAddress(this.sender)
   }
 
 }
