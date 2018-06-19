@@ -13,9 +13,8 @@ export default class Name {
     this.address = addr
     this.displayName = name
     this.time = time
-    this.hashData = this.calcHash()
 
-    // TODO create integrated name hash image and inline HTML display variables
+    // TODO create integrated name hash image and inline HTML display functions
 
   }
   calcHash(){

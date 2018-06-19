@@ -65,7 +65,6 @@ export default class Post {
     return new Promise((resolve, reject) => {
       NameManager.resolveFromAddress(this.sender).then ((name) => {
         this.senderName = name
-
         // TODO check if the reply is a child of an already-rendered post,
         // setting replyIndex and renderPosition as necessary
 
@@ -153,7 +152,7 @@ export default class Post {
     timeText.text(this.time)
 
     var nameHash = $('<img></img>')
-    nameHash.attr('src', this.senderName.hashData)
+    nameHash.attr('src', this.senderName.calcHash())
     nameHash.attr('alt', 'Address: ' + this.sender)
     nameHash.attr('title', 'Address: ' + this.sender)
     nameHash.attr('id', uid + 'namehash')
@@ -216,7 +215,7 @@ export default class Post {
     postDiv.prepend(postHeader)
     postDiv.append(actionBar)
 
-    if (this.isLive) { // TODO optional threading of posts
+    if (this.options.isLive) { // TODO optional threading of posts
       $(tag).prepend(postDiv)
     } else {
       $(tag).append(postDiv)

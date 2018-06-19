@@ -20,18 +20,21 @@ export default class NetworkManager {
     this.isDead = false
     this.isIPFSReady = false
 
-    // connect to the WebSocket
-    this.socketStream = io(config.randomInsightWebsocket())
-    this.socketStream.on('connect', () => {
-      // TODO: an array of addresses the user subscribes to, iterating each one.
+    if (config.ENABLE_WEBSOCKETS) {
+      // connect to a WebSocket
+      this.socketStream = io(config.randomInsightWebsocket())
+      this.socketStream.on('connect', () => {
+        // TODO: an array of addresses the user subscribes to, iterating each one.
 
-      this.subscribeAddress('inv')
-      this.bindEvents()
-    })
+        this.subscribeAddress('inv')
+        this.bindEvents()
+      })
+    }
 
     // start IPFS
-    this.IPFSNode = new IPFS()
-    this.IPFSNode.on('ready', () => {
+    //this.IPFSNode = new IPFS()
+
+    /*this.IPFSNode.on('ready', () => {
       if (config.DEBUG_MODE) {
         console.log('IPFS is ready!')
       }
@@ -43,16 +46,18 @@ export default class NetworkManager {
         }
 
         // connect to the IPFS peers
-        for (var i = 0; i < config.DEFAULT_IPFS_ENDPOINT_ARRAY.length; i++){
-          this.IPFSNode.swarm.connect(config.DEFAULT_IPFS_ENDPOINT_ARRAY[i])
+        for (var i = 0; i < config.ipfsEndpointsArray.length; i++){
+          //this.IPFSNode.swarm.connect(config.ipfsEndpointsArray[i])
         }
       })
-    })
+    })*/
   }
 
   bindEvents () {
     this.socketStream.on('tx', (data) => {
-      new Transaction(data.txid, true)
+      new Transaction(data.txid, {
+        isLive: true
+      })
     })
   }
 

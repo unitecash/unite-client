@@ -2,14 +2,17 @@
 
 This list outlines some things that need to be done.
 
-## Misc
+### Bugs and issues
 
-- skeleton of the unite.cash homepage
-- get a code signing certificate
-- setup, installation, uninstallation wizards
+- Fix inefficient and unneeded data stored about transactions in localStorage,
+  (for example nLockTime, version, etc), possibly employine compression
+- Calling the IPFS constructor kills the page and disconnects devtools
 
-## Short-term
+### Short-term
 
+- IPFS node integrations
+- Define data structure for IPFS content
+- IPFS node "client pin requests" to ensure content availability
 - User.follow(address)
 - User.unfollow(address)
 - User.listFollowers()
@@ -18,14 +21,18 @@ This list outlines some things that need to be done.
 - User.getNumFollowing()
 - networkManager.getTotalTipped(post)
 - networkManager.getTotalTipped(User)
-- Signed (potentially automated) updates from the developers
 - Reporting of posts and content
-- Post composition dialog box
-- IPFS node integrations
-- Define data structure for IPFS content
-- IPFS node "client pin requests" to ensure content availability
+
+### After the above, some things to consider
+
+- skeleton of the unite.cash homepage
+- get a code signing certificate
+- setup, installation, uninstallation wizards
+- Signed (potentially automated) updates from the developers
 - Profile photos, taglines
+- Post composition dialog box
 - Sanity checks for IPFS and AJAX data (size, no 1x100000-pixel images, etc)
+- A propper way of handling multiple block explorers / websockets
 - Persistant cross-session logins with short 6-digit PIN and localStorage
 - Build system for native iOS, Android apps
 - Watch towers for active push notifications relating to on-chain actions
@@ -39,7 +46,7 @@ This list outlines some things that need to be done.
   occurring in a reddit thread, but their contribution is exclusively
   available on Unite
 
-## Medium-term
+## Further down the road
 
 - popular posts (popularity=numReplies*tips/age?)
 - new users screen (encourage people to tip and interact with them)

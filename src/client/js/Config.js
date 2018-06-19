@@ -19,6 +19,8 @@ export default class Config {
     this.DUST_LIMIT_SIZE = 547
     this.DEFAULT_FEE_PER_BYTE = 1.05
 
+    this.ENABLE_WEBSOCKETS = true
+
     this.DEBUG_MODE = true
 
     this.DEFAULT_INSIGHT_ENDPOINTS_ARRAY = [
@@ -32,8 +34,14 @@ export default class Config {
     ]
 
     this.DEFAULT_IPFS_ENDPOINT_ARRAY = [
-      '/ip4/127.0.0.1/tcp/9999/ws/ipfs/QmbpX2EBFU9wYQ2hRg93mn6rm7pYyNJGrEkn8XJ3TK2FVB'
+      '/ip4/127.0.0.1/tcp/9999/ws/ipfs/QmbpX2EBFU9wYQ2hRg93mn6rm7pYyNJGrEkn8XJ3TK2FVB',
+
     ]
+
+    // clear the localStorage when debug is enabled to get the latest defaults
+    if (this.DEBUG_MODE) {
+      localStorage.clear()
+    }
 
     if (typeof localStorage.insightEndpointsArray === 'undefined') {
   		localStorage.insightEndpointsArray = JSON.stringify(
@@ -47,11 +55,20 @@ export default class Config {
       )
     }
 
+    if (typeof localStorage.ipfsEndpointsArray === 'undefined') {
+      localStorage.ipfsEndpointsArray = JSON.stringify(
+        this.DEFAULT_IPFS_ENDPOINT_ARRAY
+      )
+    }
+
     this.insightEndpointsArray = JSON.parse(
       localStorage.insightEndpointsArray
     )
     this.insightWebsocketsArray = JSON.parse(
       localStorage.insightWebsocketsArray
+    )
+    this.ipfsEndpointsArray = JSON.parse(
+      localStorage.ipfsEndpointsArray
     )
 
     if (typeof sessionStorage.privateKey !== 'undefined') {
@@ -73,15 +90,11 @@ export default class Config {
   }
 
   randomInsightEndpoint () {
-    return Utilities.getRandomFromArray (
-      JSON.parse (localStorage.insightEndpointsArray)
-    )
+    return Utilities.getRandomFromArray (this.insightEndpointsArray)
   }
 
   randomInsightWebsocket () {
-    return Utilities.getRandomFromArray (
-      JSON.parse (localStorage.insightWebsocketsArray)
-    )
+    return Utilities.getRandomFromArray (this.insightWebsocketsArray)
   }
 
 }

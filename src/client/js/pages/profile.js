@@ -17,7 +17,7 @@ window.pageInit = () => {
     user.loadPosts()
     // TODO modularize, externalize this
     var nameHash = $('<img></img>')
-    nameHash.attr('src', user.name.hashData)
+    nameHash.attr('src', user.name.calcHash())
     nameHash.attr('alt', 'Address: ' + user.name.address)
     nameHash.attr('title', 'Address: ' + user.name.address)
     nameHash.attr('class', 'UIInlineNameHash')

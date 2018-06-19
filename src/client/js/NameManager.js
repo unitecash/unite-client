@@ -38,7 +38,9 @@ export default class NameManager {
       for (var i = 0; i < names.length; i++) {
         if (names[i].address == addr) {
           success = true
-          resolve(names[i])
+          resolve (
+            new Name (names[i].address, names[i].displayName, names[i].time)
+          )
         }
       }
       if (!success) {
@@ -55,7 +57,9 @@ export default class NameManager {
               for (var i = 0; i < names.length; i++) {
                 if (names[i].address === addr) {
                   found_name = true
-                  resolve(names[i])
+                  resolve (
+                    new Name (names[i].address, names[i].displayName, names[i].time)
+                  )
                 }
               }
               if (!found_name) {

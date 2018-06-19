@@ -12,6 +12,15 @@ export default class TransactionManager {
 
 
   static validate (transaction) {
+    if (typeof transaction !== 'object') {
+      if (config.DEBUG_MODE) {
+        console.error(
+          'A malformed transaction was passed for validation:',
+          transaction
+        )
+      }
+      return false
+    }
     var parent = 'none', code = 'none'
     for (var i = 0; i < transaction.vout.length; i++) { // for each output
       if (!transaction.vout[i].scriptPubKey.asm.startsWith('OP_RETURN')) {
