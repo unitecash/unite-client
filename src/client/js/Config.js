@@ -20,26 +20,25 @@ export default class Config {
     this.DEFAULT_FEE_PER_BYTE = 1.05
 
     this.ENABLE_WEBSOCKETS = true
-
+    this.ENABLE_CACHING = true
+    this.ENABLE_TRANSACTION_BROADCASTS = false
     this.DEBUG_MODE = true
 
     this.DEFAULT_INSIGHT_ENDPOINTS_ARRAY = [
-      //'https://bitcoincash.blockexplorer.com/api/',
-      'https://bch-insight.bitpay.com/api/'
+      'https://bitcoincash.blockexplorer.com/api/'
+      //'https://bch-insight.bitpay.com/api/'
     ]
 
     this.DEFAULT_INSIGHT_WEBSOCKETS_ARRAY = [
-      //'wss://bitcoincash.blockexplorer.com',
-      'wss://bch-insight.bitpay.com'
+      'wss://bitcoincash.blockexplorer.com'
+      //'wss://bch-insight.bitpay.com'
     ]
 
     this.DEFAULT_IPFS_ENDPOINT_ARRAY = [
-      '/ip4/127.0.0.1/tcp/9999/ws/ipfs/QmbpX2EBFU9wYQ2hRg93mn6rm7pYyNJGrEkn8XJ3TK2FVB',
-
+      '/ip4/185.25.51.115/tcp/9999/ws/ipfs/QmXcZWb9UnwR6QqYJZmsSJr4SK4ehe8Ky6vNgW7ciFqE4C'
     ]
 
-    // clear the localStorage when debug is enabled to get the latest defaults
-    if (this.DEBUG_MODE) {
+    if (this.ENABLE_CACHING = false) {
       localStorage.clear()
     }
 

@@ -101,7 +101,7 @@ window.onPostLoad = function (post) {
   if (post.txid === window.topPostTXID) {
     post.render('#topPost')
   } else if (post.parentTXID === window.topPostTXID) {
-    post.render('#posts')
+    post.render('#replies')
   }
 }
 

@@ -26,70 +26,72 @@ export default class PostBuilder {
     }
 
     if (typeof content === 'undefined') {
-      content = '';
+      content = ''
     }
 
-    networkManager.findUTXOsByAddress(config.userAddress).then((data) => {
+    if (config.DEBUG_MODE) {
+      console.info('PostBuilder called with arguments:')
+      console.info('Type: ', type)
+      console.info('Content:', content)
+      console.info('Parent Address:', parentAddress)
+      console.info('Amount:', amount)
+      console.info('Fee:', fee)
+      console.info('Parent TXID:', parentTXID)
+    }
+
+    // return an array of UTXOs for this user
+    networkManager.findUTXOsByAddress(config.userAddress).then((allUTXOs) => {
       var transaction = new bch.Transaction()
+      // pay the parent address the amount provided
       transaction.to(bchaddr.toLegacyAddress(parentAddress), amount)
-      if (typeof parentTXID === 'undefined') {
+      // if there is a parent transaction, encode the OP_RETURN data to save
+      // as much blockchain space (and cost in fees) as possible
+      if (typeof parentTXID === 'undefined') { // if no parent TXID
+        if (config.DEBUG_MODE) {
+          console.log (
+            'PostBuilder.build:',
+            'Adding (ascii) data to transaction:',
+            Utilities.hex2a(type) + content
+          )
+        }
         transaction.addData(Utilities.hex2a(type) + content)
-      } else {
-        var txData = Utilities.ascii2buf(type)
+      } else { // if there is a parent TXID
+        var txData = Utilities.hex2buf(type)
         txData = txData.concat(Utilities.hex2buf(parentTXID))
         txData = txData.concat(Utilities.ascii2buf(content))
-        transaction.addData(new Buffer(data))
+        if (config.DEBUG_MODE) {
+          console.log (
+            'PostBuilder.build:',
+            'Adding (buffer) data to transaction:',
+            txData
+          )
+        }
+        transaction.addData(new Buffer(txData))
       }
+
+      // add UTXOs to transaction until we reach the required amount
       var success = false
       var totalAdded = 0
-      var utxo_arr = []
-      for (var i = 0; i < data.length; i++) {
+      for (var i = 0; i < allUTXOs.length && (success === false); i++) {
         var utxo = {
-          txId: data[i].txid,
-          outputIndex: data[i].vout,
-          address: bchaddr.toLegacyAddress(data[i].address),
-          script: data[i].scriptPubKey,
-          satoshis: data[i].satoshis
+          txId: allUTXOs[i].txid,
+          outputIndex: allUTXOs[i].vout,
+          address: bchaddr.toLegacyAddress(allUTXOs[i].address),
+          script: allUTXOs[i].scriptPubKey,
+          satoshis: allUTXOs[i].satoshis
         }
         transaction.from(utxo)
-        utxo_arr.push(utxo)
-        totalAdded += data[i].satoshis
-        if (totalAdded >= amount + (768 * fee)) { // approximate
+        totalAdded += allUTXOs[i].satoshis
+        if (totalAdded >= amount + (1000 * fee)) { // approximate fee amount
           success = true
-          if (totalAdded - amount - (768 * fee) >= config.DUST_LIMIT_SIZE) {
-            transaction.to(
-              bchaddr.toLegacyAddress(config.userAddress),
-              Math.floor(totalAdded - amount - (768 * fee))
-            )
-          }
-          transaction.sign(config.userPrivateKey)
-          var txSize = transaction.toString().length / 2
-          var transaction = new bch.Transaction()
-          transaction.to(bchaddr.toLegacyAddress(parentAddress), amount)
-          if (typeof parentTXID === 'undefined') {
-            transaction.addData(Utilities.hex2a(type) + content)
-          } else {
-            var data = Utilities.hex2buf(type)
-            data = data.concat(Utilities.hex2buf(parentTXID))
-            data = data.concat(Utilities.ascii2buf(content))
-            transaction.addData(new Buffer(data))
-          }
-          for (var i = 0; i < utxo_arr.length; i++) {
-            transaction.from(utxo_arr[i])
-          }
-          if (totalAdded - amount - (768 * fee) >= config.DUST_LIMIT_SIZE) {
-            transaction.to(
-              bchaddr.toLegacyAddress(config.userAddress),
-              Math.floor(totalAdded - amount - (txSize * fee))
-            )
-          }
-          transaction.sign(config.userPrivateKey)
-          networkManager.broadcastTransaction(transaction.toString())
-          i = data.length + 1 // to stop the loop from executing
-          break
         }
       }
-      if (!success) {
+      if (success) { // set fee, change address, sign, broadcast
+        transaction.feePerKb(parseInt(fee * 300)) // hacky.
+        transaction.change(bchaddr.toLegacyAddress(config.userAddress))
+        transaction.sign(config.userPrivateKey)
+        networkManager.broadcastTransaction(transaction.toString())
+      } else {
         Messages.notEnoughFunds()
         return false
       }

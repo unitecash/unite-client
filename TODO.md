@@ -6,7 +6,8 @@ This list outlines some things that need to be done.
 
 - Fix inefficient and unneeded data stored about transactions in localStorage,
   (for example nLockTime, version, etc), possibly employine compression
-- Calling the IPFS constructor kills the page and disconnects devtools
+- IPFS node does not make content hashes available to the entire IPFS network,
+  only peers connected to that particular IPFS node explicitly
 
 ### Short-term
 
@@ -20,7 +21,6 @@ This list outlines some things that need to be done.
 - User.getNumFollowers()
 - User.getNumFollowing()
 - networkManager.getTotalTipped(post)
-- networkManager.getTotalTipped(User)
 - Reporting of posts and content
 
 ### After the above, some things to consider
@@ -30,7 +30,7 @@ This list outlines some things that need to be done.
 - setup, installation, uninstallation wizards
 - Signed (potentially automated) updates from the developers
 - Profile photos, taglines
-- Post composition dialog box
+- Post composition dialog box (finish CSS, markdown, inline photos/videos)
 - Sanity checks for IPFS and AJAX data (size, no 1x100000-pixel images, etc)
 - A propper way of handling multiple block explorers / websockets
 - Persistant cross-session logins with short 6-digit PIN and localStorage
@@ -41,7 +41,7 @@ This list outlines some things that need to be done.
 - Name "backing" in which users can vote on contentious names with their money
 - Mentions/tagging by-name and by-address
 - Trustless linking of Reddit, Discord, Twitter, YouTube accounts
-- Portability tools allowing for people to move tweets
+- Portability tools allowing for people to move tweets/threads/comments
 - Subreddit-mirroring allowing for people to contribute to the discussion
   occurring in a reddit thread, but their contribution is exclusively
   available on Unite

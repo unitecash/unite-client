@@ -24,7 +24,7 @@ export default class TransactionManager {
     var parent = 'none', code = 'none'
     for (var i = 0; i < transaction.vout.length; i++) { // for each output
       if (!transaction.vout[i].scriptPubKey.asm.startsWith('OP_RETURN')) {
-        if (parseInt(transaction.vout[i].value * 100000000) <= config.DUST_LIMIT_SIZE &&
+        if (transaction.vout[i].scriptPubKey.addresses[0] !== config.userAddress &&
   					parseInt(transaction.vout[i].value * 100000000) != 0) {
           // this finds the parent output of the transaction.
           parent = transaction.vout[i].scriptPubKey.addresses[0]

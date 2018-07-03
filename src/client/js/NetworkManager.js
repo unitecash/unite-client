@@ -32,25 +32,27 @@ export default class NetworkManager {
     }
 
     // start IPFS
-    //this.IPFSNode = new IPFS()
+    this.IPFSNode = new IPFS({
+      repo: String(Math.random + Date.now())
+    })
 
-    /*this.IPFSNode.on('ready', () => {
+    this.IPFSNode.on('ready', () => {
       if (config.DEBUG_MODE) {
-        console.log('IPFS is ready!')
+        console.info('IPFS is ready!')
       }
       this.isIPFSReady = true
       this.IPFSNode.version((err, version) => {
         if (err) { console.error(err) }
         if (config.DEBUG_MODE) {
-          console.log('IPFS Version:', version.version)
+          console.info('IPFS Version:', version.version)
         }
 
         // connect to the IPFS peers
         for (var i = 0; i < config.ipfsEndpointsArray.length; i++){
-          //this.IPFSNode.swarm.connect(config.ipfsEndpointsArray[i])
+          this.IPFSNode.swarm.connect(config.ipfsEndpointsArray[i])
         }
       })
-    })*/
+    })
   }
 
   bindEvents () {
@@ -76,22 +78,25 @@ export default class NetworkManager {
 
   broadcastTransaction (hex) {
     if (!this.isDead) {
-      if(config.DEBUG_MODE === false) {
-        for (var i = 0; i < config.DEFAULT_INSIGHT_ENDPOINTS_ARRAY; i++) {
+      if(config.ENABLE_TRANSACTION_BROADCASTS === true) {
+        for (var i = 0; i < config.insightEndpointsArray; i++) {
           $.ajax({
             type: 'POST',
-            url: config.DEFAULT_INSIGHT_ENDPOINTS_ARRAY[i] + 'tx/send',
+            url: config.insightEndpointsArray[i] + 'tx/send',
             data: {rawtx: hex},
-            success: function (data) {
+            success: (data) => {
               console.log('Broadcasted! TXID:\n\n' + data.txid)
             },
-            error: function (data) {
+            error: (data) => {
               Messages.broadcastFailure(hex)
             }
           })
         }
+        if (config.DEBUG_MODE === true) {
+          console.info('Broadcasting Transaction:\n\n' + hex)
+        }
       } else {
-        console.log('Pretend broadcasting TX:\n\n' + hex)
+        console.info('Pretend broadcasting TX:\n\n' + hex)
       }
     }
   }

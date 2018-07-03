@@ -122,4 +122,12 @@ export default class Utilities {
     history.back()
   }
 
+  static stripAddressPrefix (address) {
+    if (address.split(':')[1] === undefined) {
+      return address
+    } else {
+      return address.split(':')[1]
+    }
+  }
+
 }

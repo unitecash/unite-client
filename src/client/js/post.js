@@ -19,7 +19,10 @@ export default class Post {
       for (var i = 0; i < currentPosts.length; i++) {
         if (transaction.txid === currentPosts[i]) {
           if (config.DEBUG_MODE) {
-            console.log ('Not constructing existing post redundantly.')
+            console.log (
+              'Post.constructor:',
+              'Not constructing existing post redundantly.'
+            )
           }
           redundant = true
           resolve (false)
@@ -32,21 +35,21 @@ export default class Post {
         var parent = 'none', code = 'none', data = 'none'
         for (var i = 0; i < transaction.vout.length; i++) {
           if (!transaction.vout[i].scriptPubKey.asm.startsWith('OP_RETURN')) {
-            if (parseInt(transaction.vout[i].value * 100000000) <= config.DUST_LIMIT_SIZE &&
-                parseInt(transaction.vout[i].value * 100000000) != 0) {
+            if (transaction.vout[i].scriptPubKey.addresses[0] !== config.userAddress &&
+      					parseInt(transaction.vout[i].value * 100000000) != 0) {
               // parent is determined by this small, non-zero output
               parent = transaction.vout[i].scriptPubKey.addresses[0]
             }
           } else { // OP_RETURN data parsing
             code = transaction.vout[i].scriptPubKey.asm.substring(10, 14)
             data = transaction.vout[i].scriptPubKey.asm.substring(14)
-            data = Utilities.hex2a(data)
+            //data = Utilities.hex2a(data)
           }
         }
         if (parent != 'none' && code != 'none' && data != 'none') {
           this.type = code
-          this.sender = sender
-          this.parent = parent
+          this.sender = Utilities.stripAddressPrefix(sender)
+          this.parent = Utilities.stripAddressPrefix(parent)
           this.txid = transaction.txid
           this.time = transaction.time
           this.data = data
@@ -69,12 +72,14 @@ export default class Post {
         // setting replyIndex and renderPosition as necessary
 
         if (this.type == '5504') {
-          NameManager.consider (new Name(this.sender, this.data, this.time))
+          NameManager.consider ( new Name (
+            this.sender, Utilities.hex2a(this.data), this.time
+          ))
         } else if (this.type == '5503') {
-          this.parentTXID = this.data.substr(0, 32)
-          this.displayContent = this.data.substr(32)
+          this.parentTXID = this.data.substr(0, 64)
+          this.displayContent = Utilities.hex2a(this.data.substr(64))
         } else if (this.type == '5501') {
-          this.displayContent = this.data
+          this.displayContent = Utilities.hex2a(this.data)
         } else if (this.type == '5502') {
           //networkManager.resolveHash(this.data).then((data) => {
           //  this.resolvedData = data

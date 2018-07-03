@@ -37,11 +37,21 @@ export default class Notification {
       this.title = post.senderName.displayName
       this.body = post.data
     }
+    if (post.type === '5503') {
+      this.title = post.senderName.displayName
+      this.body = 'Replied to a post'
+    }
     if (post.type === '5504') {
       this.title = post.sender.substr(0, 6)
       this.body = 'Changed their name to ' + post.senderName.displayName
     }
-    console.log(this)
+    if (config.DEBUG_MODE) {
+      console.log(
+        'Notification.constructor:',
+        'Constructed notification:',
+        this
+      )
+    }
     return this
   }
 
