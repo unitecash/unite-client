@@ -64,14 +64,20 @@ export default class TransactionManager {
     localStorage.transactions = JSON.stringify (transactions)
   }
 
-  static loadTransactionsByAddress (addr) {
+  /* params:
+  * - options: the options to pass to each transaction loaded
+  */
+  static loadTransactionsByAddress (addr, options) {
+    if (typeof options === 'undefined') {
+      options = {}
+    }
     return new Promise((resolve, reject) => {
       $.ajax({
         type: 'GET',
         url: config.randomInsightEndpoint() + 'addr/' + addr + '?from=0&to=1000', // TODO a better solution than a hard limit
         success: (data) => {
           for (var i = 0; i < data.transactions.length; i++) { // for each transaction
-            new Transaction(data.transactions[i])
+            new Transaction(data.transactions[i], options)
           }
           resolve (true)
         },

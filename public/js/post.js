@@ -82,7 +82,7 @@ window.pageInit = function () {
 
   window.topPostTXID = Utilities.resolveGETParam('txid')
   new Transaction(window.topPostTXID).then((post) => {
-    post.loadReplies()
+    //post.loadReplies()
     new NavigationMenu({
       pageTitle: 'Replies',
       pageIcon: './images/newusers_icon.svg',
@@ -100,8 +100,11 @@ window.pageInit = function () {
 window.onPostLoad = function (post) {
   if (post.txid === window.topPostTXID) {
     post.render('#topPost')
-  } else if (post.parentTXID === window.topPostTXID) {
-    post.render('#replies')
+  }
+  if (post.parentTXID !== undefined) {
+    if ( $('#' + post.parentTXID.substr(0, 16)).length === 1) {
+      post.render('#replies')
+    }
   }
 }
 

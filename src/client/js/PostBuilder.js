@@ -87,8 +87,8 @@ export default class PostBuilder {
         }
       }
       if (success) { // set fee, change address, sign, broadcast
-        transaction.feePerKb(parseInt(fee * 300)) // hacky.
         transaction.change(bchaddr.toLegacyAddress(config.userAddress))
+        transaction.feePerKb(parseInt(fee * 512)) // hacky.
         transaction.sign(config.userPrivateKey)
         networkManager.broadcastTransaction(transaction.toString())
       } else {

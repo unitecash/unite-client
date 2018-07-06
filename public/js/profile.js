@@ -95,17 +95,13 @@ window.pageInit = () => {
   }
   window.currentUser = new User(window.currentUserAddress).then((user) => {
     user.loadPosts()
-    // TODO modularize, externalize this
-    var nameHash = $('<img></img>')
-    nameHash.attr('src', user.name.calcHash())
-    nameHash.attr('alt', 'Address: ' + user.name.address)
-    nameHash.attr('title', 'Address: ' + user.name.address)
-    nameHash.attr('class', 'UIInlineNameHash')
+
+    var inlineName = user.name.getInlineName()
     $('#myName').text('')
     $('#myName').append('Hi, ')
-    $('#myName').append(nameHash)
-    $('#myName').append(user.name.displayName)
+    $('#myName').append(inlineName)
     $('#myName').append('!')
+
     new NavigationMenu({
       pageTitle: 'Profile',
       pageIcon: './images/profile_icon.svg',

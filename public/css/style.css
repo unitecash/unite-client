@@ -298,6 +298,18 @@ body {
 .UITextButton {
 	cursor:pointer;
 }
+.UIIndent1 {
+	margin-left:1em;
+}
+.UIIndent2 {
+	margin-left:2em;
+}
+.UIIndent3 {
+	margin-left:3em;
+}
+.UIIndent4 {
+	margin-left:4em;
+}
 
 @media only screen and (max-width: 50em) {
   .headingIcon {
