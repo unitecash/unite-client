@@ -91,7 +91,10 @@ window.pageInit = function () {
     }).render()
   })
 
-  TransactionManager.loadTransactionsByAddress(config.CENTRAL_CONTENT_ADDRESS)
+  networkManager.loadTransactionsByAddress(config.CENTRAL_CONTENT_ADDRESS,
+  {
+    loadChildren: false
+  })
 }
 window.onPostLoad = function (post) {
   post.render()

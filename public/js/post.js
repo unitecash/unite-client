@@ -81,7 +81,9 @@
 window.pageInit = function () {
 
   window.topPostTXID = Utilities.resolveGETParam('txid')
-  new Transaction(window.topPostTXID).then((post) => {
+  new Transaction(window.topPostTXID, {
+    loadChildren: true
+  }).then((post) => {
     //post.loadReplies()
     new NavigationMenu({
       pageTitle: 'Replies',

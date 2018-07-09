@@ -24,7 +24,7 @@ export default class User {
   }
 
   loadPosts () {
-    TransactionManager.loadTransactionsByAddress(this.address)
+    networkManager.loadTransactionsByAddress(this.address)
   }
 
 }

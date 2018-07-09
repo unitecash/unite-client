@@ -24,58 +24,51 @@ export default class Config {
     this.ENABLE_TRANSACTION_BROADCASTS = false
     this.DEBUG_MODE = true
 
-    this.DEFAULT_INSIGHT_ENDPOINTS_ARRAY = [
-      'https://bitcoincash.blockexplorer.com/api/'
-      //'https://bch-insight.bitpay.com/api/'
+    this.DEFAULT_NETWORK_ENDPOINTS = [
+      {
+        insightURL: 'https://bitcoincash.blockexplorer.com/api/',
+        websocketURL: 'wss://bitcoincash.blockexplorer.com',
+        addressFormat: 'legacy'
+      },
+      {
+        insightURL: 'https://bch-insight.bitpay.com/api/',
+        websocketURL: 'wss://bch-insight.bitpay.com',
+        addressFormat: 'cashaddress'
+      }
     ]
 
-    this.DEFAULT_INSIGHT_WEBSOCKETS_ARRAY = [
-      'wss://bitcoincash.blockexplorer.com'
-      //'wss://bch-insight.bitpay.com'
-    ]
-
-    this.DEFAULT_IPFS_ENDPOINT_ARRAY = [
+    this.DEFAULT_IPFS_ENDPOINTS = [
       '/ip4/185.25.51.115/tcp/9999/ws/ipfs/QmXcZWb9UnwR6QqYJZmsSJr4SK4ehe8Ky6vNgW7ciFqE4C'
     ]
 
-    if (this.ENABLE_CACHING = false) {
+    if (this.ENABLE_CACHING === false) {
       localStorage.clear()
     }
 
-    if (typeof localStorage.insightEndpointsArray === 'undefined') {
-  		localStorage.insightEndpointsArray = JSON.stringify(
-        this.DEFAULT_INSIGHT_ENDPOINTS_ARRAY
+    if (typeof localStorage.networkEndpoints === 'undefined') {
+  		localStorage.networkEndpoints = JSON.stringify(
+        this.DEFAULT_NETWORK_ENDPOINTS
       )
   	}
+    this.networkEndpoints = JSON.parse(localStorage.networkEndpoints)
 
-  	if (typeof localStorage.insightWebsocketsArray === 'undefined') {
-      localStorage.insightWebsocketsArray = JSON.stringify(
-        this.DEFAULT_INSIGHT_WEBSOCKETS_ARRAY
+    if (typeof localStorage.IPFSEndpoints === 'undefined') {
+      localStorage.IPFSEndpoints = JSON.stringify(
+        this.DEFAULT_IPFS_ENDPOINTS
       )
     }
-
-    if (typeof localStorage.ipfsEndpointsArray === 'undefined') {
-      localStorage.ipfsEndpointsArray = JSON.stringify(
-        this.DEFAULT_IPFS_ENDPOINT_ARRAY
-      )
-    }
-
-    this.insightEndpointsArray = JSON.parse(
-      localStorage.insightEndpointsArray
-    )
-    this.insightWebsocketsArray = JSON.parse(
-      localStorage.insightWebsocketsArray
-    )
-    this.ipfsEndpointsArray = JSON.parse(
-      localStorage.ipfsEndpointsArray
-    )
+    this.IPFSEndpoints = JSON.parse(localStorage.IPFSEndpoints)
 
     if (typeof sessionStorage.privateKey !== 'undefined') {
       this.userPrivateKey = bch.PrivateKey.fromWIF(sessionStorage.privateKey)
-      this.userAddress = bchaddr.toCashAddress(this.userPrivateKey.toAddress().toString()).substr(12)
+      this.userAddress = Utilities.stripAddressPrefix (
+        bchaddr.toCashAddress (
+          this.userPrivateKey.toAddress().toString()
+        )
+      )
     }
 
-    // ensure the localStorage data structures are defined
+    // ensure the localStorage caching data structures are defined
     if (typeof localStorage.names === 'undefined') {
       var names = []
       localStorage.names = JSON.stringify(names)
@@ -85,15 +78,8 @@ export default class Config {
       localStorage.transactions = JSON.stringify(transactions)
     }
 
+    // highest Z index used by dialog boxes in the CSS [hacky, TODO get rid of.]
     this.highestZIndexUsed = 2
-  }
-
-  randomInsightEndpoint () {
-    return Utilities.getRandomFromArray (this.insightEndpointsArray)
-  }
-
-  randomInsightWebsocket () {
-    return Utilities.getRandomFromArray (this.insightWebsocketsArray)
   }
 
 }

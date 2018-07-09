@@ -130,4 +130,24 @@ export default class Utilities {
     }
   }
 
+  static privateKeyFromLoginCredentials(user, pass) {
+    // current implementation of key stretching algorithm
+    var key = sha512('memologin:' + user + pass)
+    key = key.substr(0, pass.length)
+    key = sha512(key)
+    for (var i = 0;
+      i < $('#user').val().length * $('#pass').val().length &&
+        i < 500; i++) {
+      var n = 'bar'
+      var m = 3301
+      for (var j = 0; j < i; j++) {
+        n += 'fooo'
+        m += n.length
+      }
+      key = sha512(n + key + (m - i))
+    }
+    key = bch.crypto.BN.fromString(key.substr(0, 32))
+    return new bch.PrivateKey(key).toWIF()
+  }
+
 }

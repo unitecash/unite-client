@@ -273,27 +273,29 @@ export default class Post {
     }
 
     // now we load all the children (threaded).
-    if (config.DEBUG_MODE) {
-      console.log (
-        'post.render',
-        uid + ':',
-        'rendering children with parameters:',
-        {
-          parentUID: uid,
-          UIReplyIndent: this.options.UIReplyIndent + 1
-        }
-      )
+    if (this.options.loadChildren === true) {
+      if (config.DEBUG_MODE) {
+        console.log (
+          'post.render',
+          uid + ':',
+          'rendering children with parameters:',
+          {
+            parentUID: uid,
+            UIReplyIndent: this.options.UIReplyIndent + 1
+          }
+        )
+      }
+      this.loadReplies()
     }
-    this.loadReplies({
-      parentUID: uid,
-      UIReplyIndent: this.options.UIReplyIndent + 1
-    })
-
   }
 
-  loadReplies (options) {
-    // TODO parse options
-    TransactionManager.loadTransactionsByAddress(this.sender, options)
+  loadReplies () {
+    networkManager.loadTransactionsByAddress(this.sender,
+    {
+      parentUID: this.uid,
+      UIReplyIndent: this.options.UIReplyIndent + 1,
+      loadChildren: true
+    })
   }
 
 }

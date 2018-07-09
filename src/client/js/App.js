@@ -68,6 +68,8 @@ import NameManager from './NameManager'
 window.NameManager = NameManager
 import NetworkManager from './NetworkManager'
 window.NetworkManager = NetworkManager
+import NetworkEndpoint from './NetworkEndpoint'
+window.NetworkEndpoint = NetworkEndpoint
 import Notification from './Notification'
 window.AppNotification = Notification
 import NotificationManager from './NotificationManager'
@@ -85,11 +87,13 @@ export default class App {
     if (sessionStorage.privateKey !== undefined) {
       $(document).ready(() => {
         window.notificationManager = new NotificationManager()
-        window.networkManager = new NetworkManager()
         window.formManager = new FormManager()
-        if (typeof pageInit !== 'undefined') {
-          pageInit()
-        }
+        new NetworkManager().then((networkManager) => {
+          window.networkManager = networkManager
+          if (typeof pageInit !== 'undefined') {
+            pageInit()
+          }
+        })
       })
     } else {
       if (window.location.pathname.split('/').pop() != 'login.html') { // endsWith

@@ -17,75 +17,72 @@ export default class NetworkManager {
   *
   */
   constructor () {
-    this.isDead = false
-    this.isIPFSReady = false
+    return new Promise ((resolve, reject) => {
+      this.isDead = false
+      this.isIPFSReady = false
 
-    if (config.ENABLE_WEBSOCKETS) {
-      // connect to a WebSocket
-      this.socketStream = io(config.randomInsightWebsocket())
-      this.socketStream.on('connect', () => {
-        // TODO: an array of addresses the user subscribes to, iterating each one.
+      // select a NetworkEndpoint to use for this page
+      new NetworkEndpoint(
+        Utilities.getRandomFromArray(
+          config.networkEndpoints
+        )
+      ).then((result) => {
+        if (result !== false) {
+          this.endpoint = result
+          if (config.DEBUG_MODE) {
+            console.log (
+              'NetworkManager.constructor:',
+              'Successfully connected to Insight!\n',
+              this.endpoint
+            )
+          }
+          this.endpoint.bindEvents()
 
-        this.subscribeAddress('inv')
-        this.bindEvents()
-      })
-    }
+          // Start IPFS
+          this.IPFSNode = new IPFS({
+            repo: String(Math.random + Date.now())
+          })
 
-    // start IPFS
-    this.IPFSNode = new IPFS({
-      repo: String(Math.random + Date.now())
-    })
+          this.IPFSNode.on('ready', () => {
+            if (config.DEBUG_MODE) {
+              console.info('IPFS is ready!')
+            }
+            this.isIPFSReady = true
+            this.IPFSNode.version((err, version) => {
+              if (err) { console.error(err) }
+              if (config.DEBUG_MODE) {
+                console.info('IPFS Version:', version.version)
+              }
+              // connect to the IPFS peers
+              for (var i = 0; i < config.IPFSEndpoints.length; i++){
+                this.IPFSNode.swarm.connect(config.IPFSEndpoints[i])
+              }
 
-    this.IPFSNode.on('ready', () => {
-      if (config.DEBUG_MODE) {
-        console.info('IPFS is ready!')
-      }
-      this.isIPFSReady = true
-      this.IPFSNode.version((err, version) => {
-        if (err) { console.error(err) }
-        if (config.DEBUG_MODE) {
-          console.info('IPFS Version:', version.version)
+              // At this point in time the network should be ready for use.
+
+              resolve (this)
+
+            })
+          })
+        } else {
+          if (config.DEBUG_MODE) {
+            console.log ('Failed to connect to Insight')
+          }
         }
-
-        // connect to the IPFS peers
-        for (var i = 0; i < config.ipfsEndpointsArray.length; i++){
-          this.IPFSNode.swarm.connect(config.ipfsEndpointsArray[i])
-        }
       })
     })
-  }
-
-  bindEvents () {
-    this.socketStream.on('tx', (data) => {
-      new Transaction(data.txid, {
-        isLive: true
-      })
-    })
-  }
-
-  subscribeAddress (addr) {
-    this.socketStream.emit('subscribe', addr)
-  }
-
-  unsubscribeAddress (addr) {
-    this.socketStream.emit('unsubscribe', addr)
-  }
-
-  disconnect () {
-    this.isDead = true
-    this.socketStream.disconnect()
   }
 
   broadcastTransaction (hex) {
     if (!this.isDead) {
       if(config.ENABLE_TRANSACTION_BROADCASTS === true) {
-        for (var i = 0; i < config.insightEndpointsArray; i++) {
+        for (var i = 0; i < config.networkEndpoints; i++) {
           $.ajax({
             type: 'POST',
-            url: config.insightEndpointsArray[i] + 'tx/send',
+            url: config.networkEndpoints[i].insightURL + 'tx/send',
             data: {rawtx: hex},
             success: (data) => {
-              console.log('Broadcasted! TXID:\n\n' + data.txid)
+              console.log('Transaction broadcasted! TXID:\n\n' + data.txid)
             },
             error: (data) => {
               Messages.broadcastFailure(hex)
@@ -99,87 +96,6 @@ export default class NetworkManager {
         console.info('Pretend broadcasting TX:\n\n' + hex)
       }
     }
-  }
-
-
-  getBalance (addr) {
-    return new Promise ((resolve, reject) => {
-      if (!this.isDead) {
-        $.ajax({
-          type: 'GET',
-          url: config.randomInsightEndpoint() + 'addr/' + addr,
-          success: (data) => {
-            resolve (data.balance)
-          }
-        })
-      } else {
-        resolve (false)
-      }
-    })
-  }
-
-  findCommonTransactions (addr1, addr2) {
-    return new Promise((resolve, reject) => {
-      if (!this.isDead) {
-        $.ajax({
-          type: 'GET',
-          url: config.randomInsightEndpoint() + 'addr/' + addr1 + '?from=0&to=1000',
-          success: (data1) => {
-            $.ajax({
-              type: 'GET',
-              url: config.randomInsightEndpoint() + 'addr/' + addr2 + '?from=0&to=1000',
-              success: (data2) => {
-                resolve(data1.transactions.filter(value => -1 !== data2.transactions.indexOf(value)))
-              },
-              error: (data) => {
-                resolve (false)
-              }
-            })
-          },
-          error: (data) => {
-            resolve (false)
-          }
-        })
-      } else {
-        resolve (false)
-      }
-    })
-  }
-
-  lookupTXID (txid) {
-    return new Promise((resolve, reject) => {
-      if (!this.isDead) {
-        $.ajax({
-          type: 'GET',
-          url: config.randomInsightEndpoint () + 'tx/' + txid,
-          success: (transaction) => {
-            resolve(transaction)
-          },
-          error: () => {
-            resolve(false)
-          }
-        })
-      }
-    })
-  }
-
-  findUTXOsByAddress (address) {
-    return new Promise((resolve, reject) => {
-      if (!this.isDead) {
-        $.ajax({
-          type: 'GET',
-          url: config.randomInsightEndpoint() + 'addr/' + address + '/utxo',
-          success: (data) => {
-            resolve (data)
-          },
-          error: () => {
-            resolve (false)
-          }
-        })
-      } else {
-        resolve (false)
-      }
-    })
   }
 
   // Adds a file to IPFS with the data provided, notifying pin-servers who will
@@ -219,5 +135,46 @@ export default class NetworkManager {
       }
     })
   }
+
+
+
+
+
+  subscribeAddress (addr) {
+    this.endpoint.subscribeAddress (addr)
+  }
+
+  unsubscribeAddress (addr) {
+    this.endpoint.unsubscribeAddress (addr)
+  }
+
+  disconnect () {
+    this.endpoint.disconnect()
+    this.isDead = true
+  }
+
+  getBalance (addr) {
+    return this.endpoint.getBalance (addr)
+  }
+
+  findCommonTransactions (addr1, addr2) {
+    return this.endpoint.findCommonTransactions (addr1, addr2)
+  }
+
+  lookupTXID (txid) {
+    return this.endpoint.lookupTXID(txid)
+  }
+
+  findUTXOsByAddress (address) {
+    return this.endpoint.findUTXOsByAddress (address)
+  }
+
+  loadTransactionsByAddress (addr, options) {
+    this.endpoint.loadTransactionsByAddress (addr, options)
+  }
+
+
+
+
 
 }
