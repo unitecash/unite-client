@@ -28,6 +28,20 @@ You may open an issue if you have questions or trouble. However,
 be advised that this project is in pre-alpha stage and that things may not
 work.
 
+## Contributing
+
+Pull requests are much appreciated. Please see the [TODO.md](TODO) for a list
+of what needs doing. Especially lacking are UX and graphic designers.
+
+## Money
+
+If you'd like to donate, we accept Bitcoin Cash to this address:
+
+```bitcoincash:qra4cts50zs0spfuwk94yae5a57t073jps5hae847u```
+
+If you'd like to be paid for your work, send an email to jobs@unite.cash.
+Hiring capacity and job availability will be proportional to donations.
+
 ## License
 
 As of May 18th, 2018, this software is licensed under the GNU AGPL 3.0. Prior
