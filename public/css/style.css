@@ -311,6 +311,10 @@ body {
 	margin-left:4em;
 }
 
+.UIDisplayImage {
+	width:80%;
+}
+
 @media only screen and (max-width: 50em) {
   .headingIcon {
 		display:none;

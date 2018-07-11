@@ -21,7 +21,7 @@ export default class Config {
 
     this.ENABLE_WEBSOCKETS = true
     this.ENABLE_CACHING = true
-    this.ENABLE_TRANSACTION_BROADCASTS = false
+    this.ENABLE_TRANSACTION_BROADCASTS = true
     this.DEBUG_MODE = true
 
     this.DEFAULT_NETWORK_ENDPOINTS = [
@@ -38,7 +38,12 @@ export default class Config {
     ]
 
     this.DEFAULT_IPFS_ENDPOINTS = [
-      '/ip4/185.25.51.115/tcp/9999/ws/ipfs/QmXcZWb9UnwR6QqYJZmsSJr4SK4ehe8Ky6vNgW7ciFqE4C'
+      'https://ipfs.io/ipfs/',
+      'https://gateway.ipfs.io/ipfs/',
+      'https://ipfs.infura.io/ipfs/',
+      'https://www.eternum.io/ipfs/',
+      'https://ipfs.works/ipfs/',
+      'https://ipfs.work/ipfs/'
     ]
 
     if (this.ENABLE_CACHING === false) {

@@ -116,10 +116,46 @@ export default class Post {
         } else if (this.type == '5501') {
           this.displayContent = Utilities.hex2a(this.data)
         } else if (this.type == '5502') {
-          //networkManager.resolveHash(this.data).then((data) => {
-          //  this.resolvedData = data
-          //  ...
-          //})
+          networkManager.resolveHash(Utilities.hex2a(this.data)).then((data) => {
+            // now that the hash has been resolved, try to parse the JSON.
+            try {
+              this.resolvedData = JSON.parse(data)
+            } catch (e) {
+              console.error (
+                'Post.init:',
+                'Unable to parse JSON after hash resolution:',
+                data
+              )
+              resolve (false)
+              return false
+            }
+            if (this.resolvedData.contentType === 'image') {
+              this.displayContent = $('<img></img>')
+              this.displayContent.attr(
+                'src',
+                Utilities.getRandomFromArray(config.IPFSEndpoints) + this.resolvedData.hash
+              )
+              this.displayContent.attr(
+                'alt',
+                this.resolvedData.description
+              )
+              this.displayContent.attr(
+                'title',
+                this.resolvedData.description
+              )
+              this.displayContent.attr(
+                'class',
+                'UIDisplayImage'
+              )
+              // pass to host page
+              if (typeof onPostLoad !== 'undefined') {
+                onPostLoad(this)
+              }
+            } else { // videos, articles, long paragraphs of text.......
+
+
+            }
+          })
         }
 
         // Notifications for live (current, from-the-websocket content)
@@ -186,7 +222,7 @@ export default class Post {
     var postText = $('<div></div>')
     postText.attr('id', uid + 'content')
     postText.attr('class', 'postText')
-    postText.text(this.displayContent) // .html, TODO XSS protection
+    postText.html(this.displayContent) // .html, TODO XSS protection
 
     var actionBar = $('<div></div>')
     actionBar.attr('class', 'actionBar')

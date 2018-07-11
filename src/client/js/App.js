@@ -70,6 +70,8 @@ import NetworkManager from './NetworkManager'
 window.NetworkManager = NetworkManager
 import NetworkEndpoint from './NetworkEndpoint'
 window.NetworkEndpoint = NetworkEndpoint
+import IPFSEndpoint from './IPFSEndpoint'
+window.IPFSEndpoint = IPFSEndpoint
 import Notification from './Notification'
 window.AppNotification = Notification
 import NotificationManager from './NotificationManager'

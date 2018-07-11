@@ -19,7 +19,6 @@ export default class NetworkManager {
   constructor () {
     return new Promise ((resolve, reject) => {
       this.isDead = false
-      this.isIPFSReady = false
 
       // select a NetworkEndpoint to use for this page
       new NetworkEndpoint(
@@ -38,8 +37,11 @@ export default class NetworkManager {
           }
           this.endpoint.bindEvents()
 
+          // At this point in time the network should be ready for use.
+          resolve (this)
+
           // Start IPFS
-          this.IPFSNode = new IPFS({
+          /*this.IPFSNode = new IPFS({
             repo: String(Math.random + Date.now())
           })
 
@@ -57,13 +59,9 @@ export default class NetworkManager {
               for (var i = 0; i < config.IPFSEndpoints.length; i++){
                 this.IPFSNode.swarm.connect(config.IPFSEndpoints[i])
               }
-
-              // At this point in time the network should be ready for use.
-
-              resolve (this)
-
             })
           })
+          */
         } else {
           if (config.DEBUG_MODE) {
             console.log ('Failed to connect to Insight')
@@ -126,9 +124,21 @@ export default class NetworkManager {
   // Retrieves a file's contents from IPFS
   retrieveFromIPFS (hash) {
     return new Promise ((resolve, reject) => {
-      if (this.isIPFSReady && !this.isDead) {
-        this.IPFSNode.files.cat(hash).then((data) => {
-          resolve (data.toString())
+      if (!this.isDead) {
+        $.ajax({
+          type: 'GET',
+          url: Utilities.getRandomFromArray(config.IPFSEndpoints) + hash,
+          success: (data) => {
+            resolve (data)
+          },
+          error: (data) => {
+            console.error (
+              'NetworkManager.retrieveFromIPFS:',
+              'Failed to resolve IPFS hash:',
+              hash
+            )
+            resolve (false)
+          }
         })
       } else {
         resolve (false)
@@ -136,7 +146,32 @@ export default class NetworkManager {
     })
   }
 
-
+  // finds the type of hash or URL and resolves the associated data
+  resolveHash(hash) {
+    if (config.DEBUG_MODE) {
+      console.log(
+        'networkManager.resolveHash:',
+        'Attempting to resolve:',
+        hash
+      )
+    }
+    return new Promise ((resolve, reject) => {
+      if (hash.length === 46 && hash.startsWith('Q')) { // IPFS
+        this.retrieveFromIPFS(hash).then((data) => {
+          resolve (data)
+        })
+      } else {
+        if (config.DEBUG_MODE) {
+          console.log(
+            'networkManager.resolveHash:',
+            'Could not recognize the hash type of hash:',
+            hash
+          )
+          resolve (false)
+        }
+      }
+    })
+  }
 
 
 

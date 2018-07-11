@@ -33,7 +33,7 @@ export default class CompositionWindow {
       image: './images/send_icon.svg',
       text: 'Send',
       onclick: () => {
-        if (typeof this.post === 'undefined') {
+        if (typeof this.post === 'undefined') { // not in reply to anyone
           PostBuilder.build(
             '5501',
             $('#' + uid + 'text').val(),

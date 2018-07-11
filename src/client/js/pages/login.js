@@ -14,8 +14,8 @@ fade.fadeIn('slow')
 
 $(document).ready(() => {
   $('#user').focus()
-  $('#insightURL').val(config.randomInsightEndpoint())
-  $('#websockURL').val(config.randomInsightWebsocket())
+  //$('#insightURL').val(config.randomInsightEndpoint())
+  //$('#websockURL').val(config.randomInsightWebsocket())
   $('#loginform').on('submit', function (ev) {
     ev.preventDefault()
     // check if WIF was used for login
@@ -28,10 +28,10 @@ $(document).ready(() => {
         new ErrorBanner('Please enter a username').show()
       } else if ($('#pass').val().length < 12) { // [TODO]: validate this
         Messages.passwordSecurity()
-      } else if ($('#insightURL').val().length < 6) {
-        new ErrorBanner('Is that Insight URL correct?').show()
-      } else if ($('#websockURL').val().length < 6) {
-        new ErrorBanner('That WebSocket URL smells fishy...').show()
+      //} else if ($('#insightURL').val().length < 6) {
+      //  new ErrorBanner('Is that Insight URL correct?').show()
+      //} else if ($('#websockURL').val().length < 6) {
+      //  new ErrorBanner('That WebSocket URL smells fishy...').show()
       } else {
         $('#loginbutton').val('PLEASE WAIT...')
         sessionStorage.privateKey = Utilities.privateKeyFromLoginCredentials (
