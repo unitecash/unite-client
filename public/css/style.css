@@ -152,6 +152,7 @@ body {
 	width:100%;
 	display:block;
 	overflow:hidden;
+	margin-top:0.5em;
 }
 .banner {
 	position:fixed;
@@ -311,8 +312,18 @@ body {
 	margin-left:4em;
 }
 
-.UIDisplayImage {
-	width:80%;
+.UIDisplayImage, .UIDisplayVideo {
+	width:100%;
+	align:center;
+	text-align:center;
+	max-height:16em;
+}
+.UIFootnote {
+	color:#777777;
+	font-size:0.8em;
+	margin:0px;
+	padding:0px;
+	margin-top:0.2em;
 }
 
 @media only screen and (max-width: 50em) {

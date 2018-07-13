@@ -85,7 +85,9 @@ export default class Post {
           this.txid = transaction.txid
           this.time = transaction.time
           this.data = data
+          this.uid = this.txid.substr(0, 16)
           this.options = transaction.options
+          this.displayContent = []
           this.init().then((result) => {
             // this will cause the entire "promise chain" all the way back to
             // the "new Transaction(txid)" to resolve with the fully-initialized
@@ -106,47 +108,83 @@ export default class Post {
 
         // now that all pre-requisites are met, take the appropriate action
         // based on the type of post we are parsing
-        if (this.type == '5504') {
+        if (this.type === '5504') {
           NameManager.consider ( new Name (
             this.sender, Utilities.hex2a(this.data), this.time
           ))
-        } else if (this.type == '5503') {
+        } else if (this.type === '5503') {
           this.parentTXID = this.data.substr(0, 64)
-          this.displayContent = Utilities.hex2a(this.data.substr(64))
-        } else if (this.type == '5501') {
-          this.displayContent = Utilities.hex2a(this.data)
-        } else if (this.type == '5502') {
+          this.displayContent[0] = $('<p></p>')
+          this.displayContent[0].text(Utilities.hex2a(this.data.substr(64)))
+        } else if (this.type === '5501') {
+          this.displayContent[0] = $('<p></p>')
+          this.displayContent[0].text(Utilities.hex2a(this.data))
+        } else if (this.type === '5502' || this.type === '5505') {
           networkManager.resolveHash(Utilities.hex2a(this.data)).then((data) => {
             // now that the hash has been resolved, try to parse the JSON.
             try {
-              this.resolvedData = JSON.parse(data)
+              if (this.type === '5502') {
+                this.resolvedData = JSON.parse(data)
+              } else {
+                this.parentTXID = this.data.substr(0, 64)
+                this.resolvedData = JSON.parse(data.substr(64))
+              }
             } catch (e) {
-              console.error (
-                'Post.init:',
-                'Unable to parse JSON after hash resolution:',
-                data
-              )
+              if (config.DEBUG_MODE) {
+                console.error (
+                  'Post.init:',
+                  this.uid + ':',
+                  'Unable to parse JSON from hash descriptor'
+                )
+              }
               resolve (false)
               return false
             }
             if (this.resolvedData.contentType === 'image') {
-              this.displayContent = $('<img></img>')
-              this.displayContent.attr(
+              this.displayContent[0] = $('<img></img>')
+              this.displayContent[0].attr(
                 'src',
                 Utilities.getRandomFromArray(config.IPFSEndpoints) + this.resolvedData.hash
               )
-              this.displayContent.attr(
+              this.displayContent[0].attr(
                 'alt',
                 this.resolvedData.description
               )
-              this.displayContent.attr(
+              this.displayContent[0].attr(
                 'title',
                 this.resolvedData.description
               )
-              this.displayContent.attr(
+              this.displayContent[0].attr(
                 'class',
                 'UIDisplayImage'
               )
+              this.displayContent[1] = $('<p></p>')
+              this.displayContent[1].attr('class', 'UIFootnote')
+              this.displayContent[1].text(this.resolvedData.description)
+              // pass to host page
+              if (typeof onPostLoad !== 'undefined') {
+                onPostLoad(this)
+              }
+            } else if (this.resolvedData.contentType === 'video') {
+              this.displayContent[0] = $('<video controls></video>')
+              this.displayContent[0].attr(
+                'class',
+                'UIDisplayVideo'
+              )
+              var source = $('<source></source>')
+              source.attr(
+                'src',
+                Utilities.getRandomFromArray(config.IPFSEndpoints) + this.resolvedData.hash
+              )
+              source.attr(
+                'type',
+                'video/mp4'
+              )
+              this.displayContent[0].append(source)
+              this.displayContent[1] = $('<h2></h2>')
+              this.displayContent[1].text(this.resolvedData.title)
+              this.displayContent[2] = $('<p></p>')
+              this.displayContent[2].text(this.resolvedData.description)
               // pass to host page
               if (typeof onPostLoad !== 'undefined') {
                 onPostLoad(this)
@@ -176,7 +214,8 @@ export default class Post {
         }
 
         if (config.DEBUG_MODE) {
-          /*console.log (
+          /* Disabled because it is annoying.
+          console.log (
             'Post.init',
             'Post has made it to end of init:',
             this
@@ -190,19 +229,18 @@ export default class Post {
     })
   }
 
-  // NOTE that tag is overridden by parentUID when parentUID is provided
+  // NOTE that tag is overridden by parentUID when parentUID is provided via options
+  // TODO remove "tag" and just do it from options maybe, or make it standard across pages.
   render (tag) {
-    if (typeof this.displayContent === 'undefined') { // only render content.
-      return
+    if (typeof this.displayContent[0] === 'undefined') { // only render content.
+      return false
     }
     if (typeof tag === 'undefined') {
       tag = '#posts'
     }
-    var uid = this.txid.substr(0, 16)
-    this.uid = uid
 
     var postDiv = $('<div></div>')
-    postDiv.attr('id', uid)
+    postDiv.attr('id', this.uid)
     // if there is a UIReplyIndent, add it as a CSS class
     if (this.options.UIReplyIndent > 0) {
       postDiv.attr('class', 'post UIIndent' + this.options.UIReplyIndent)
@@ -211,7 +249,7 @@ export default class Post {
     }
 
     var timeText = $('<p></p>')
-    timeText.attr('id', uid + 'time')
+    timeText.attr('id', this.uid + 'time')
     timeText.attr('class', 'time')
     timeText.text(this.time)
 
@@ -220,51 +258,53 @@ export default class Post {
     postHeader.append(timeText)
 
     var postText = $('<div></div>')
-    postText.attr('id', uid + 'content')
+    postText.attr('id', this.uid + 'content')
     postText.attr('class', 'postText')
-    postText.html(this.displayContent) // .html, TODO XSS protection
+    for(var i = 0; i < this.displayContent.length; i++) {
+      postText.append(this.displayContent[i])
+    }
 
     var actionBar = $('<div></div>')
     actionBar.attr('class', 'actionBar')
 
     var replyButton = $('<p></p>')
-    replyButton.attr('id', uid + 'reply')
+    replyButton.attr('id', this.uid + 'reply')
     replyButton.attr('class', 'UITextButton')
     replyButton.text('reply')
-    $(document).on('click', '#' + uid + 'reply', () => {
+    $(document).on('click', '#' + this.uid + 'reply', () => {
       new CompositionWindow(this)
     })
 
     var viewRepliesButton = $('<p></p>')
-    viewRepliesButton.attr('id', uid + 'viewreplies')
+    viewRepliesButton.attr('id', this.uid + 'viewreplies')
     viewRepliesButton.attr('class', 'UITextButton')
     viewRepliesButton.text('show replies')
-    $(document).on('click', '#' + uid + 'viewreplies', () => {
+    $(document).on('click', '#' + this.uid + 'viewreplies', () => {
       Utilities.redirect('post.html?txid=' + this.txid)
     })
 
     var tipButton = $('<p></p>')
-    tipButton.attr('id', uid + 'tip')
+    tipButton.attr('id', this.uid + 'tip')
     tipButton.attr('class', 'UITextButton')
     tipButton.text('tip')
-    $(document).on('click', '#' + uid + 'tip', () => {
+    $(document).on('click', '#' + this.uid + 'tip', () => {
       new TipWindow (this)
     })
 
     var reportButton = $('<p></p>')
-    reportButton.attr('id', uid + 'report')
+    reportButton.attr('id', this.uid + 'report')
     reportButton.attr('class', 'UITextButton')
     reportButton.text('report')
-    $(document).on('click', '#' + uid + 'report', () => {
+    $(document).on('click', '#' + this.uid + 'report', () => {
       new ReportWindow (this)
     })
 
     if (config.DEBUG_MODE) {
       var debugButton = $('<p></p>')
-      debugButton.attr('id', uid + 'debug')
+      debugButton.attr('id', this.uid + 'debug')
       debugButton.attr('class', 'UITextButton')
       debugButton.text('debug')
-      $(document).on('click', '#' + uid + 'debug', () => {
+      $(document).on('click', '#' + this.uid + 'debug', () => {
         console.log(
           'Debug: dumping post: \n',
           this
@@ -313,10 +353,10 @@ export default class Post {
       if (config.DEBUG_MODE) {
         console.log (
           'post.render',
-          uid + ':',
+          this.uid + ':',
           'rendering children with parameters:',
           {
-            parentUID: uid,
+            parentUID: this.uid,
             UIReplyIndent: this.options.UIReplyIndent + 1
           }
         )
