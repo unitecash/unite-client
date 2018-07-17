@@ -11,6 +11,7 @@
 
 export default class PostBuilder {
 
+  // TODO accept one "params" JSON object instead of this, this is confusing.
   static build (type, content, parentAddress, amount, fee, parentTXID) {
     if (typeof type === 'undefined' ||
         typeof parentAddress === 'undefined') {
@@ -30,13 +31,13 @@ export default class PostBuilder {
     }
 
     if (config.DEBUG_MODE) {
-      console.info('PostBuilder called with arguments:')
-      console.info('Type: ', type)
-      console.info('Content:', content)
-      console.info('Parent Address:', parentAddress)
-      console.info('Amount:', amount)
-      console.info('Fee:', fee)
-      console.info('Parent TXID:', parentTXID)
+      console.log('PostBuilder called with arguments:')
+      console.log('Type:           ', type)
+      console.log('Content:        ', content)
+      console.log('Parent Address: ', parentAddress)
+      console.log('Amount:         ', amount)
+      console.log('Fee:            ', fee)
+      console.log('Parent TXID:    ', parentTXID)
     }
 
     // return an array of UTXOs for this user
@@ -90,7 +91,11 @@ export default class PostBuilder {
         transaction.change(bchaddr.toLegacyAddress(config.userAddress))
         transaction.feePerKb(parseInt(fee * 512)) // hacky.
         transaction.sign(config.userPrivateKey)
-        networkManager.broadcastTransaction(transaction.toString())
+        networkManager.broadcastTransaction(transaction.toString()).then((result) => {
+          if (result === true) {
+            new SuccessBanner('Your post has been sent!').show()
+          }
+        })
       } else {
         Messages.notEnoughFunds()
         return false

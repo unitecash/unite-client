@@ -11,59 +11,99 @@ export default class CompositionWindow {
   constructor (post) {
     if (typeof post === 'undefined') {
       this.title = 'New Post'
+      this.uid = Utilities.stripAddressPrefix(config.userAddress).substr(0, 16)
     } else {
-      this.title = 'Reply to ' + post.senderName.displayName
+      this.post = post
+      this.title = 'Reply to ' + this.post.senderName.displayName
+      this.uid = Utilities.stripAddressPrefix(this.post.senderName.address.substr(0, 16))
     }
-    this.post = post
 
-    var uid = Utilities.getRandomChars(16)
-    var dialog = $('<div></div>')
-    dialog.attr('class', 'UIAlertWindow hidden')
-    dialog.attr('id', uid)
+    if (!$('#' + this.uid).length) {
+      this.dialog = $('<div></div>')
+      this.dialog.attr('class', 'UIAlertWindow hidden')
+      this.dialog.attr('id', this.uid)
 
-    var dialogHeading = $('<div></div>')
-    dialogHeading.attr('class', 'UIAlertHeader')
+      this.dialogHeading = $('<div></div>')
+      this.dialogHeading.attr('class', 'UIAlertHeader')
 
-    var dialogTitle = $('<h3></h3>')
-    dialogTitle.attr('class', 'center-text w90')
-    dialogTitle.text(this.title)
-    dialogHeading.append(dialogTitle)
+      this.dialogTitle = $('<h3></h3>')
+      this.dialogTitle.attr('class', 'center-text w60')
+      this.dialogTitle.text(this.title)
+      this.dialogHeading.append(this.dialogTitle)
 
-    var sendButton = new ImageButton({
-      image: './images/send_icon.svg',
-      text: 'Send',
-      onclick: () => {
-        if (typeof this.post === 'undefined') { // not in reply to anyone
-          PostBuilder.build(
-            '5501',
-            $('#' + uid + 'text').val(),
-            config.CENTRAL_CONTENT_ADDRESS
-          )
-        } else {
-          PostBuilder.build(
-            '5503',
-            $('#' + uid + 'text').val(),
-            this.post.senderName.address,
-            config.DUST_LIMIT_SIZE,
-            config.DEFAULT_FEE_PER_BYTE,
-            this.post.txid
-          )
+      this.sendButton = new ImageButton({
+        image: './images/send_icon.svg',
+        text: 'Send',
+        onclick: () => {
+          // When a post is sent.
+          // check if this post requires IPFS uploads
+          if ($('#' + this.uid + 'text').val().length > 180 ||
+              typeof this.fileUploadInput.files !== 'undefined') {
+            // upload to IPFS
+
+            // ...
+
+          } else {
+            // put it on-chain in an OP_RETURN
+            if (typeof this.post === 'undefined') { // not in reply to anyone
+              PostBuilder.build(
+                '5501',
+                $('#' + this.uid + 'text').val(),
+                config.CENTRAL_CONTENT_ADDRESS
+              )
+            } else {
+              PostBuilder.build(
+                '5503',
+                $('#' + this.uid + 'text').val(),
+                this.post.senderName.address,
+                config.DUST_LIMIT_SIZE,
+                config.DEFAULT_FEE_PER_BYTE,
+                this.post.txid
+              )
+            }
+          }
+          Utilities.closePopup()
         }
-        Utilities.closePopup()
-        new SuccessBanner('Your post has been sent!').show()
-      }
-    }).render()
-    sendButton.attr('class', 'UIImageButton transparent right')
-    dialogHeading.append(sendButton)
-    dialog.append(dialogHeading)
+      }).render()
+      this.sendButton.attr('class', 'UIImageButton transparent right')
+      this.dialogHeading.append(this.sendButton)
+      this.dialog.append(this.dialogHeading)
 
-    var textInput = $('<textarea></textarea>')
-    textInput.attr('class', 'UITextArea')
-    textInput.attr('id', uid + 'text')
-    dialog.append(textInput)
+      this.textInput = $('<textarea></textarea>')
+      this.textInput.attr('class', 'UITextArea')
+      this.textInput.attr('id', this.uid + 'text')
+      this.dialog.append(this.textInput)
 
-    $('body').append(dialog)
-    new InteractivePopup('#' + uid).show()
+      this.fileUploadInput = $('<input></input>')
+      this.fileUploadInput.attr('type', 'file')
+      this.fileUploadInput.attr('style', 'display:none;')
+      this.fileUploadInput.attr('id', this.uid + 'file')
+      this.dialog.append(this.fileUploadInput)
+      $('body').on('change', '#' + this.uid + 'file', (ev) => {
+        var input = $('#' + this.uid + 'file')
+        if (input.files && input.files[0]) {
+          var reader = new FileReader()
+          reader.onload = function(e) {
+            $('#' + uid + 'filepreview').attr('src', e.target.result)
+          }
+          reader.readAsDataURL(input.files[0])
+        }
+      })
+
+      this.fileUploadButton = new ImageButton({
+        image: './images/underline_icon.svg',
+        text: 'Upload Files...',
+        onclick: () => {
+          $('#' + this.uid + 'file').trigger('click')
+        }
+      }).render()
+      this.fileUploadButton.attr('class', 'UIImageButton transparent left')
+      this.dialog.append(this.fileUploadButton)
+
+      $('body').append(this.dialog)
+    }
+
+    new InteractivePopup('#' + this.uid).show()
   }
 
 }

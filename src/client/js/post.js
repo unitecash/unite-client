@@ -120,14 +120,18 @@ export default class Post {
           this.displayContent[0] = $('<p></p>')
           this.displayContent[0].text(Utilities.hex2a(this.data))
         } else if (this.type === '5502' || this.type === '5505') {
-          networkManager.resolveHash(Utilities.hex2a(this.data)).then((data) => {
+          this.hash = Utilities.hex2a(this.data)
+          if (this.type === '5505') {
+            this.hash = this.hash.substr(32)
+          }
+          networkManager.resolveHash(this.hash).then((data) => {
             // now that the hash has been resolved, try to parse the JSON.
             try {
               if (this.type === '5502') {
                 this.resolvedData = JSON.parse(data)
               } else {
                 this.parentTXID = this.data.substr(0, 64)
-                this.resolvedData = JSON.parse(data.substr(64))
+                this.resolvedData = JSON.parse(data)
               }
             } catch (e) {
               if (config.DEBUG_MODE) {

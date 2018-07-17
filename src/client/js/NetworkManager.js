@@ -72,28 +72,34 @@ export default class NetworkManager {
   }
 
   broadcastTransaction (hex) {
-    if (!this.isDead) {
-      if(config.ENABLE_TRANSACTION_BROADCASTS === true) {
-        for (var i = 0; i < config.networkEndpoints; i++) {
-          $.ajax({
-            type: 'POST',
-            url: config.networkEndpoints[i].insightURL + 'tx/send',
-            data: {rawtx: hex},
-            success: (data) => {
-              console.log('Transaction broadcasted! TXID:\n\n' + data.txid)
-            },
-            error: (data) => {
-              Messages.broadcastFailure(hex)
-            }
-          })
-        }
-        if (config.DEBUG_MODE === true) {
-          console.info('Broadcasting Transaction:\n\n' + hex)
+    return new Promise ((resolve, reject) => {
+      if (!this.isDead) {
+        if (config.ENABLE_TRANSACTION_BROADCASTS === true) {
+          for (var i = 0; i < config.networkEndpoints.length; i++) {
+            $.ajax({
+              type: 'POST',
+              url: config.networkEndpoints[i].insightURL + 'tx/send',
+              data: {rawtx: hex},
+              success: (data) => {
+                console.log('Transaction broadcasted! TXID:\n\n' + data.txid)
+              },
+              error: (data) => {
+                Messages.broadcastFailure(hex)
+              }
+            })
+          }
+          resolve (true) // TODO resolve true only after all ajax calls complete.
+          if (config.DEBUG_MODE === true) {
+            console.info('Broadcasting Transaction:\n\n' + hex)
+          }
+        } else {
+          console.info('Pretend broadcasting TX:\n\n' + hex)
+          resolve (true) // true, because no error has occurred.
         }
       } else {
-        console.info('Pretend broadcasting TX:\n\n' + hex)
+        resolve (false) // false, because networkManager is dead.
       }
-    }
+    })
   }
 
   // Adds a file to IPFS with the data provided, notifying pin-servers who will
@@ -125,19 +131,39 @@ export default class NetworkManager {
   retrieveFromIPFS (hash) {
     return new Promise ((resolve, reject) => {
       if (!this.isDead) {
-        $.ajax({
+        var xhr = $.ajax({
           type: 'GET',
           url: Utilities.getRandomFromArray(config.IPFSEndpoints) + hash,
           success: (data) => {
             resolve (data)
           },
           error: (data) => {
-            console.error (
-              'NetworkManager.retrieveFromIPFS:',
-              'Failed to resolve IPFS hash:',
-              hash
-            )
+            if (config.DEBUG_MODE) {
+              console.error (
+                'NetworkManager.retrieveFromIPFS:',
+                'Failed to resolve IPFS hash:',
+                hash,
+                'due to error:',
+                data
+              )
+            }
             resolve (false)
+          },
+          xhrFields: {
+            onprogress: function(progress) {
+              if (progress.loaded > config.MAX_HASH_DESCRIPTOR_SIZE) {
+                // stop any unreasonably long malicious payload downloads.
+                if (config.DEBUG_MODE) {
+                  console.error(
+                    'NetworkManager.resolveFromIPFS:',
+                    'Not resolving hash descriptor above',
+                    config.MAX_HASH_DESCRIPTOR_SIZE,
+                    'bytes.'
+                  )
+                }
+                xhr.abort()
+              }
+            }
           }
         })
       } else {

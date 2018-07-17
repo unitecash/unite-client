@@ -18,6 +18,7 @@ export default class Config {
 
     this.DUST_LIMIT_SIZE = 547
     this.DEFAULT_FEE_PER_BYTE = 1.05
+    this.MAX_HASH_DESCRIPTOR_SIZE = 4096
 
     this.ENABLE_WEBSOCKETS = true
     this.ENABLE_CACHING = true
