@@ -150,4 +150,22 @@ export default class Utilities {
     return new bch.PrivateKey(key).toWIF()
   }
 
+  static fileToIPFSHash (file) {
+    return new Promise ((resolve, reject) => {
+      // convert file to buffer.
+      var reader = new FileReader()
+      reader.onload = function(e) {
+        var buf = new Buffer(e.target.result)
+        networkManager.IPFSNode.files.add({
+          "only-hash": true,
+          "content": buf,
+          "path": "file"
+        }).then((res) => {
+          resolve (res[0].hash)
+        })
+      }
+      reader.readAsArrayBuffer(file)
+    })
+  }
+
 }

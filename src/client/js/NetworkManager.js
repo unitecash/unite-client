@@ -41,7 +41,7 @@ export default class NetworkManager {
           resolve (this)
 
           // Start IPFS
-          /*this.IPFSNode = new IPFS({
+          this.IPFSNode = new IPFS({
             repo: String(Math.random + Date.now())
           })
 
@@ -56,12 +56,13 @@ export default class NetworkManager {
                 console.info('IPFS Version:', version.version)
               }
               // connect to the IPFS peers
+              /* Disabled because the code is obsolete and this functionality
+              is now accomplished with the Unite endpoint.
               for (var i = 0; i < config.IPFSEndpoints.length; i++){
                 this.IPFSNode.swarm.connect(config.IPFSEndpoints[i])
-              }
+              }*/
             })
           })
-          */
         } else {
           if (config.DEBUG_MODE) {
             console.log ('Failed to connect to Insight')
@@ -104,6 +105,9 @@ export default class NetworkManager {
 
   // Adds a file to IPFS with the data provided, notifying pin-servers who will
   // then pin the content for reliable access.
+  /* Disabled because this is now accomplished with the Unite endpoint.
+  Ideally, client-side, fully-decentralized publishing would exist but it has
+  not been done yet. If anybody would like to work on this please do so.
   publishToIPFS (data) {
     return new Promise ((resolve, reject) => {
       if (this.isIPFSReady && !this.isDead) {
@@ -125,7 +129,7 @@ export default class NetworkManager {
         resolve (false)
       }
     })
-  }
+  }*/
 
   // Retrieves a file's contents from IPFS
   retrieveFromIPFS (hash) {
@@ -173,6 +177,8 @@ export default class NetworkManager {
   }
 
   // finds the type of hash or URL and resolves the associated data
+  // TODO add better way of recognizing IPFS hashes.
+  // TODO look into Torrents, HTTP, other IPFS "multihash", other DHTs, Tor etc.
   resolveHash(hash) {
     if (config.DEBUG_MODE) {
       console.log(
@@ -199,20 +205,23 @@ export default class NetworkManager {
     })
   }
 
-
-
+  // Subscribe to live websocket notifications for given address from Insight.
   subscribeAddress (addr) {
     this.endpoint.subscribeAddress (addr)
   }
 
+ // Unubscribe from live websocket notifications for given address from Insight.
   unsubscribeAddress (addr) {
     this.endpoint.unsubscribeAddress (addr)
   }
 
+  // die. Used to stop floods when the code malfunctions and for debugging.
   disconnect () {
     this.endpoint.disconnect()
     this.isDead = true
   }
+
+  // The below methods provide interfaces to the network endpoint.
 
   getBalance (addr) {
     return this.endpoint.getBalance (addr)

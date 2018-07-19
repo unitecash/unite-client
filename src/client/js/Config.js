@@ -22,7 +22,7 @@ export default class Config {
 
     this.ENABLE_WEBSOCKETS = true
     this.ENABLE_CACHING = true
-    this.ENABLE_TRANSACTION_BROADCASTS = true
+    this.ENABLE_TRANSACTION_BROADCASTS = false
     this.DEBUG_MODE = true
 
     this.DEFAULT_NETWORK_ENDPOINTS = [

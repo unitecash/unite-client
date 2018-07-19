@@ -38,28 +38,43 @@ export default class CompositionWindow {
           // When a post is sent.
           // check if this post requires IPFS uploads
           if ($('#' + this.uid + 'text').val().length > 180 ||
-              typeof this.fileUploadInput.files !== 'undefined') {
-            // upload to IPFS
-
-            // ...
-
+              (typeof window.attachedFiles !== 'undefined' &&
+              typeof window.attachedFiles[0] !== 'undefined')) {
+            // upload it to IPFS
+            // create a JSON object to hold the content of the post
+            var postContent = {
+              text: $('#' + this.uid + 'text').val(),
+              files: window.attachedFiles
+            }
+            if (typeof this.post === 'undefined') {
+              PostBuilder.build({
+                type: '5502',
+                content: postContent,
+                parentAddress: config.CENTRAL_CONTENT_ADDRESS
+              })
+            } else {
+              PostBuilder.build({
+                type: '5505',
+                content: postContent,
+                parentAddress: this.post.senderName.address,
+                parentTXID: this.post.txid
+              })
+            }
           } else {
             // put it on-chain in an OP_RETURN
             if (typeof this.post === 'undefined') { // not in reply to anyone
-              PostBuilder.build(
-                '5501',
-                $('#' + this.uid + 'text').val(),
-                config.CENTRAL_CONTENT_ADDRESS
-              )
+              PostBuilder.build({
+                type: '5501',
+                content: $('#' + this.uid + 'text').val(),
+                parentAddress: config.CENTRAL_CONTENT_ADDRESS
+              })
             } else {
-              PostBuilder.build(
-                '5503',
-                $('#' + this.uid + 'text').val(),
-                this.post.senderName.address,
-                config.DUST_LIMIT_SIZE,
-                config.DEFAULT_FEE_PER_BYTE,
-                this.post.txid
-              )
+              PostBuilder.build({
+                type: '5503',
+                content: $('#' + this.uid + 'text').val(),
+                parentAddress: this.post.senderName.address,
+                parentTXID: this.post.txid
+              })
             }
           }
           Utilities.closePopup()
@@ -80,14 +95,20 @@ export default class CompositionWindow {
       this.fileUploadInput.attr('id', this.uid + 'file')
       this.dialog.append(this.fileUploadInput)
       $('body').on('change', '#' + this.uid + 'file', (ev) => {
-        var input = $('#' + this.uid + 'file')
-        if (input.files && input.files[0]) {
-          var reader = new FileReader()
+        var input = document.getElementById(this.uid + 'file')
+        window.attachedFiles = input.files
+
+        // TODO Previewing of the different filetypes.
+        // This will come along with the UX update for this whole CompWindow.
+
+        //if (input.files && input.files[0]) {
+          // preview the file
+          /*var reader = new FileReader()
           reader.onload = function(e) {
             $('#' + uid + 'filepreview').attr('src', e.target.result)
           }
-          reader.readAsDataURL(input.files[0])
-        }
+          reader.readAsDataURL(input.files[0])*/
+        //}
       })
 
       this.fileUploadButton = new ImageButton({

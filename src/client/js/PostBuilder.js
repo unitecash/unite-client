@@ -11,55 +11,154 @@
 
 export default class PostBuilder {
 
-  // TODO accept one "params" JSON object instead of this, this is confusing.
-  static build (type, content, parentAddress, amount, fee, parentTXID) {
-    if (typeof type === 'undefined' ||
-        typeof parentAddress === 'undefined') {
+  static build (params) {
+    if (typeof params.type === 'undefined' ||
+        typeof params.parentAddress === 'undefined') {
       return false
     }
 
-    if (typeof amount === 'undefined') {
-      amount = config.DUST_LIMIT_SIZE
+    if (typeof params.amount === 'undefined') {
+      params.amount = config.DUST_LIMIT_SIZE
     }
 
-    if (typeof fee === 'undefined') {
-      fee = config.DEFAULT_FEE_PER_BYTE
+    if (typeof params.fee === 'undefined') {
+      params.fee = config.DEFAULT_FEE_PER_BYTE
     }
 
-    if (typeof content === 'undefined') {
-      content = ''
+    if (typeof params.content === 'undefined') {
+      params.content = ''
     }
 
     if (config.DEBUG_MODE) {
       console.log('PostBuilder called with arguments:')
-      console.log('Type:           ', type)
-      console.log('Content:        ', content)
-      console.log('Parent Address: ', parentAddress)
-      console.log('Amount:         ', amount)
-      console.log('Fee:            ', fee)
-      console.log('Parent TXID:    ', parentTXID)
+      console.log('Type:           ', params.type)
+      console.log('Content:        ', params.content)
+      console.log('Parent Address: ', params.parentAddress)
+      console.log('Amount:         ', params.amount)
+      console.log('Fee:            ', params.fee)
+      console.log('Parent TXID:    ', params.parentTXID)
     }
 
+    // if the params.content needs to be uploaded to IPFS, do it here.
+    if (typeof params.content === 'object') {
+      var hashDescriptor = {}
+      if (typeof params.content.files !== 'undefined'
+          && typeof params.content.files[0] !== 'undefined') {
+        // TODO support for multiple files, or at least for auto-zipping.
+        var file = params.content.files[0]
+        // determine contentType for IPFS hash descriptor
+        if (file.type.startsWith('image')) {
+          hashDescriptor.contentType = 'image'
+        } else if (file.type.startsWith('video')) {
+          hashDescriptor.contentType = 'video'
+        } else { // ...
+          if (config.DEBUG_MODE) {
+            console.log (
+              'PostBuilder.build:',
+              'Unable to recognize content type:',
+              file.type
+            )
+          }
+          return false
+        }
+        hashDescriptor.description = params.content.text
+        /* long-term TODO:
+        Here's where we'd make any conversions and scaledowns, things of that
+        nature. We'd add any converted files to window.attachedFiles
+        (after converting and/or downscaling them in AWS (publisher pays), or
+        locally somehow (really slow)). We then hash each of the files and
+        store the hashes in the IPFSHashes array, to be sent to the Unite
+        endpoint later.
+        */
+
+        Utilities.fileToIPFSHash(file).then((hash) => {
+          // add the hash to the IPFSHashes array
+          // set the hash pointed to by the hash descriptor.
+          /*
+          In a situation where multiple files are processed and included,
+          we would need to add all of them to the hash descriptor.
+          */
+          hashDescriptor.hash = hash
+
+          // now, we need to make a file from the hash descriptor object
+          // we've just constructed, get the hash of it and put the
+          // hash descriptor's hash in the blockchain so clients can parse it.
+          var hd = new File([JSON.stringify(hashDescriptor)], 'file')
+
+          // we also add the hash descriptor to params so it can be submitted
+          // to the endpoint at publication time.
+          params.hashDescriptor = hashDescriptor
+
+          // debug printing for hash descriptor
+          if (config.DEBUG_MODE) {
+            console.log(
+              'PostBuilder.build:',
+              'Created hash descriptor for multimedia content:',
+              hashDescriptor
+            )
+          }
+
+          // hash the hash descriptor
+          Utilities.fileToIPFSHash(hd).then((hash) => {
+            // add HD's hash to IPFSHashes
+            // put HD's hash on the blockchain.
+            params.content = hash
+            // debug printing prior to constructing.
+            if (config.DEBUG_MODE) {
+              console.log(
+                'PostBuilder.build:',
+                'constructing multimedia post with parameters:',
+                params,
+                window.attachedFiles,
+              )
+            }
+            PostBuilder.constructTransaction(
+              params,
+              window.attachedFiles
+            )
+          })
+        })
+      } else { // no files were added, it is just a lot of text.
+        hashDescriptor.contentType = 'text'
+        hashDescriptor.content = params.content.text
+        var hd = new File([JSON.stringify(hashDescriptor)], 'file')
+        Utilities.fileToIPFSHash(hd).then((hash) => {
+          params.content = hash
+          PostBuilder.constructTransaction(
+            params
+          )
+        })
+      }
+    } else {
+      PostBuilder.constructTransaction (params)
+    }
+  }
+
+  // construct the transaction (after parsing content and setting defaults)
+  // NOTE: Do not use this outside of PostBuilder.build. Ever. If I knew how,
+  // I would make it a private method. It will break unless you provide
+  // ALL params perfectly. Do not be lazy and just go update PostBuilder.build.
+  static constructTransaction (params, files) {
     // return an array of UTXOs for this user
     networkManager.findUTXOsByAddress(config.userAddress).then((allUTXOs) => {
       var transaction = new bch.Transaction()
       // pay the parent address the amount provided
-      transaction.to(bchaddr.toLegacyAddress(parentAddress), amount)
+      transaction.to(bchaddr.toLegacyAddress(params.parentAddress), params.amount)
       // if there is a parent transaction, encode the OP_RETURN data to save
       // as much blockchain space (and cost in fees) as possible
-      if (typeof parentTXID === 'undefined') { // if no parent TXID
+      if (typeof params.parentTXID === 'undefined') { // if no parent TXID
         if (config.DEBUG_MODE) {
           console.log (
             'PostBuilder.build:',
             'Adding (ascii) data to transaction:',
-            Utilities.hex2a(type) + content
+            Utilities.hex2a(params.type) + params.content
           )
         }
-        transaction.addData(Utilities.hex2a(type) + content)
+        transaction.addData(Utilities.hex2a(params.type) + params.content)
       } else { // if there is a parent TXID
-        var txData = Utilities.hex2buf(type)
-        txData = txData.concat(Utilities.hex2buf(parentTXID))
-        txData = txData.concat(Utilities.ascii2buf(content))
+        var txData = Utilities.hex2buf(params.type)
+        txData = txData.concat(Utilities.hex2buf(params.parentTXID))
+        txData = txData.concat(Utilities.ascii2buf(params.content))
         if (config.DEBUG_MODE) {
           console.log (
             'PostBuilder.build:',
@@ -83,22 +182,67 @@ export default class PostBuilder {
         }
         transaction.from(utxo)
         totalAdded += allUTXOs[i].satoshis
-        if (totalAdded >= amount + (1000 * fee)) { // approximate fee amount
+        if (totalAdded >= params.amount + (1000 * params.fee)) { // approximate fee amount
           success = true
         }
       }
       if (success) { // set fee, change address, sign, broadcast
         transaction.change(bchaddr.toLegacyAddress(config.userAddress))
-        transaction.feePerKb(parseInt(fee * 512)) // hacky.
+        transaction.feePerKb(parseInt(params.fee * 512)) // hacky.
         transaction.sign(config.userPrivateKey)
         networkManager.broadcastTransaction(transaction.toString()).then((result) => {
           if (result === true) {
-            new SuccessBanner('Your post has been sent!').show()
-          }
+            if (params.type === '5502' || params.type === '5505') {
+              // TODO tell the user that things are uploading so they don't close window.
+              // we should now upload things to the Unite publishing endpoint.
+              if (typeof files !== 'undefined') { // Feeble.
+                PostBuilder.publishContent(
+                  params,
+                  files,
+                  transaction.toString()
+                )
+              }
+            } else {
+              new SuccessBanner('Your post has been sent!').show()
+            }
+          } // else { the broadcast function shows a broadcast failure message }
         })
       } else {
         Messages.notEnoughFunds()
         return false
+      }
+    })
+  }
+
+  static publishContent (params, files, rawtx) {
+    // create a form data object and add the relevant objects to it for upload
+    var fdata = new FormData()
+    fdata.append('rawtx', rawtx)
+    fdata.append('hashDescriptor', JSON.stringify(params.hashDescriptor))
+    for (var i = 0; i < files.length; i++) {
+      fdata.append('files', files[i], files[i].name)
+    }
+    // make the ajax request
+    $.ajax({
+      type: 'POST',
+      url: 'http://unite.cash:5501/publish', // TODO add multiple endpoints
+      cache: false,
+      dataType: 'json',
+      processData: false,
+      contentType: false,
+      data: fdata,
+      success: (data) => {
+        console.log('Success', data)
+      },
+      error: (data) => {
+        console.error(
+          'PostBuilder.publishContent:',
+          'Server returned an error:',
+          data
+        )
+        // TODO a way way better solution than this vague error message.
+        /* "I still have to pay even though it didn't work?!!?1!1?!!11!1111" */
+        new ErrorBanner('Could not publish content to the network.').show()
       }
     })
   }
