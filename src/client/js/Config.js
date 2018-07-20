@@ -35,6 +35,11 @@ export default class Config {
         insightURL: 'https://bch-insight.bitpay.com/api/',
         websocketURL: 'wss://bch-insight.bitpay.com',
         addressFormat: 'cashaddress'
+      },
+      {
+        insightURL: 'https://blockdozer.com/insight-api/',
+        websocketURL: 'wss://blockdozer.com',
+        addressFormat: 'cashaddress'
       }
     ]
 
@@ -45,6 +50,16 @@ export default class Config {
       'https://www.eternum.io/ipfs/',
       'https://ipfs.works/ipfs/',
       'https://ipfs.work/ipfs/'
+    ]
+
+    this.DEFAULT_UNITE_ENDPOINTS = [
+      'http://unite.cash:5001/'
+      //'https://alpha.unite.cash/',
+      //'https://beta.unite.cash/',
+      //'https://gamma.unite.cash/',
+      //'https://delta.unite.cash/',
+      //'https://epsilon.unite.cash/',
+      //'http://blahblahblahblah.onion/',
     ]
 
     if (this.ENABLE_CACHING === false) {
@@ -64,6 +79,13 @@ export default class Config {
       )
     }
     this.IPFSEndpoints = JSON.parse(localStorage.IPFSEndpoints)
+
+    if (typeof localStorage.uniteEndpoints === 'undefined') {
+      localStorage.uniteEndpoints = JSON.stringify(
+        this.DEFAULT_UNITE_ENDPOINTS
+      )
+    }
+    this.uniteEndpoints = JSON.parse(localStorage.uniteEndpoints)
 
     if (typeof sessionStorage.privateKey !== 'undefined') {
       this.userPrivateKey = bch.PrivateKey.fromWIF(sessionStorage.privateKey)
@@ -86,6 +108,9 @@ export default class Config {
 
     // highest Z index used by dialog boxes in the CSS [hacky, TODO get rid of.]
     this.highestZIndexUsed = 2
+
+    // An array to keep track of rendered posts (to avoid duplications)
+    window.currentPosts = []
   }
 
 }

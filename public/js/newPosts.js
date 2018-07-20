@@ -97,7 +97,11 @@ window.pageInit = function () {
   })
 }
 window.onPostLoad = function (post) {
-  post.render()
+  return new Promise((resolve, reject) => {
+    post.init().then((result) => {
+      resolve (result)
+    })
+  })
 }
 
 

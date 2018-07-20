@@ -6,14 +6,9 @@ This list outlines some things that need to be done.
 
 - Fix inefficient and unneeded data stored about transactions in localStorage,
   (for example nLockTime, version, etc), possibly employine compression
-- IPFS node does not make content hashes available to the entire IPFS network,
-  only peers connected to that particular IPFS node explicitly
 
 ### Short-term
 
-- IPFS node integrations
-- Define data structure for IPFS content
-- IPFS node "client pin requests" to ensure content availability
 - User.follow(address)
 - User.unfollow(address)
 - User.listFollowers()
@@ -25,7 +20,6 @@ This list outlines some things that need to be done.
 
 ### After the above, some things to consider
 
-- skeleton of the unite.cash homepage
 - get a code signing certificate
 - setup, installation, uninstallation wizards
 - Signed (potentially automated) updates from the developers

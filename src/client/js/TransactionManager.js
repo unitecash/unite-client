@@ -21,6 +21,13 @@ export default class TransactionManager {
       }
       return false
     }
+    if (config.DEBUG_MODE) {
+      console.log(
+        'TransactionManager.validate:',
+        'Validating transaction:',
+        transaction
+      )
+    }
     var parent = 'none', code = 'none'
     for (var i = 0; i < transaction.vout.length; i++) { // for each output
       if (!transaction.vout[i].scriptPubKey.asm.startsWith('OP_RETURN')) {

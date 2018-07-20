@@ -11,237 +11,281 @@
 export default class Post {
   constructor (transaction) {
     return new Promise((resolve, reject) => {
-      // only construct each post once per page.
-      if (typeof window.currentPosts === 'undefined') {
-        window.currentPosts = []
+      // parse the options passed in by "new Transaction" and add defaults
+      // Parse the transaction.options object
+      this.options = transaction.options
+      if (typeof this.options === 'undefined') {
+        this.options = {}
       }
-      var redundant = false
-      for (var i = 0; i < currentPosts.length; i++) {
-        if (transaction.txid === currentPosts[i]) {
-          if (config.DEBUG_MODE) {
-            console.log (
-              'Post.constructor:',
-              'Not constructing existing post redundantly.'
-            )
+      if (typeof this.options.isLive === 'undefined') {
+        this.options.isLive = false
+      }
+      if (typeof this.options.UIReplyIndent === 'undefined') {
+        this.options.UIReplyIndent = 0
+      }
+      if (this.options.UIReplyIndent > 4) {
+        // relative to the top post on this page, this post is too far
+        // nested in the thread to be loaded
+        if (config.DEBUG_MODE) {
+          console.log (
+            'Post.constructor:',
+            'Relative to top post, this post has reply indent of',
+            this.options.UIReplyIndent,
+            'which is greater than the limit of 4. Killing post.'
+          )
+        }
+        resolve (false)
+        return false
+      }
+      // initialize, extract, parse and determine the values for attributes
+      var sender = transaction.vin[0].addr
+      var parent = 'none', code = 'none', data = 'none'
+      for (var i = 0; i < transaction.vout.length; i++) {
+        if (!transaction.vout[i].scriptPubKey.asm.startsWith('OP_RETURN')) {
+          // POTENTIAL BUG: should this be this.sender or config.userAddress?
+          if (transaction.vout[i].scriptPubKey.addresses[0] !== config.userAddress &&
+      				parseInt(transaction.vout[i].value * 100000000) != 0) {
+            // parent is determined by non-zero output not equal to sender
+            parent = transaction.vout[i].scriptPubKey.addresses[0]
           }
-          redundant = true
-          resolve (false)
-          return false
+        } else { // OP_RETURN data parsing
+          code = transaction.vout[i].scriptPubKey.asm.substring(10, 14)
+          data = transaction.vout[i].scriptPubKey.asm.substring(14)
         }
       }
-
-      if (!redundant) {
-        // now we know it isn't redundant we mark post as "loaded on this page"
-        currentPosts.push (transaction.txid)
-
-        // parse the options passed in by "new Transaction" and add defaults
-        // Parse the transaction.options object
+      // if the attributes were successfully set, continue.
+      if (parent != 'none' && code != 'none' && data != 'none') {
+        // define all the variables
+        this.type = code
+        this.sender = Utilities.stripAddressPrefix(sender)
+        this.parent = Utilities.stripAddressPrefix(parent)
+        this.txid = transaction.txid
+        this.time = transaction.time
+        this.data = data
+        this.uid = this.txid.substr(0, 16)
         this.options = transaction.options
-        if (typeof this.options === 'undefined') {
-          this.options = {}
-        }
-        if (typeof this.options.isLive === 'undefined') {
-          this.options.isLive = false
-        }
-        if (typeof this.options.UIReplyIndent === 'undefined') {
-          this.options.UIReplyIndent = 0
-        }
-        if (this.options.UIReplyIndent > 4) {
-          // relative to the top post on this page, this post is too far
-          // nested in the thread to be loaded
-          if (config.DEBUG_MODE) {
-            console.log (
-              'Post.constructor:',
-              'Relative to top post, this post has reply indent of',
-              this.options.UIReplyIndent,
-              'which is greater than the limit of 4. Killing post.'
-            )
-          }
-          resolve (false)
-          return false
-        }
-
-        // initialize, extract, parse and determine the values for attributes
-        var sender = transaction.vin[0].addr
-        var parent = 'none', code = 'none', data = 'none'
-        for (var i = 0; i < transaction.vout.length; i++) {
-          if (!transaction.vout[i].scriptPubKey.asm.startsWith('OP_RETURN')) {
-            // POTENTIAL BUG: should this be this.sender or config.userAddress?
-            if (transaction.vout[i].scriptPubKey.addresses[0] !== config.userAddress &&
-      					parseInt(transaction.vout[i].value * 100000000) != 0) {
-              // parent is determined by non-zero output not equal to sender
-              parent = transaction.vout[i].scriptPubKey.addresses[0]
-            }
-          } else { // OP_RETURN data parsing
-            code = transaction.vout[i].scriptPubKey.asm.substring(10, 14)
-            data = transaction.vout[i].scriptPubKey.asm.substring(14)
-          }
-        }
-        // if the attributes were successfully set, continue.
-        if (parent != 'none' && code != 'none' && data != 'none') {
-          this.type = code
-          this.sender = Utilities.stripAddressPrefix(sender)
-          this.parent = Utilities.stripAddressPrefix(parent)
-          this.txid = transaction.txid
-          this.time = transaction.time
-          this.data = data
-          this.uid = this.txid.substr(0, 16)
-          this.options = transaction.options
-          this.displayContent = []
-          this.init().then((result) => {
-            // this will cause the entire "promise chain" all the way back to
-            // the "new Transaction(txid)" to resolve with the fully-initialized
-            // and constructed post.
-            resolve (result)
-          })
-        } else {
-          resolve (false)
-        }
-      }
-    })
-  }
-
-  init () {
-    return new Promise((resolve, reject) => {
-      NameManager.resolveFromAddress(this.sender).then ((name) => {
-        this.senderName = name
-
-        // now that all pre-requisites are met, take the appropriate action
-        // based on the type of post we are parsing
-        if (this.type === '5504') {
+        this.displayContent = []
+        // Now we assign some values which are post-type-dependent
+        if (this.type === '5504') { // this is a name declaration.
           NameManager.consider ( new Name (
             this.sender, Utilities.hex2a(this.data), this.time
           ))
-        } else if (this.type === '5503') {
+        } else if (this.type === '5503') { // this is a simple tip/reply.
           this.parentTXID = this.data.substr(0, 64)
           this.displayContent[0] = $('<p></p>')
           this.displayContent[0].text(Utilities.hex2a(this.data.substr(64)))
-        } else if (this.type === '5501') {
+        } else if (this.type === '5501') { // this is a short text post.
           this.displayContent[0] = $('<p></p>')
           this.displayContent[0].text(Utilities.hex2a(this.data))
-        } else if (this.type === '5502' || this.type === '5505') {
+        } else if (this.type === '5502' || this.type === '5505') { // multimedia
           this.hash = Utilities.hex2a(this.data)
-          if (this.type === '5505') {
+          if (this.type === '5505') { // multimedia with a parent TXID.
             this.hash = this.hash.substr(32)
+            this.parentTXID = this.data.substr(0, 64)
           }
-          networkManager.resolveHash(this.hash).then((data) => {
-            // now that the hash has been resolved, try to parse the JSON.
-            try {
-              if (this.type === '5502') {
-                this.resolvedData = JSON.parse(data)
-              } else {
-                this.parentTXID = this.data.substr(0, 64)
-                this.resolvedData = JSON.parse(data)
-              }
-            } catch (e) {
-              if (config.DEBUG_MODE) {
-                console.error (
-                  'Post.init:',
-                  this.uid + ':',
-                  'Unable to parse JSON from hash descriptor'
-                )
-              }
-              resolve (false)
-              return false
-            }
-            if (this.resolvedData.contentType === 'image') {
-              this.displayContent[0] = $('<img></img>')
-              this.displayContent[0].attr(
-                'src',
-                Utilities.getRandomFromArray(config.IPFSEndpoints) + this.resolvedData.hash
-              )
-              this.displayContent[0].attr(
-                'alt',
-                this.resolvedData.description
-              )
-              this.displayContent[0].attr(
-                'title',
-                this.resolvedData.description
-              )
-              this.displayContent[0].attr(
-                'class',
-                'UIDisplayImage'
-              )
-              this.displayContent[1] = $('<p></p>')
-              this.displayContent[1].attr('class', 'UIFootnote')
-              this.displayContent[1].text(this.resolvedData.description)
-              // pass to host page
-              if (typeof onPostLoad !== 'undefined') {
-                onPostLoad(this)
-              }
-            } else if (this.resolvedData.contentType === 'video') {
-              this.displayContent[0] = $('<video controls></video>')
-              this.displayContent[0].attr(
-                'class',
-                'UIDisplayVideo'
-              )
-              var source = $('<source></source>')
-              source.attr(
-                'src',
-                Utilities.getRandomFromArray(config.IPFSEndpoints) + this.resolvedData.hash
-              )
-              source.attr(
-                'type',
-                'video/mp4'
-              )
-              this.displayContent[0].append(source)
-              this.displayContent[1] = $('<h2></h2>')
-              this.displayContent[1].text(this.resolvedData.title)
-              this.displayContent[2] = $('<p></p>')
-              this.displayContent[2].text(this.resolvedData.description)
-              // pass to host page
-              if (typeof onPostLoad !== 'undefined') {
-                onPostLoad(this)
-              }
-            } else { // videos, articles, long paragraphs of text.......
+          // we only resolve the IPFS hash to find out more inside of Post.init
+          // which is called by the host page.
+        }
 
-
-            }
+        // Now we call the page-specific onPostLoad functionn which will decide
+        // if execution continues beyond this point.
+        if (typeof onPostLoad === 'function') {
+          onPostLoad(this).then((result) => {
+            resolve(result)
           })
+        } else {
+          if (config.DEBUG_MODE) {
+            console.error(
+              'Post.constructor:',
+              'Cannot find the window.onPostLoad() function!'
+            )
+          }
         }
-
-        // Notifications for live (current, from-the-websocket content)
-        if (this.options.isLive) {
-          new AppNotification (this).show()
-        }
-
-        /*
-         * if the page supports it and the post contains renderable data,
-         * the page-specific onPostLoad function is called*.
-         *
-         * UNLESS there is un-resolved DHT/Torrent hashes, in which case
-         * the render function will be called after hash resolution
-         */
-        if (typeof onPostLoad !== 'undefined' &&
-            typeof this.displayContent !== 'undefined') {
-          onPostLoad(this)
-        }
-
-        if (config.DEBUG_MODE) {
-          /* Disabled because it is annoying.
-          console.log (
-            'Post.init',
-            'Post has made it to end of init:',
-            this
-          )*/
-        }
-
-        // resolve the current state of the post, after everything is done,
-        // back to the ORIGINAL function caller "new Transaction(txid, options)"
-        resolve(this)
-      })
+      } else { // One or more of the required data values was not provided.
+        resolve (false)
+      }
     })
   }
 
-  // NOTE that tag is overridden by parentUID when parentUID is provided via options
-  // TODO remove "tag" and just do it from options maybe, or make it standard across pages.
-  render (tag) {
+  // Fetch poster's name and any external data needed to render the post,
+  // then call the render function.
+  init () {
+    return new Promise((resolve, reject) => {
+      // only initialize each post once per page.
+      // NOTE currentPosts was defined in Config as window.currentPosts
+      var isCurrentPostRedundant = false
+      for (var i = 0; i < currentPosts.length; i++) {
+        if (this.txid === currentPosts[i]) {
+          if (config.DEBUG_MODE) {
+            console.log (
+              'Post.init:',
+              this.uid + ':',
+              'Not constructing existing post redundantly.'
+            )
+          }
+          isCurrentPostRedundant = true
+          resolve (false)
+          return false
+        }
+      }
+
+      if (isCurrentPostRedundant === false) {
+        // now we know it isn't redundant we mark post as "rendered on this page"
+        currentPosts.push (this.txid)
+
+        // we can now start the process of loading the post's children, because
+        // we've made sure this post is not a duplicate.
+        if (this.options.loadChildren === true) {
+          this.loadReplies()
+        }
+
+        // get the sender's name
+        NameManager.resolveFromAddress(this.sender).then ((name) => {
+          this.senderName = name
+
+          // for these types, we need to resolve a hash or an HTTP URL.
+          if (this.type === '5502' || this.type === '5505') {
+            networkManager.resolveHash(this.hash).then((data) => {
+              // now that the content descriptor hash has been resolved, try
+              // to parse the JSON.
+              try {
+                this.resolvedData = JSON.parse(data)
+              } catch (e) {
+                if (config.DEBUG_MODE) {
+                  console.error (
+                    'Post.init:',
+                    this.uid + ':',
+                    'Unable to parse JSON from hash descriptor'
+                  )
+                }
+                resolve (false) // malformed JSON from the hash descriptor, die.
+                return false
+              }
+
+              // JSON object has been now parsed. We can now populate the
+              // displayContent array based on what contentType was defined
+              // by the content descriptor.
+              if (this.resolvedData.contentType === 'image') {
+                // TODO a JavaScript class for displaying images (which allows
+                // you to tap into it and get it full-screen, pinch-to-zoom...)
+                this.displayContent[0] = $('<img></img>')
+                this.displayContent[0].attr(
+                  'src',
+                  Utilities.getRandomFromArray(config.IPFSEndpoints) + this.resolvedData.hash
+                )
+                this.displayContent[0].attr(
+                  'alt',
+                  this.resolvedData.description
+                )
+                this.displayContent[0].attr(
+                  'title',
+                  this.resolvedData.description
+                )
+                this.displayContent[0].attr(
+                  'class',
+                  'UIDisplayImage'
+                )
+                this.displayContent[1] = $('<p></p>')
+                this.displayContent[1].attr('class', 'UIFootnote')
+                this.displayContent[1].text(this.resolvedData.description)
+                // pass to host page
+                if (typeof onPostLoad !== 'undefined') {
+                  onPostLoad(this)
+                }
+              } else if (this.resolvedData.contentType === 'video') {
+                /* TODO:
+                  A class for displaying videos, including multi-resolutions,
+                  (different resolutions specified as different file hashes in
+                  the content descriptor), as well as auto-switching between them
+                  based on network lag and latency.
+
+                  This will involve creation of a video player which can manage
+                  all of these options. Should be mobile-friendly and auto
+                  scaledown (no 4K videos on 480p screens).
+                */
+                this.displayContent[0] = $('<video controls></video>')
+                this.displayContent[0].attr(
+                  'class',
+                  'UIDisplayVideo'
+                )
+                var source = $('<source></source>')
+                source.attr(
+                  'src',
+                  Utilities.getRandomFromArray(config.IPFSEndpoints) + this.resolvedData.hash
+                )
+                source.attr(
+                  'type',
+                  'video/mp4'
+                )
+                this.displayContent[0].append(source)
+                this.displayContent[1] = $('<h2></h2>')
+                this.displayContent[1].text(this.resolvedData.title)
+                this.displayContent[2] = $('<p></p>')
+                this.displayContent[2].text(this.resolvedData.description)
+                // pass to host page
+                if (typeof onPostLoad !== 'undefined') {
+                  onPostLoad(this)
+                }
+              } else {
+                /*
+                  TODO: Other content types: Some ideas:
+                  - News articles (with citations to other TXIDs and a citation
+                    system)
+                  - Galleries of photos
+                  - Vector drawings
+                  - encrypted multimedia content (only for a single BCH key to
+                    unlock (or a group key)).
+                  - Markdown content (a markdown parser and editor)
+                */
+                if (config.DEBUG_MODE) {
+                  console.log(
+                    'Post.init:',
+                    this.uid + ':',
+                    'Unrecognized multimedia content type:',
+                    this.resolvedData.contentType
+                  )
+                }
+              }
+
+              // Now that the displayContent has been populated we are ready to
+              // call the render function and display any notifications.
+              this.render()
+              // Notifications for live (current, from-the-websocket content)
+              if (this.options.isLive) {
+                new AppNotification (this).show()
+              }
+              // resolve the current state of the post, after everything is done,
+              // back to the ORIGINAL function caller "new Transaction(txid, options)"
+              resolve(this)
+            })
+          } else {
+            // no hash or URL resolutions are required.
+
+            // since no hash resolutions were needed (no promise callbacks to wait
+            // for), we can render it and display notifications.
+            this.render()
+            // Notifications for live (current, from-the-websocket content)
+            if (this.options.isLive) {
+              new AppNotification (this).show()
+            }
+            // resolve the current state of the post, after everything is done,
+            // back to the ORIGINAL function caller "new Transaction(txid, options)"
+            resolve(this)
+          }
+        }) //nameManager resolve
+      } // if isCurrentPostRedundant === false
+    }) // return new Promise
+  } // init
+
+  // renders the post to the page.
+  render () {
     if (typeof this.displayContent[0] === 'undefined') { // only render content.
       return false
     }
-    if (typeof tag === 'undefined') {
-      tag = '#posts'
-    }
+
+    // NOTE that tag is overridden by parentUID when the post is being rendered
+    // as a child (reply) of another post.
+    var tag = '#posts' // where the post is rendered.
 
     var postDiv = $('<div></div>')
     postDiv.attr('id', this.uid)
@@ -351,25 +395,22 @@ export default class Post {
       }*/
       $('#' + this.options.parentUID).after(postDiv)
     }
-
-    // now we load all the children (threaded).
-    if (this.options.loadChildren === true) {
-      if (config.DEBUG_MODE) {
-        console.log (
-          'post.render',
-          this.uid + ':',
-          'rendering children with parameters:',
-          {
-            parentUID: this.uid,
-            UIReplyIndent: this.options.UIReplyIndent + 1
-          }
-        )
-      }
-      this.loadReplies()
-    }
   }
 
+  // loads the replies to this post.
   loadReplies () {
+    if (config.DEBUG_MODE) {
+      console.log (
+        'Post.loadReplies:',
+        this.uid + ':',
+        'Rendering children with parameters:',
+        {
+          parentUID: this.uid,
+          UIReplyIndent: this.options.UIReplyIndent + 1,
+          loadChildren: true
+        }
+      )
+    }
     networkManager.loadTransactionsByAddress(this.sender,
     {
       parentUID: this.uid,

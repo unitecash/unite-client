@@ -214,7 +214,22 @@ export default class PostBuilder {
     })
   }
 
-  static publishContent (params, files, rawtx) {
+  // Publish content to IPFS by uploading it to a Unite endpoint.
+  static publishContent (params, files, rawtx, numAttempts) {
+    if (typeof numAttempts === 'undefined') {
+      numAttempts = 0
+    }
+    if (numAttempts > 5) {
+      cnosole.log(
+        'Post.publishContent:',
+        'Failed to publish content 5 times. Giving up. Dump:',
+        params,
+        files,
+        rawtx
+      )
+      // TODO Messages.failedContentPublication(params, files, rawtx, numAttempts)
+    }
+
     // create a form data object and add the relevant objects to it for upload
     var fdata = new FormData()
     fdata.append('rawtx', rawtx)
@@ -222,10 +237,19 @@ export default class PostBuilder {
     for (var i = 0; i < files.length; i++) {
       fdata.append('files', files[i], files[i].name)
     }
+    // set the random URL:
+    var randomURL = Utilities.getRandomFromArray(config.uniteEndpoints)
+    if (config.DEBUG_MODE) {
+      console.log(
+        'Post.pulishConten:',
+        'Selected Unite content publishing endpoint, sending request:',
+        randomURL + 'publish'
+      )
+    }
     // make the ajax request
     $.ajax({
       type: 'POST',
-      url: 'http://unite.cash:5501/publish', // TODO add multiple endpoints
+      url: randomURL + 'publish',
       cache: false,
       dataType: 'json',
       processData: false,
@@ -233,6 +257,7 @@ export default class PostBuilder {
       data: fdata,
       success: (data) => {
         console.log('Success', data)
+        new SuccessBanner('Your post has been sent!').show()
       },
       error: (data) => {
         console.error(
@@ -240,9 +265,11 @@ export default class PostBuilder {
           'Server returned an error:',
           data
         )
-        // TODO a way way better solution than this vague error message.
-        /* "I still have to pay even though it didn't work?!!?1!1?!!11!1111" */
-        new ErrorBanner('Could not publish content to the network.').show()
+        // TODO a WAY WAY better solution than this vague error message.
+        /* "I still have to pay even though it didn't work?!!?1!eleven!1!?1!" */
+        new ErrorBanner('Couldn\'t publish post, retrying...').show()
+        // just call it again with a numberOfAttempts parameter
+        //PostBuilder.publishContent(params, files, rawtx, numAttempts + 1)
       }
     })
   }

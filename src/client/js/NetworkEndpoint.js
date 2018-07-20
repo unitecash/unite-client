@@ -38,54 +38,63 @@ export default class NetworkEndpoint {
     }
     this.totalFailures = 0
     this.totalSuccesses = 0
-    this.reliability = 0 // TODO reliability = successes / failures ???
+    this.reliability = 1 // TODO reliability=successes/(success+failures) ???
     this.uid = Utilities.getRandomChars(16)
     return new Promise ((resolve, reject) => {
       // verify insightURL and websocketURL
+      // TODO we only should verify if it has never been used before.
+      // TODO endpoint huristics (success, failures, reliability) should
+      // persist to localStorage. In the future, random endpoint selection
+      // should be weighted by how reliable each endpoint is.
+      // TODO the UID should be the hash of insightURL (first 16)
       $.ajax({
         type: 'GET',
         url: this.insightURL + 'status?q=getInfo',
         success: (data) => {
-          this.socket = io(this.websocketURL)
-          this.socket.on('connect', () => {
+          if (this.websocketsSupported === true && config.ENABLE_WEBSOCKETS) {
+            this.socket = io(this.websocketURL)
+            this.socket.on('connect', () => {
+              resolve (this)
+            })
+            this.socket.on('error', () => {
+              console.error(
+                'NetworkEndpoint.constructor:',
+                this.uid + ':',
+                'Failed to connect to websocketURL:',
+                this.websocketURL,
+                'Disabling websocket.'
+              )
+              this.websocketsSupported = false
+              this.socket.disconnect()
+              resolve (this)
+            })
+            this.socket.on('connect_failed', () => {
+              console.error(
+                'NetworkEndpoint.constructor:',
+                this.uid + ':',
+                'Failed to connect to websocketURL:',
+                this.websocketURL,
+                'Disabling websocket.'
+              )
+              this.websocketsSupported = false
+              this.socket.disconnect()
+              resolve (this)
+            })
+            this.socket.on('connect_error', () => {
+              console.error(
+                'NetworkEndpoint.constructor:',
+                this.uid + ':',
+                'Failed to connect to websocketURL:',
+                this.websocketURL,
+                'Disabling websocket.'
+              )
+              this.websocketsSupported = false
+              this.socket.disconnect()
+              resolve (this)
+            })
+          } else {
             resolve (this)
-          })
-          this.socket.on('error', () => {
-            console.error(
-              'NetworkEndpoint.constructor:',
-              this.uid + ':',
-              'Failed to connect to websocketURL:',
-              this.websocketURL,
-              'Disabling websocket.'
-            )
-            this.websocketsSupported = false
-            this.socket.disconnect()
-            resolve (this)
-          })
-          this.socket.on('connect_failed', () => {
-            console.error(
-              'NetworkEndpoint.constructor:',
-              this.uid + ':',
-              'Failed to connect to websocketURL:',
-              this.websocketURL,
-              'Disabling websocket.'
-            )
-            this.websocketsSupported = false
-            this.socket.disconnect()
-            resolve (this)
-          })
-          this.socket.on('connect_error', () => {
-            console.error(
-              'NetworkEndpoint.constructor:',
-              this.uid + ':',
-              'Failed to connect to websocketURL:',
-              this.websocketURL,
-              'Disabling websocket.'
-            )
-            this.websocketsSupported = false
-            this.socket.disconnect()
-            resolve (this)
-          })
+          }
         },
         error: () => {
           console.error(

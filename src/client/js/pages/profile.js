@@ -39,8 +39,14 @@ window.pageInit = () => {
 }
 
 window.onPostLoad = function (post) {
-  // Only display posts sent by this user
-  if (post.sender === window.currentUserAddress) {
-    post.render()
-  }
+  return new Promise((resolve, reject) => {
+    // Only display posts sent by this user
+    if (post.sender === window.currentUserAddress) {
+      post.init().then((result) => {
+        resolve (result)
+      })
+    } else {
+      resolve (false)
+    }
+  })
 }
