@@ -53,7 +53,7 @@ export default class Config {
     ]
 
     this.DEFAULT_UNITE_ENDPOINTS = [
-      'http://unite.cash:5001/'
+      'http://unite.cash:5501/'
       //'https://alpha.unite.cash/',
       //'https://beta.unite.cash/',
       //'https://gamma.unite.cash/',

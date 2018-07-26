@@ -5,7 +5,7 @@ This list outlines some things that need to be done.
 ### Bugs and issues
 
 - Fix inefficient and unneeded data stored about transactions in localStorage,
-  (for example nLockTime, version, etc), possibly employine compression
+  (for example nLockTime, version, etc), possibly employing compression
 
 ### Short-term
 

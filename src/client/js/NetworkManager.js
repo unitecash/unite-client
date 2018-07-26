@@ -28,13 +28,13 @@ export default class NetworkManager {
       ).then((result) => {
         if (result !== false) {
           this.endpoint = result
-          if (config.DEBUG_MODE) {
+          /*if (config.DEBUG_MODE) {
             console.log (
               'NetworkManager.constructor:',
               'Successfully connected to Insight!\n',
               this.endpoint
             )
-          }
+          }*/
           this.endpoint.bindEvents()
 
           // At this point in time the network should be ready for use.
@@ -46,15 +46,12 @@ export default class NetworkManager {
           })
 
           this.IPFSNode.on('ready', () => {
-            if (config.DEBUG_MODE) {
+            /*if (config.DEBUG_MODE) {
               console.info('IPFS is ready!')
-            }
+            }*/
             this.isIPFSReady = true
             this.IPFSNode.version((err, version) => {
               if (err) { console.error(err) }
-              if (config.DEBUG_MODE) {
-                console.info('IPFS Version:', version.version)
-              }
               // connect to the IPFS peers
               /* Disabled because the code is obsolete and this functionality
               is now accomplished with the Unite endpoint.
@@ -180,13 +177,13 @@ export default class NetworkManager {
   // TODO add better way of recognizing IPFS hashes.
   // TODO look into Torrents, HTTP, other IPFS "multihash", other DHTs, Tor etc.
   resolveHash(hash) {
-    if (config.DEBUG_MODE) {
+    /*if (config.DEBUG_MODE) {
       console.log(
         'networkManager.resolveHash:',
         'Attempting to resolve:',
         hash
       )
-    }
+    }*/
     return new Promise ((resolve, reject) => {
       if (hash.length === 46 && hash.startsWith('Q')) { // IPFS
         this.retrieveFromIPFS(hash).then((data) => {

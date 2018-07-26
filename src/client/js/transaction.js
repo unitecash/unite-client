@@ -28,7 +28,8 @@ export default class Transaction {
       }
       if (!success) { // look it up from the network and add it to cache
         networkManager.lookupTXID(txid).then((transaction) => {
-          if (TransactionManager.validate (transaction)) {
+          transaction = TransactionManager.validate (transaction)
+          if (transaction !== false) {
             TransactionManager.remember(transaction)
             transaction.options = options
             new Post(transaction).then((result) => {

@@ -168,4 +168,12 @@ export default class Utilities {
     })
   }
 
+  static toAddress (addr) {
+    return Utilities.stripAddressPrefix(
+      bchaddr.toCashAddress(
+        addr
+      )
+    )
+  }
+
 }

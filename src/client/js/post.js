@@ -37,72 +37,50 @@ export default class Post {
         resolve (false)
         return false
       }
-      // initialize, extract, parse and determine the values for attributes
-      var sender = transaction.vin[0].addr
-      var parent = 'none', code = 'none', data = 'none'
-      for (var i = 0; i < transaction.vout.length; i++) {
-        if (!transaction.vout[i].scriptPubKey.asm.startsWith('OP_RETURN')) {
-          // POTENTIAL BUG: should this be this.sender or config.userAddress?
-          if (transaction.vout[i].scriptPubKey.addresses[0] !== config.userAddress &&
-      				parseInt(transaction.vout[i].value * 100000000) != 0) {
-            // parent is determined by non-zero output not equal to sender
-            parent = transaction.vout[i].scriptPubKey.addresses[0]
-          }
-        } else { // OP_RETURN data parsing
-          code = transaction.vout[i].scriptPubKey.asm.substring(10, 14)
-          data = transaction.vout[i].scriptPubKey.asm.substring(14)
-        }
-      }
-      // if the attributes were successfully set, continue.
-      if (parent != 'none' && code != 'none' && data != 'none') {
-        // define all the variables
-        this.type = code
-        this.sender = Utilities.stripAddressPrefix(sender)
-        this.parent = Utilities.stripAddressPrefix(parent)
-        this.txid = transaction.txid
-        this.time = transaction.time
-        this.data = data
-        this.uid = this.txid.substr(0, 16)
-        this.options = transaction.options
-        this.displayContent = []
-        // Now we assign some values which are post-type-dependent
-        if (this.type === '5504') { // this is a name declaration.
-          NameManager.consider ( new Name (
-            this.sender, Utilities.hex2a(this.data), this.time
-          ))
-        } else if (this.type === '5503') { // this is a simple tip/reply.
+      // define all the variables
+      this.type = transaction.code
+      this.sender = Utilities.stripAddressPrefix(transaction.sender)
+      this.parent = Utilities.stripAddressPrefix(transaction.parent)
+      this.txid = transaction.txid
+      this.time = transaction.time
+      this.data = transaction.data
+      this.uid = this.txid.substr(0, 16)
+      this.options = transaction.options
+      this.displayContent = []
+      // Now we assign some values which are post-type-dependent
+      if (this.type === '5504') { // this is a name declaration.
+        NameManager.consider ( new Name (
+          this.sender, Utilities.hex2a(this.data), this.time
+        ))
+      } else if (this.type === '5503') { // this is a simple tip/reply.
+        this.parentTXID = this.data.substr(0, 64)
+        this.displayContent[0] = $('<p></p>')
+        this.displayContent[0].text(Utilities.hex2a(this.data.substr(64)))
+      } else if (this.type === '5501') { // this is a short text post.
+        this.displayContent[0] = $('<p></p>')
+        this.displayContent[0].text(Utilities.hex2a(this.data))
+      } else if (this.type === '5502' || this.type === '5505') { // multimedia
+        this.hash = Utilities.hex2a(this.data)
+        if (this.type === '5505') { // multimedia with a parent TXID.
+          this.hash = this.hash.substr(32)
           this.parentTXID = this.data.substr(0, 64)
-          this.displayContent[0] = $('<p></p>')
-          this.displayContent[0].text(Utilities.hex2a(this.data.substr(64)))
-        } else if (this.type === '5501') { // this is a short text post.
-          this.displayContent[0] = $('<p></p>')
-          this.displayContent[0].text(Utilities.hex2a(this.data))
-        } else if (this.type === '5502' || this.type === '5505') { // multimedia
-          this.hash = Utilities.hex2a(this.data)
-          if (this.type === '5505') { // multimedia with a parent TXID.
-            this.hash = this.hash.substr(32)
-            this.parentTXID = this.data.substr(0, 64)
-          }
-          // we only resolve the IPFS hash to find out more inside of Post.init
-          // which is called by the host page.
         }
-
-        // Now we call the page-specific onPostLoad functionn which will decide
-        // if execution continues beyond this point.
-        if (typeof onPostLoad === 'function') {
-          onPostLoad(this).then((result) => {
-            resolve(result)
-          })
-        } else {
-          if (config.DEBUG_MODE) {
-            console.error(
-              'Post.constructor:',
-              'Cannot find the window.onPostLoad() function!'
-            )
-          }
+        // we only resolve the IPFS hash to find out more inside of Post.init
+        // which is called by the host page if it actually wants to load it.
+      }
+      // Now we call the page-specific onPostLoad functionn which will decide
+      // if execution continues beyond this point.
+      if (typeof onPostLoad === 'function') {
+        onPostLoad(this).then((result) => {
+          resolve(result)
+        })
+      } else {
+        if (config.DEBUG_MODE) {
+          console.error(
+            'Post.constructor:',
+            'Cannot find the window.onPostLoad() function!'
+          )
         }
-      } else { // One or more of the required data values was not provided.
-        resolve (false)
       }
     })
   }

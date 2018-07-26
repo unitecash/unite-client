@@ -21,6 +21,11 @@ window.pageInit = function () {
 }
 window.onPostLoad = function (post) {
   return new Promise((resolve, reject) => {
+
+    if (post.type == 5505) {
+      console.log('post 5505!', post)
+    }
+
     if (post.txid === window.topPostTXID) {
       post.init().then((result) => {
         resolve (result)
