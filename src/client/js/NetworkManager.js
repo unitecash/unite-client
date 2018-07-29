@@ -28,13 +28,13 @@ export default class NetworkManager {
       ).then((result) => {
         if (result !== false) {
           this.endpoint = result
-          /*if (config.DEBUG_MODE) {
+          if (config.DEBUG_MODE) {
             console.log (
               'NetworkManager.constructor:',
               'Successfully connected to Insight!\n',
               this.endpoint
             )
-          }*/
+          }
           this.endpoint.bindEvents()
 
           // At this point in time the network should be ready for use.
@@ -46,9 +46,9 @@ export default class NetworkManager {
           })
 
           this.IPFSNode.on('ready', () => {
-            /*if (config.DEBUG_MODE) {
+            if (config.DEBUG_MODE) {
               console.info('IPFS is ready!')
-            }*/
+            }
             this.isIPFSReady = true
             this.IPFSNode.version((err, version) => {
               if (err) { console.error(err) }
@@ -154,14 +154,14 @@ export default class NetworkManager {
             onprogress: function(progress) {
               if (progress.loaded > config.MAX_HASH_DESCRIPTOR_SIZE) {
                 // stop any unreasonably long malicious payload downloads.
-                if (config.DEBUG_MODE) {
+                /*if (config.DEBUG_MODE) {
                   console.error(
                     'NetworkManager.resolveFromIPFS:',
                     'Not resolving hash descriptor above',
                     config.MAX_HASH_DESCRIPTOR_SIZE,
                     'bytes.'
                   )
-                }
+                }*/
                 xhr.abort()
               }
             }

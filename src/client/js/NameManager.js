@@ -19,12 +19,12 @@ export default class NameManager {
         if (names[i].time < name.time) { // the stored value is old
           names[i] = name
         } else {
-          if (config.DEBUG_MODE) {
+          /*if (config.DEBUG_MODE) {
             console.log (
               'NameManager.consider:',
               'Not adding name because it already exists.'
             )
-          }
+          }*/
         }
       }
     }

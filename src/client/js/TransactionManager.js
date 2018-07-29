@@ -61,26 +61,26 @@ export default class TransactionManager {
         result.sender = Utilities.toAddress(transaction.vin[i].addr)
       } else {
         if (result.sender !== Utilities.toAddress(transaction.vin[i].addr)){
-          if (config.DEBUG_MODE) {
+          /*if (config.DEBUG_MODE) {
             console.log(
               'TransactionManager.validate:',
               'Multiple senders:',
               transaction
             )
-          }
+          }*/
           return false
         }
       }
     }
     // if no sender, return error
     if (result.sender === 'none') {
-      if (config.DEBUG_MODE) {
+      /*if (config.DEBUG_MODE) {
         console.log(
           'TransactionManager.validate:',
           'No sender:',
           transaction
         )
-      }
+      }*/
       return false
     }
 
@@ -102,13 +102,13 @@ export default class TransactionManager {
           if (result.sender !== result.parent &&
               result.parent !== candidate &&
               result.sender !== candidate) {
-            if (config.DEBUG_MODE) {
+            /*if (config.DEBUG_MODE) {
               console.log(
                 'TransactionManager.validate:',
                 'Multiple parents:',
                 transaction
               )
-            }
+            }*/
             return false
           }
           // if sender is parent but parent not vout then make parent vout
@@ -122,13 +122,31 @@ export default class TransactionManager {
         }
 
       } else { // extracts data from OP_RETURN.
-        result.code = transaction.vout[i].scriptPubKey.hex.substring(4, 8)
-        result.data = transaction.vout[i].scriptPubKey.hex.substring(8)
+        var hex = transaction.vout[i].scriptPubKey.hex
+        hex = hex.substr(2)
+        if (hex.startsWith('4c')) {
+          hex = hex.substr(4)
+        } else if (hex.startsWith('4d')) {
+          hex = hex.substr(6)
+        } else if (hex.startsWith('4e')) {
+          hex = hex.substr(10)
+        } else {
+          hex = hex.substr(2)
+        }
+        result.code = hex.substring(0, 4)
+        result.data = hex.substring(4)
       }
     }
     if (result.code.startsWith('55') && result.parent !== 'none') {
       return result
     }
+    /*if(config.DEBUG_MODE) {
+      console.log(
+        'TransactionManager.validate:',
+        'Invalid return prefix or missing parent:',
+        result
+      )
+    }*/
     return false
   }
 

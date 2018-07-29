@@ -94,13 +94,13 @@ export default class Post {
       var isCurrentPostRedundant = false
       for (var i = 0; i < currentPosts.length; i++) {
         if (this.txid === currentPosts[i]) {
-          if (config.DEBUG_MODE) {
+          /*if (config.DEBUG_MODE) {
             console.log (
               'Post.init:',
               this.uid + ':',
               'Not constructing existing post redundantly.'
             )
-          }
+          }*/
           isCurrentPostRedundant = true
           resolve (false)
           return false
@@ -377,7 +377,7 @@ export default class Post {
 
   // loads the replies to this post.
   loadReplies () {
-    if (config.DEBUG_MODE) {
+    /*if (config.DEBUG_MODE) {
       console.log (
         'Post.loadReplies:',
         this.uid + ':',
@@ -388,13 +388,15 @@ export default class Post {
           loadChildren: true
         }
       )
-    }
-    networkManager.loadTransactionsByAddress(this.sender,
-    {
-      parentUID: this.uid,
-      UIReplyIndent: this.options.UIReplyIndent + 1,
-      loadChildren: true
-    })
+    }*/
+    networkManager.loadTransactionsByAddress(
+        this.sender,
+        {
+          parentUID: this.uid,
+          UIReplyIndent: this.options.UIReplyIndent + 1,
+          loadChildren: true
+        }
+      )
   }
 
 }
