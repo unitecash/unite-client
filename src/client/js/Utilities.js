@@ -176,4 +176,29 @@ export default class Utilities {
     )
   }
 
+  static getCurrentTimestamp() {
+    return Math.floor(Date.now() / 1000)
+  }
+
+  // accepts a number of seconds and outputs something like "4h"
+  static readableTimeDiff (seconds) {
+    if (isNaN(seconds)) {
+      return false
+    }
+    seconds = Math.abs(Math.floor(seconds))
+    if (seconds <= 10) {
+      return 'now'
+    } else if (seconds < 60) {
+      return seconds + 's'
+    } else if (seconds < 3600) {
+      return Math.round(seconds / 60)  + 'm'
+    } else if (seconds < 86400) {
+      return Math.round(seconds / 3600) + 'h'
+    } else if (seconds < (86400 * 730.5)) {
+      return Math.round(seconds / 86400) + 'd'
+    } else {
+      return Math.round(seconds / 86400 / 365.25) + 'y'
+    }
+  }
+
 }

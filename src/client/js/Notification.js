@@ -45,13 +45,12 @@ export default class Notification {
       this.title = post.sender.substr(0, 6)
       this.body = 'Changed their name to ' + post.senderName.displayName
     }
-    if (config.DEBUG_MODE) {
-      console.log(
+      log(
+        'notif',
         'Notification.constructor:',
         'Constructed notification:',
         this
       )
-    }
     return this
   }
 

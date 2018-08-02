@@ -28,6 +28,10 @@ import Config from './Config'
 window.Config = Config
 import Utilities from './Utilities'
 window.Utilities = Utilities
+import Logger from './Logger'
+window.Logger = Logger
+window.log = window.Logger.log
+window.error = window.Logger.error
 import Messages from './UI/Messages'
 window.Messages = Messages
 import Popup from './UI/Popup'
@@ -86,6 +90,7 @@ window.User = User
 export default class App {
   constructor () {
     window.config = new Config()
+    // if the user is logged in
     if (sessionStorage.privateKey !== undefined) {
       $(document).ready(() => {
         window.notificationManager = new NotificationManager()
@@ -97,8 +102,9 @@ export default class App {
           }
         })
       })
-    } else {
-      if (window.location.pathname.split('/').pop() != 'login.html') { // endsWith
+    } else { // user is not logged in
+      // if we are not at login.html then redirect there
+      if (window.location.pathname.split('/').pop() != 'login.html') {
         Utilities.redirect('login.html')
       }
     }

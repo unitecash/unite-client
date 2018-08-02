@@ -19,12 +19,11 @@ export default class NameManager {
         if (names[i].time < name.time) { // the stored value is old
           names[i] = name
         } else {
-          /*if (config.DEBUG_MODE) {
-            console.log (
-              'NameManager.consider:',
-              'Not adding name because it already exists.'
-            )
-          }*/
+          log(
+            'name',
+            'NameManager.consider:',
+            'Not adding name because it already exists.'
+          )
         }
       }
     }
@@ -39,17 +38,13 @@ export default class NameManager {
       var success = false
       var names = JSON.parse (localStorage.names)
       for (var i = 0; i < names.length; i++) {
-        if (config.DEBUG_MODE) {
-          /*
-          Disabled because this is annoying.
-          console.log (
-            'NameManager.resolveFromAddress:',
-            'comparing potential name address in database with provided address',
-            names[i].address,
-            addr
-          )
-          */
-        }
+        log(
+          'name',
+          'NameManager.resolveFromAddress:',
+          'Comparing potential name address in database with provided address:',
+          names[i].address,
+          addr
+        )
         if (names[i].address == addr) {
           success = true
           resolve (
@@ -88,8 +83,9 @@ export default class NameManager {
     })
   }
 
-  static resolveFromName (name) {
-    // finds an address given a name, from CENTRAL_PROFILE_ADDRESS
+  // Name-to-address resolution function
+  static resolveFromName (name, scheme) {
+    // TODO finds an address given a name, from CENTRAL_PROFILE_ADDRESS
   }
 
 }

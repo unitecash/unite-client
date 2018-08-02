@@ -11,20 +11,41 @@
 
 export default class Config {
   constructor () {
+
+    // Unite network-wide constants
     this.CENTRAL_CONTENT_ADDRESS = bchaddr.toCashAddress('1HBqvcE3jArLxTe4p2KRaDsRHHtEaqG66z')
     this.CENTRAL_PROFILE_ADDRESS = bchaddr.toCashAddress('1B4wyiAP3xYx2H8AqMqrwdMfbw7YwFd4C3')
     this.CENTRAL_GROUPS_ADDRESS =  bchaddr.toCashAddress('14F1NbudfgRyEzau29HpexQPzHkghbWUKR')
     this.CENTRAL_REPORT_ADDRESS =  bchaddr.toCashAddress('12xemQTP98jgkAUGuGqHghdVSufqR7htjY')
 
+    // blockchain-specific settings
     this.DUST_LIMIT_SIZE = 547
     this.DEFAULT_FEE_PER_BYTE = 1.05
+
+    // consensus rules for valid Unite posts
     this.MAX_HASH_DESCRIPTOR_SIZE = 4096
 
+    // client-side configuration settings
     this.ENABLE_WEBSOCKETS = true
     this.ENABLE_CACHING = true
     this.ENABLE_TRANSACTION_BROADCASTS = false
-    this.DEBUG_MODE = true
 
+    // debug logging
+    this.DEBUG_MODE = true
+    this.LOGGING_CATEGORIES = [
+      //'net',
+      'ipfs',
+      //'post',
+      'tx',
+      //'name',
+      'notif',
+      'builder',
+      'user',
+      'ui',
+      'utils'
+    ]
+
+    // endpoints for interfacing with the blockchain
     this.DEFAULT_NETWORK_ENDPOINTS = [
       {
         insightURL: 'https://bitcoincash.blockexplorer.com/api/',
@@ -43,6 +64,7 @@ export default class Config {
       }
     ]
 
+    // endpoints for interfacing with IPFS
     this.DEFAULT_IPFS_ENDPOINTS = [
       'https://ipfs.io/ipfs/',
       'https://gateway.ipfs.io/ipfs/',
@@ -52,6 +74,7 @@ export default class Config {
       'https://ipfs.work/ipfs/'
     ]
 
+    // content publication endpoints
     this.DEFAULT_UNITE_ENDPOINTS = [
       'http://unite.cash:5501/'
       //'https://alpha.unite.cash/',
@@ -62,10 +85,12 @@ export default class Config {
       //'http://blahblahblahblah.onion/',
     ]
 
+    // clear cache when caching is disabled
     if (this.ENABLE_CACHING === false) {
       localStorage.clear()
     }
 
+    // load default configuration if none exists
     if (typeof localStorage.networkEndpoints === 'undefined') {
   		localStorage.networkEndpoints = JSON.stringify(
         this.DEFAULT_NETWORK_ENDPOINTS
@@ -87,6 +112,7 @@ export default class Config {
     }
     this.uniteEndpoints = JSON.parse(localStorage.uniteEndpoints)
 
+    // re-construct the private key from storage
     if (typeof sessionStorage.privateKey !== 'undefined') {
       this.userPrivateKey = bch.PrivateKey.fromWIF(sessionStorage.privateKey)
       this.userAddress = Utilities.stripAddressPrefix (

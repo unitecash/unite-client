@@ -26,14 +26,13 @@ export default class Post {
       if (this.options.UIReplyIndent > 4) {
         // relative to the top post on this page, this post is too far
         // nested in the thread to be loaded
-        if (config.DEBUG_MODE) {
-          console.log (
-            'Post.constructor:',
-            'Relative to top post, this post has reply indent of',
-            this.options.UIReplyIndent,
-            'which is greater than the limit of 4. Killing post.'
-          )
-        }
+        log (
+          'post',
+          'Post.constructor:',
+          'Relative to top post, this post has reply indent of',
+          this.options.UIReplyIndent,
+          'which is greater than the limit of 4. Killing post.'
+        )
         resolve (false)
         return false
       }
@@ -75,12 +74,11 @@ export default class Post {
           resolve(result)
         })
       } else {
-        if (config.DEBUG_MODE) {
-          console.error(
-            'Post.constructor:',
-            'Cannot find the window.onPostLoad() function!'
-          )
-        }
+        log(
+          'post',
+          'Post.constructor:',
+          'Cannot find the window.onPostLoad() function!'
+        )
       }
     })
   }
@@ -94,13 +92,12 @@ export default class Post {
       var isCurrentPostRedundant = false
       for (var i = 0; i < currentPosts.length; i++) {
         if (this.txid === currentPosts[i]) {
-          /*if (config.DEBUG_MODE) {
-            console.log (
-              'Post.init:',
-              this.uid + ':',
-              'Not constructing existing post redundantly.'
-            )
-          }*/
+          log (
+            'post',
+            'Post.init:',
+            this.uid + ':',
+            'Not constructing existing post redundantly.'
+          )
           isCurrentPostRedundant = true
           resolve (false)
           return false
@@ -129,13 +126,12 @@ export default class Post {
               try {
                 this.resolvedData = JSON.parse(data)
               } catch (e) {
-                if (config.DEBUG_MODE) {
-                  console.error (
-                    'Post.init:',
-                    this.uid + ':',
-                    'Unable to parse JSON from hash descriptor'
-                  )
-                }
+                error (
+                  'post',
+                  'Post.init:',
+                  this.uid + ':',
+                  'Unable to parse JSON from hash descriptor'
+                )
                 resolve (false) // malformed JSON from the hash descriptor, die.
                 return false
               }
@@ -215,14 +211,13 @@ export default class Post {
                     unlock (or a group key)).
                   - Markdown content (a markdown parser and editor)
                 */
-                if (config.DEBUG_MODE) {
-                  console.log(
-                    'Post.init:',
-                    this.uid + ':',
-                    'Unrecognized multimedia content type:',
-                    this.resolvedData.contentType
-                  )
-                }
+                log(
+                  'post',
+                  'Post.init:',
+                  this.uid + ':',
+                  'Unrecognized multimedia content type:',
+                  this.resolvedData.contentType
+                )
               }
 
               // Now that the displayContent has been populated we are ready to
@@ -277,7 +272,11 @@ export default class Post {
     var timeText = $('<p></p>')
     timeText.attr('id', this.uid + 'time')
     timeText.attr('class', 'time')
-    timeText.text(this.time)
+    timeText.text(
+      Utilities.readableTimeDiff(
+        Utilities.getCurrentTimestamp() - this.time
+      )
+    )
 
     var postHeader = $('<div></div>')
     postHeader.append(this.senderName.getInlineName())
@@ -349,36 +348,34 @@ export default class Post {
     postDiv.append(actionBar)
 
     if (typeof this.options.parentUID === 'undefined') {
-      /*if (config.DEBUG_MODE) {
-        console.log (
+        log (
+          'post',
           'Post.render:',
-          uid + ':',
+          this.uid + ':',
           'No parent UID given, rendering based on isLive'
         )
-      }*/
       if (this.options.isLive) {
         $(tag).prepend(postDiv)
       } else {
         $(tag).append(postDiv)
       }
     } else { // insert the post at the location of the parent UID
-      /*if (config.DEBUG_MODE) {
-        console.log (
-          'Post.render:',
-          uid + ':',
-          'ParentUID was defined as ',
-          this.options.parentUID,
-          ', rendering after parentUID on the page'
-        )
-      }*/
+      log (
+        'post',
+        'Post.render:',
+        uid + ':',
+        'ParentUID was defined as ',
+        this.options.parentUID,
+        ', rendering after parentUID on the page'
+      )
       $('#' + this.options.parentUID).after(postDiv)
     }
   }
 
   // loads the replies to this post.
   loadReplies () {
-    /*if (config.DEBUG_MODE) {
-      console.log (
+      log (
+        'post',
         'Post.loadReplies:',
         this.uid + ':',
         'Rendering children with parameters:',
@@ -388,7 +385,6 @@ export default class Post {
           loadChildren: true
         }
       )
-    }*/
     networkManager.loadTransactionsByAddress(
         this.sender,
         {

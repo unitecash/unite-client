@@ -3,7 +3,7 @@
  * Author: The Unite.cash Developers
  * License: GNU AGPL v3
  *
- * @file Defines a class for managing data related to users.
+ * @file defines a class for managing data related to users.
  */
 
 export default class User {

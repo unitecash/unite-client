@@ -29,15 +29,14 @@ export default class PostBuilder {
       params.content = ''
     }
 
-    if (config.DEBUG_MODE) {
-      console.log('PostBuilder called with arguments:')
-      console.log('Type:           ', params.type)
-      console.log('Content:        ', params.content)
-      console.log('Parent Address: ', params.parentAddress)
-      console.log('Amount:         ', params.amount)
-      console.log('Fee:            ', params.fee)
-      console.log('Parent TXID:    ', params.parentTXID)
-    }
+
+    log('builder', 'PostBuilder called with arguments:')
+    log('builder', 'Type:           ', params.type)
+    log('builder', 'Content:        ', params.content)
+    log('builder', 'Parent Address: ', params.parentAddress)
+    log('builder', 'Amount:         ', params.amount)
+    log('builder', 'Fee:            ', params.fee)
+    log('builder', 'Parent TXID:    ', params.parentTXID)
 
     // if the params.content needs to be uploaded to IPFS, do it here.
     if (typeof params.content === 'object') {
@@ -52,13 +51,12 @@ export default class PostBuilder {
         } else if (file.type.startsWith('video')) {
           hashDescriptor.contentType = 'video'
         } else { // ...
-          if (config.DEBUG_MODE) {
-            console.log (
+            log (
+              'builder',
               'PostBuilder.build:',
               'Unable to recognize content type:',
               file.type
             )
-          }
           return false
         }
         hashDescriptor.description = params.content.text
@@ -88,15 +86,12 @@ export default class PostBuilder {
           // we also add the hash descriptor to params so it can be submitted
           // to the endpoint at publication time.
           params.hashDescriptor = hashDescriptor
-
-          // debug printing for hash descriptor
-          if (config.DEBUG_MODE) {
-            console.log(
-              'PostBuilder.build:',
-              'Created hash descriptor for multimedia content:',
-              hashDescriptor
-            )
-          }
+          log(
+            'builder',
+            'PostBuilder.build:',
+            'Created hash descriptor for multimedia content:',
+            hashDescriptor
+          )
 
           // hash the hash descriptor
           Utilities.fileToIPFSHash(hd).then((hash) => {
@@ -104,14 +99,13 @@ export default class PostBuilder {
             // put HD's hash on the blockchain.
             params.content = hash
             // debug printing prior to constructing.
-            if (config.DEBUG_MODE) {
-              console.log(
-                'PostBuilder.build:',
-                'constructing multimedia post with parameters:',
-                params,
-                window.attachedFiles,
-              )
-            }
+            log(
+              'builder',
+              'PostBuilder.build:',
+              'constructing multimedia post with parameters:',
+              params,
+              window.attachedFiles,
+            )
             PostBuilder.constructTransaction(
               params,
               window.attachedFiles
@@ -147,25 +141,23 @@ export default class PostBuilder {
       // if there is a parent transaction, encode the OP_RETURN data to save
       // as much blockchain space (and cost in fees) as possible
       if (typeof params.parentTXID === 'undefined') { // if no parent TXID
-        if (config.DEBUG_MODE) {
-          console.log (
-            'PostBuilder.build:',
-            'Adding (ascii) data to transaction:',
-            Utilities.hex2a(params.type) + params.content
-          )
-        }
+        log (
+          'builder',
+          'PostBuilder.build:',
+          'Adding (ascii) data to transaction:',
+          Utilities.hex2a(params.type) + params.content
+        )
         transaction.addData(Utilities.hex2a(params.type) + params.content)
       } else { // if there is a parent TXID
         var txData = Utilities.hex2buf(params.type)
         txData = txData.concat(Utilities.hex2buf(params.parentTXID))
         txData = txData.concat(Utilities.ascii2buf(params.content))
-        if (config.DEBUG_MODE) {
-          console.log (
-            'PostBuilder.build:',
-            'Adding (buffer) data to transaction:',
-            txData
-          )
-        }
+        log (
+          'builder',
+          'PostBuilder.build:',
+          'Adding (buffer) data to transaction:',
+          txData
+        )
         transaction.addData(new Buffer(txData))
       }
 
@@ -239,13 +231,12 @@ export default class PostBuilder {
     }
     // set the random URL:
     var randomURL = Utilities.getRandomFromArray(config.uniteEndpoints)
-    if (config.DEBUG_MODE) {
-      console.log(
-        'Post.pulishConten:',
-        'Selected Unite content publishing endpoint, sending request:',
-        randomURL + 'publish'
-      )
-    }
+    log(
+      'builder',
+      'Post.pulishConten:',
+      'Selected Unite content publishing endpoint, sending request:',
+      randomURL + 'publish'
+    )
     // make the ajax request
     $.ajax({
       type: 'POST',

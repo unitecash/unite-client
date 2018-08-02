@@ -14,12 +14,11 @@ export default class TransactionManager {
   // Effectively, this dictates what is or is not considered a valid post.
   static validate (transaction) {
     if (typeof transaction !== 'object') {
-      if (config.DEBUG_MODE) {
-        console.error(
-          'A malformed transaction was passed for validation:',
-          transaction
-        )
-      }
+      log(
+        'tx',
+        'A malformed transaction was passed for validation:',
+        transaction
+      )
       return false
     }
     if(!transaction.vout ||
@@ -28,13 +27,12 @@ export default class TransactionManager {
         !transaction.vin.length ||
         !transaction.txid ||
         !transaction.time){
-      if(config.DEBUG_MODE){
-        console.log(
+        log(
+          'tx',
           'TransactionManager.validate:',
           'transaction is missing essential data, failing:',
           transaction
         )
-      }
       return false
     }
 
@@ -61,26 +59,24 @@ export default class TransactionManager {
         result.sender = Utilities.toAddress(transaction.vin[i].addr)
       } else {
         if (result.sender !== Utilities.toAddress(transaction.vin[i].addr)){
-          /*if (config.DEBUG_MODE) {
-            console.log(
-              'TransactionManager.validate:',
-              'Multiple senders:',
-              transaction
-            )
-          }*/
+          log(
+            'tx',
+            'TransactionManager.validate:',
+            'Multiple senders:',
+            transaction
+          )
           return false
         }
       }
     }
     // if no sender, return error
     if (result.sender === 'none') {
-      /*if (config.DEBUG_MODE) {
-        console.log(
-          'TransactionManager.validate:',
-          'No sender:',
-          transaction
-        )
-      }*/
+      log(
+        'tx',
+        'TransactionManager.validate:',
+        'No sender:',
+        transaction
+      )
       return false
     }
 
@@ -102,13 +98,12 @@ export default class TransactionManager {
           if (result.sender !== result.parent &&
               result.parent !== candidate &&
               result.sender !== candidate) {
-            /*if (config.DEBUG_MODE) {
-              console.log(
-                'TransactionManager.validate:',
-                'Multiple parents:',
-                transaction
-              )
-            }*/
+            log(
+              'tx',
+              'TransactionManager.validate:',
+              'Multiple parents:',
+              transaction
+            )
             return false
           }
           // if sender is parent but parent not vout then make parent vout
@@ -140,13 +135,12 @@ export default class TransactionManager {
     if (result.code.startsWith('55') && result.parent !== 'none') {
       return result
     }
-    /*if(config.DEBUG_MODE) {
-      console.log(
-        'TransactionManager.validate:',
-        'Invalid return prefix or missing parent:',
-        result
-      )
-    }*/
+    log(
+      'tx',
+      'TransactionManager.validate:',
+      'Invalid return prefix or missing parent:',
+      result
+    )
     return false
   }
 
@@ -155,10 +149,11 @@ export default class TransactionManager {
     // check if it exists
     for (var i = 0; i < transactions.length; i++) {
       if (transactions[i].txid == transaction.txid) {
-        if (config.DEBUG_MODE) {
-          console.log('Not adding transaction, it is a duplicate.')
-        }
-        return
+        log('tx',
+          'Not adding transaction, it is a duplicate:',
+          transaction.txid.substr(0, 16)
+        )
+        return false
       }
     }
     transactions.push(transaction)

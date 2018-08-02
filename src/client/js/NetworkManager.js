@@ -28,13 +28,12 @@ export default class NetworkManager {
       ).then((result) => {
         if (result !== false) {
           this.endpoint = result
-          if (config.DEBUG_MODE) {
-            console.log (
-              'NetworkManager.constructor:',
-              'Successfully connected to Insight!\n',
-              this.endpoint
-            )
-          }
+          log (
+            'net',
+            'NetworkManager.constructor:',
+            'Successfully connected to Insight!\n',
+            this.endpoint
+          )
           this.endpoint.bindEvents()
 
           // At this point in time the network should be ready for use.
@@ -46,9 +45,7 @@ export default class NetworkManager {
           })
 
           this.IPFSNode.on('ready', () => {
-            if (config.DEBUG_MODE) {
-              console.info('IPFS is ready!')
-            }
+            log('net', 'IPFS is ready!')
             this.isIPFSReady = true
             this.IPFSNode.version((err, version) => {
               if (err) { console.error(err) }
@@ -61,9 +58,7 @@ export default class NetworkManager {
             })
           })
         } else {
-          if (config.DEBUG_MODE) {
-            console.log ('Failed to connect to Insight')
-          }
+          error('net', 'Failed to connect to Insight')
         }
       })
     })
@@ -87,11 +82,9 @@ export default class NetworkManager {
             })
           }
           resolve (true) // TODO resolve true only after all ajax calls complete.
-          if (config.DEBUG_MODE === true) {
-            console.info('Broadcasting Transaction:\n\n' + hex)
-          }
+          log('net', 'Broadcasting Transaction:\n\n' + hex)
         } else {
-          console.info('Pretend broadcasting TX:\n\n' + hex)
+          log('net', 'Pretend broadcasting TX:\n\n' + hex)
           resolve (true) // true, because no error has occurred.
         }
       } else {
@@ -139,30 +132,27 @@ export default class NetworkManager {
             resolve (data)
           },
           error: (data) => {
-            if (config.DEBUG_MODE) {
-              console.error (
-                'NetworkManager.retrieveFromIPFS:',
-                'Failed to resolve IPFS hash:',
-                hash,
-                'due to error:',
-                data
-              )
-            }
+            error(
+              'ipfs',
+              'NetworkManager.retrieveFromIPFS:',
+              'Failed to resolve IPFS hash:',
+              hash,
+              'due to error:',
+              data
+            )
             resolve (false)
           },
           xhrFields: {
             onprogress: function(progress) {
               if (progress.loaded > config.MAX_HASH_DESCRIPTOR_SIZE) {
-                // stop any unreasonably long malicious payload downloads.
-                /*if (config.DEBUG_MODE) {
-                  console.error(
-                    'NetworkManager.resolveFromIPFS:',
-                    'Not resolving hash descriptor above',
-                    config.MAX_HASH_DESCRIPTOR_SIZE,
-                    'bytes.'
-                  )
-                }*/
                 xhr.abort()
+                error(
+                  'ipfs',
+                  'NetworkManager.resolveFromIPFS:',
+                  'Not resolving hash descriptor above',
+                  config.MAX_HASH_DESCRIPTOR_SIZE,
+                  'bytes.'
+                )
               }
             }
           }
@@ -177,27 +167,25 @@ export default class NetworkManager {
   // TODO add better way of recognizing IPFS hashes.
   // TODO look into Torrents, HTTP, other IPFS "multihash", other DHTs, Tor etc.
   resolveHash(hash) {
-    /*if (config.DEBUG_MODE) {
-      console.log(
-        'networkManager.resolveHash:',
-        'Attempting to resolve:',
-        hash
-      )
-    }*/
+    log(
+      'ipfs',
+      'networkManager.resolveHash:',
+      'Attempting to resolve:',
+      hash
+    )
     return new Promise ((resolve, reject) => {
       if (hash.length === 46 && hash.startsWith('Q')) { // IPFS
         this.retrieveFromIPFS(hash).then((data) => {
           resolve (data)
         })
       } else {
-        if (config.DEBUG_MODE) {
-          console.log(
-            'networkManager.resolveHash:',
-            'Could not recognize the hash type of hash:',
-            hash
-          )
-          resolve (false)
-        }
+        error(
+          'ipfs',
+          'networkManager.resolveHash:',
+          'Could not recognize the hash type of hash:',
+          hash
+        )
+        resolve (false)
       }
     })
   }
@@ -218,7 +206,8 @@ export default class NetworkManager {
     this.isDead = true
   }
 
-  // The below methods provide interfaces to the network endpoint.
+  // The below methods provide interfaces to the underlying network endpoint.
+  // TODO find a less hacky way to do this. Inheritance?
 
   getBalance (addr) {
     return this.endpoint.getBalance (addr)
@@ -239,9 +228,5 @@ export default class NetworkManager {
   loadTransactionsByAddress (addr, options) {
     this.endpoint.loadTransactionsByAddress (addr, options)
   }
-
-
-
-
 
 }

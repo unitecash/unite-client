@@ -57,7 +57,8 @@ export default class NetworkEndpoint {
               resolve (this)
             })
             this.socket.on('error', () => {
-              console.error(
+              log(
+                'net',
                 'NetworkEndpoint.constructor:',
                 this.uid + ':',
                 'Failed to connect to websocketURL:',
@@ -69,7 +70,8 @@ export default class NetworkEndpoint {
               resolve (this)
             })
             this.socket.on('connect_failed', () => {
-              console.error(
+              log(
+                'net',
                 'NetworkEndpoint.constructor:',
                 this.uid + ':',
                 'Failed to connect to websocketURL:',
@@ -81,7 +83,8 @@ export default class NetworkEndpoint {
               resolve (this)
             })
             this.socket.on('connect_error', () => {
-              console.error(
+              log(
+                'net',
                 'NetworkEndpoint.constructor:',
                 this.uid + ':',
                 'Failed to connect to websocketURL:',
@@ -97,7 +100,8 @@ export default class NetworkEndpoint {
           }
         },
         error: () => {
-          console.error(
+          error(
+            'net',
             'NetworkEndpoint.constructor:',
             this.uid + ':',
             'Failed to connect to insightURL:',

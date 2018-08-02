@@ -27,4 +27,4 @@ data, and filtering out Unite data from other unrelated noise.
 The content layer is abstracted on top of the data layer. The content layer does
 not care which/ blockchain/DHT is used (or even if they are used), and is
 generally only concerned with delivering, routing, and displaying the
-appropriate content to the correct users. 
+appropriate content to the correct users.
