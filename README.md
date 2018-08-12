@@ -32,7 +32,7 @@ You may also run the electron desktop application with ```npm run start```.
 
 ## Contributing
 
-Pull requests are much appreciated. Please see the [TODO.md](TODO) for a list
+Pull requests are much appreciated. Please see the [TODO](TODO.md) for a list
 of what needs doing. Especially lacking are UX and graphic designers.
 
 ## Donations
@@ -54,4 +54,4 @@ As of May 18th, 2018, any code committed to this repository, and any code used
 by the unite.cash project shall be licensed under the terms of the GNU AGPL 3.0
 license. By incorporating code from this repository or any other unite.cash
 repository or source into any application, you agree to make your source code
-freely available to the public. The GNU AGPL 3.0 can be found  [https://www.gnu.org/licenses/agpl-3.0.en.html](here.)
+freely available to the public. The GNU AGPL 3.0 can be found  [here.](https://www.gnu.org/licenses/agpl-3.0.en.html)
