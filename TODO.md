@@ -7,6 +7,11 @@ This list outlines some things that need to be done.
 - Errors aren't being properly caught for failed WebSocket connections
 - When uploading files to the Unite Endpoint, onerror is called
 - Argument parsing in various places is extremely poor, use ES6 destructuring.
+- The IPFS functionality should be removed from the client. The only reason the
+  client needs to have IPFS is in order to calculate the hashes of files.
+  A simple function (instead of an additional 10MB of code) can be used for
+  this.
+- clients could pay endpoints to seed IPFS content.
 
 ### Short-term
 

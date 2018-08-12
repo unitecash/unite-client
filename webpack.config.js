@@ -1,29 +1,28 @@
 const path = require('path')
+
+const webpack = require('webpack')
+
 const CleanWebpackPlugin = require('clean-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
-const exclude = /(node_modules|tests)/
-const webpack = require('webpack')
+const SriPlugin = require('webpack-subresource-integrity')
+
+const exclude = /(node_modules|tests|public)/
 
 const config = {
   devtool: 'source-map',
-  devServer: {
-    contentBase: path.join(__dirname, 'public')
-  },
   entry: {
-    app: "./src/client/js/App.js",
-    login: "./src/client/js/pages/login.js",
-    newPosts: "./src/client/js/pages/newPosts.js",
-    profile: "./src/client/js/pages/profile.js",
-    post: "./src/client/js/pages/post.js"
-  },
-  resolve: {
-    extensions: ['.tsx', '.ts', '.js']
+    app:      './src/App.js',
+    login:    './src/pages/login.js',
+    newPosts: './src/pages/newPosts.js',
+    profile:  './src/pages/profile.js',
+    post:     './src/pages/post.js'
   },
   output: {
-    path: path.resolve(__dirname, 'public'),
-    filename: 'js/[name].js'
+    path: path.resolve(__dirname, 'dist'),
+    filename: 'javascript/[name].js',
+    crossOriginLoading: 'anonymous'
   },
   module: {
     rules: [
@@ -37,6 +36,18 @@ const config = {
         exclude: exclude
       },
       {
+        test: /\.(js|jsx)?$/,
+        use: [
+          {
+            loader: 'babel-loader',
+            options: {
+              presets: ['react', 'env']
+            }
+          }
+        ],
+        exclude: exclude
+      },
+      {
         test: /\.css$/,
         use: ExtractTextPlugin.extract({
           fallback: 'style-loader',
@@ -44,7 +55,7 @@ const config = {
             {
               loader: 'css-loader',
               options: {
-                minimize: false,
+                minimize: true,
                 sourceMap: true
               }
             }
@@ -102,37 +113,72 @@ const config = {
           }
         ],
         exclude: exclude
-      },
-      {
-        test: /\.html$/,
-        use: [
-          {
-            loader: 'file-loader',
-            options: {
-              name: '[name].[ext]'
-            }
-          }
-        ],
-        exclude: exclude
       }
     ]
   },
   plugins: [
     new CleanWebpackPlugin(['dist']),
-    // new HtmlWebpackPlugin({
-    //   filename: 'index.html',
-    //   template: 'src/index.html'
-    // }),
-    // new FaviconsWebpackPlugin('images/favicon/favicon.png'),
+    new HtmlWebpackPlugin({
+      template: './src/template.html',
+      filename: 'index.html',
+      inject: 'body',
+      chunks: ['app']
+    }),
+    new HtmlWebpackPlugin({
+      template: './src/template.html',
+      filename: 'login.html',
+      inject: 'body',
+      chunks: ['app', 'login']
+    }),
+    new HtmlWebpackPlugin({
+      template: './src/template.html',
+      filename: 'profile.html',
+      inject: 'body',
+      chunks: ['app', 'profile']
+    }),
+    new HtmlWebpackPlugin({
+      template: './src/template.html',
+      filename: 'post.html',
+      inject: 'body',
+      chunks: ['app', 'post']
+    }),
+    new HtmlWebpackPlugin({
+      template: './src/template.html',
+      filename: 'newposts.html',
+      inject: 'body',
+      chunks: ['app', 'newPosts']
+    }),
+    new SriPlugin({
+      hashFuncNames: ['sha256', 'sha384'],
+      enabled: false // disabled due to it breaking file:// functionality
+    }),
+    new FaviconsWebpackPlugin({
+      logo: path.join(__dirname, 'src/images/icon.svg'),
+      prefix: 'icons/',
+      inject: true,
+      background: '#223',
+      title: 'Unite',
+      icons: {
+        android: true,
+        appleIcon: true,
+        appleStartup: true,
+        coast: true,
+        favicons: true,
+        firefox: true,
+        opengraph: true,
+        twitter: true,
+        yandex: true,
+        windows: true
+      }
+    }),
     new ExtractTextPlugin({
       filename: (getPath) => {
-        return getPath('css/styles.css')
+        return getPath('styles/style.css')
       }
-    })//,
-    //new webpack.ProvidePlugin({
-    //  $: "jquery",
-    //  jQuery: "jquery"
-    //})
+    }),
+    new webpack.DefinePlugin({
+      '__REACT_DEVTOOLS_GLOBAL_HOOK__': '({ isDisabled: true })'
+    })
   ],
   node: {
     fs: 'empty'

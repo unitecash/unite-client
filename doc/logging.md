@@ -1,4 +1,4 @@
-# logging
+# Logging
 
 The Unite client contains many complicated components, all of which produce
 debug and error messages. In order to make it easier for developers to find and
@@ -18,14 +18,14 @@ was called from within networkManager.doSomething:
 networkManager.doSomething: Could not do thing: 42 Orange
 ```
 
-## Control of logging categories
+## Control of Logging Categories
 
 The advantage to this approach is that when debugging, developers can easily
 enable and disable certain logging categories to avoid being overwhelmed.
 For example, if a bug was preventing transactions from broadcasting, logging
 for the "net" category can easily be enabled from Config.js.
 
-## Adding new logging categories
+## Adding New Logging Categories
 
 Logging categories should be added on a per-feature basis. For example, it is not
 necessary to add a category for every function, but when implementing something

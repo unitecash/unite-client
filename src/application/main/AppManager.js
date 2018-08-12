@@ -9,7 +9,6 @@ class AppManager {
   constructor (app, options) {
     this.app = app
     this.options = options || {}
-    console.log(options.icon)
     this.bindEvents()
   }
 
@@ -67,13 +66,13 @@ class AppManager {
       }
     ])
 
-    this.tray = new Tray('./public/images/icon.ico')
+    this.tray = new Tray('./src/images/icon.ico')
     this.tray.setContextMenu(this.contextMenu)
     this.tray.on('click', this.onClick.bind(this))
 
     this.mainWindow = new BrowserWindow(this.options)
     this.mainWindow.loadURL(url.format({
-      pathname: path.join(__dirname, '../../../public/index.html'),
+      pathname: path.join(__dirname, '../../../dist/index.html'),
       protocol: 'file:',
       slashes: true
     }))
