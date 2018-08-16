@@ -363,7 +363,7 @@ export default class Post {
       log (
         'post',
         'Post.render:',
-        uid + ':',
+        this.uid + ':',
         'ParentUID was defined as ',
         this.options.parentUID,
         ', rendering after parentUID on the page'

@@ -117,7 +117,8 @@ const config = {
     ]
   },
   plugins: [
-    new CleanWebpackPlugin(['dist']),
+    // disabled due to preformance issues
+    //new CleanWebpackPlugin(['dist']),
     new HtmlWebpackPlugin({
       template: './src/template.html',
       filename: 'index.html',

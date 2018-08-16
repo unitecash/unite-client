@@ -47,7 +47,9 @@
     "webpack-subresource-integrity": "^1.1.0-rc.4"
   },
   "dependencies": {
+    "@material-ui/core": "^1.5.0",
     "async-series": "0.0.1",
+    "babel-polyfill": "^6.26.0",
     "bchaddrjs": "^0.2.1",
     "bitcoincashjs": "^0.1.10",
     "electron": "^1.8.4",
