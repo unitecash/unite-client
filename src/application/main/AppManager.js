@@ -66,7 +66,7 @@ class AppManager {
       }
     ])
 
-    this.tray = new Tray('./src/images/icon.ico')
+    this.tray = new Tray('./src/images/icon.png')
     this.tray.setContextMenu(this.contextMenu)
     this.tray.on('click', this.onClick.bind(this))
 
