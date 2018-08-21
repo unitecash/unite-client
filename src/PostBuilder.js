@@ -50,6 +50,8 @@ export default class PostBuilder {
           hashDescriptor.contentType = 'image'
         } else if (file.type.startsWith('video')) {
           hashDescriptor.contentType = 'video'
+        } else if (file.type.startsWith('audio')) {
+          hashDescriptor.contentType = 'audio'
         } else { // ...
             log (
               'builder',
@@ -68,7 +70,6 @@ export default class PostBuilder {
         store the hashes in the IPFSHashes array, to be sent to the Unite
         endpoint later.
         */
-
         Utilities.fileToIPFSHash(file).then((hash) => {
           // add the hash to the IPFSHashes array
           // set the hash pointed to by the hash descriptor.
@@ -185,7 +186,7 @@ export default class PostBuilder {
         networkManager.broadcastTransaction(transaction.toString()).then((result) => {
           if (result === true) {
             if (params.type === '5502' || params.type === '5505') {
-              // TODO tell the user that things are uploading so they don't close window.
+              // TODO tell user things are uploading so they don't close window.
               // we should now upload things to the Unite publishing endpoint.
               if (typeof files !== 'undefined') { // Feeble.
                 PostBuilder.publishContent(
@@ -224,7 +225,7 @@ export default class PostBuilder {
 
     // create a form data object and add the relevant objects to it for upload
     var fdata = new FormData()
-    fdata.append('rawtx', rawtx)
+    fdata.append('signedTransaction', rawtx)
     fdata.append('hashDescriptor', JSON.stringify(params.hashDescriptor))
     for (var i = 0; i < files.length; i++) {
       fdata.append('files', files[i], files[i].name)

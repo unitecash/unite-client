@@ -159,19 +159,33 @@ export default class Utilities {
     return new bch.PrivateKey(key).toWIF()
   }
 
+
+  /* TODO:
+    THE ONLY REASON WE ARE USING THE IPFS.JS LIBRARY AT ALL IS FOR THIS FUNCTION
+    If it could be removed or this function implemented some other way, the
+    size of the app.js output, the build time, the load time and the user
+    experience would be a lot better. Also, IPFS.js likes to kill devtools
+    somehow.
+  */
   static fileToIPFSHash (file) {
+    log('util', 'fileToIPFSHash: Converting file to hash')
     return new Promise ((resolve, reject) => {
       // convert file to buffer.
       var reader = new FileReader()
       reader.onload = function(e) {
         var buf = new Buffer(e.target.result)
-        networkManager.IPFSNode.files.add({
-          "only-hash": true,
-          "content": buf,
-          "path": "file"
-        }).then((res) => {
-          resolve (res[0].hash)
-        })
+        networkManager.IPFSNode.files.add(
+          [{
+            'content': buf,
+            'path': 'file'
+          }],
+          {
+            onlyHash: true
+          },
+          (err, res) => {
+            resolve (res[0].hash)
+          }
+        )
       }
       reader.readAsArrayBuffer(file)
     })

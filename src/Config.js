@@ -33,8 +33,8 @@ export default class Config {
     // debug logging
     this.DEBUG_MODE = true
     this.LOGGING_CATEGORIES = [
-      //'net',
-      //'ipfs',
+      'net',
+      'ipfs',
       //'post',
       //'tx',
       //'name',
@@ -42,7 +42,7 @@ export default class Config {
       'builder',
       'user',
       'ui',
-      'utils'
+      'util'
     ]
 
     // endpoints for interfacing with the blockchain

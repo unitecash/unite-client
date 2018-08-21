@@ -11,7 +11,7 @@ window.pageInit = function () {
     }).render()
   })
 
-  class NewPpstsPage extends React.Component {
+  class NewPostsPage extends React.Component {
     render () {
       return (
         <div className="content">
@@ -20,6 +20,8 @@ window.pageInit = function () {
       )
     }
   }
+
+  ReactDOM.render(<NewPostsPage />, document.getElementById('app'))
 
   networkManager.loadTransactionsByAddress(config.CENTRAL_CONTENT_ADDRESS,
   {

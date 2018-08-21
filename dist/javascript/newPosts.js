@@ -102,16 +102,16 @@ window.pageInit = function () {
     }).render()
   });
 
-  var NewPpstsPage = function (_React$Component) {
-    _inherits(NewPpstsPage, _React$Component);
+  var NewPostsPage = function (_React$Component) {
+    _inherits(NewPostsPage, _React$Component);
 
-    function NewPpstsPage() {
-      _classCallCheck(this, NewPpstsPage);
+    function NewPostsPage() {
+      _classCallCheck(this, NewPostsPage);
 
-      return _possibleConstructorReturn(this, (NewPpstsPage.__proto__ || Object.getPrototypeOf(NewPpstsPage)).apply(this, arguments));
+      return _possibleConstructorReturn(this, (NewPostsPage.__proto__ || Object.getPrototypeOf(NewPostsPage)).apply(this, arguments));
     }
 
-    _createClass(NewPpstsPage, [{
+    _createClass(NewPostsPage, [{
       key: 'render',
       value: function render() {
         return React.createElement(
@@ -122,8 +122,10 @@ window.pageInit = function () {
       }
     }]);
 
-    return NewPpstsPage;
+    return NewPostsPage;
   }(React.Component);
+
+  ReactDOM.render(React.createElement(NewPostsPage, null), document.getElementById('app'));
 
   networkManager.loadTransactionsByAddress(config.CENTRAL_CONTENT_ADDRESS, {
     loadChildren: false

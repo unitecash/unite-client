@@ -4,6 +4,7 @@ This list outlines some things that need to be done.
 
 ### Bugs and issues
 
+- NetworkEndpoint:166 filter not defined after moving to babel-loader
 - Errors aren't being properly caught for failed WebSocket connections
 - When uploading files to the Unite Endpoint, onerror is called
 - Argument parsing in various places is extremely poor, use ES6 destructuring.
