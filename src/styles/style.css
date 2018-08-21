@@ -313,10 +313,13 @@ body {
 }
 
 .UIDisplayImage, .UIDisplayVideo {
-	width:100%;
+	max-width:100%;
 	align:center;
 	text-align:center;
+	margin-left: auto;
+	margin-right: auto;
 	max-height:16em;
+
 }
 .UIFootnote {
 	color:#777777;

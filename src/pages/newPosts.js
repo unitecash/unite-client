@@ -14,8 +14,8 @@ window.pageInit = function () {
   class NewPostsPage extends React.Component {
     render () {
       return (
-        <div className="content">
-        <div id="posts"></div>
+        <div id="content" >
+          <div id="posts"></div>
         </div>
       )
     }

@@ -24,8 +24,8 @@
         }
 
         this.defaults = {
-            background: [240, 240, 240, 255],
-            margin:     0.08,
+            background: [32, 32, 48, 0],
+            margin:     0,
             size:       64,
             saturation: 0.7,
             brightness: 0.5,

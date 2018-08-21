@@ -37,12 +37,11 @@ window.pageInit = () => {
   class ProfilePage extends React.Component {
     render () {
       return (
-        <div className="content">
+        <div id="content">
           <div className="UIPanel center center-text">
             <img id="profileImage" src="./images/unite_icon.svg" className="ProfileImage center" />
             <p id="myName">loading...</p>
-            <p id="profileText">No tagline set</p>
-            <p id="editButton" className="center">Edit...</p>
+            <p id="profileText"><i>"Some profound text goes here..."</i></p>
           </div>
           <div id="posts">
           </div>
@@ -59,9 +58,7 @@ window.pageInit = () => {
 
     var inlineName = user.name.getInlineName()
     $('#myName').text('')
-    $('#myName').append('Hi, ')
     $('#myName').append(inlineName)
-    $('#myName').append('!')
 
   })
 }

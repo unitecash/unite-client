@@ -116,24 +116,26 @@ export default class NetworkEndpoint {
   }
 
   bindEvents () {
-    this.socket.on('tx', (data) => {
-      new Transaction(data.txid, {
-        isLive: true
+    if (this.websocketsSupported) {
+      this.socket.on('tx', (data) => {
+        new Transaction(data.txid, {
+          isLive: true
+        })
       })
-    })
+    }
   }
 
   subscribeAddress (addr) {
-    this.socket.emit('subscribe', addr)
+    if (this.websocketsSupported) this.socket.emit('subscribe', addr)
   }
 
   unsubscribeAddress (addr) {
-    this.socket.emit('unsubscribe', addr)
+    if (this.websocketsSupported) this.socket.emit('unsubscribe', addr)
   }
 
   disconnect () {
     this.isDisabled = true
-    this.socket.disconnect()
+    if (this.websocketsSupported) this.socket.disconnect()
   }
 
   getBalance (addr) {

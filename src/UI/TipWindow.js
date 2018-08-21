@@ -14,7 +14,7 @@ export default class TipWindow {
       tipWindow.attr('id', uid + 'tipWindow')
       tipWindow.attr('class', 'UIAlertWindow hidden')
 
-      var tipTitle = $('<h3></h3>')
+      var tipTitle = $('<h1></h1>')
       tipTitle.attr('class', 'center-text')
       tipTitle.text('SEND A TIP')
       tipWindow.append(tipTitle)
@@ -75,6 +75,7 @@ export default class TipWindow {
           Utilities.closePopup()
         }
       })
+      
       $('body').append(tipWindow)
     }
     new InteractivePopup('#' + uid + 'tipWindow').show()

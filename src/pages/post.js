@@ -4,7 +4,7 @@ window.pageInit = function () {
   class PostPage extends React.Component {
     render () {
       return (
-        <div className="content">
+        <div id="content">
           <div id="posts">
           </div>
         </div>
@@ -17,13 +17,13 @@ window.pageInit = function () {
   new NavigationMenu({
     pageTitle: 'Replies',
     pageIcon: './images/newusers_icon.svg',
-    rightButton: new ImageButton({
-      text: 'New Post',
-      image: './images/compose_icon.svg',
-      onclick: () => {
-        new CompositionWindow(post)
-      }
-    }).render(),
+    //rightButton: new ImageButton({
+    //  text: 'New Post',
+    //  image: './images/compose_icon.svg',
+    //  onclick: () => {
+    //    new CompositionWindow(window.topPost) // hacky
+    //  }
+    //}).render(),
     showBackButton: true
   })
 
@@ -35,6 +35,7 @@ window.pageInit = function () {
 window.onPostLoad = function (post) {
   return new Promise((resolve, reject) => {
     if (post.txid === window.topPostTXID) {
+      window.topPost = post
       post.init().then((result) => {
         resolve (result)
       })

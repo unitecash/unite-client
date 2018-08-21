@@ -108,9 +108,10 @@ export default class Utilities {
 
   static logOut () {
     $('*').fadeOut(1000)
-    delete sessionStorage.privateKey
+    localStorage.clear()
+    sessionStorage.clear()
     setTimeout(() => {
-      Utilities.redirect('login.html')
+      Utilities.redirect('index.html')
     }, 1100)
   }
 

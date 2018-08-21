@@ -28,13 +28,13 @@ export default class Config {
     // client-side configuration settings
     this.ENABLE_WEBSOCKETS = true
     this.ENABLE_CACHING = true
-    this.ENABLE_TRANSACTION_BROADCASTS = false
+    this.ENABLE_TRANSACTION_BROADCASTS = true
 
     // debug logging
     this.DEBUG_MODE = true
     this.LOGGING_CATEGORIES = [
       'net',
-      'ipfs',
+      //'ipfs',
       //'post',
       //'tx',
       //'name',
@@ -51,17 +51,16 @@ export default class Config {
         insightURL: 'https://bitcoincash.blockexplorer.com/api/',
         websocketURL: 'wss://bitcoincash.blockexplorer.com',
         addressFormat: 'legacy'
-      },
-      {
-        insightURL: 'https://bch-insight.bitpay.com/api/',
-        websocketURL: 'wss://bch-insight.bitpay.com',
-        addressFormat: 'cashaddress'
-      },
-      {
-        insightURL: 'https://blockdozer.com/insight-api/',
-        websocketURL: 'wss://blockdozer.com',
-        addressFormat: 'cashaddress'
-      }
+      }//, COMMENTED OUT TEMPORARILY TO AVOID ISSUES
+      //{
+      //  insightURL: 'https://bch-insight.bitpay.com/api/',
+      //  websocketURL: 'wss://bch-insight.bitpay.com',
+      //  addressFormat: 'cashaddress'
+      //},
+      //{
+      //  insightURL: 'https://blockdozer.com/insight-api/',
+      //  addressFormat: 'cashaddress'
+      //}
     ]
 
     // endpoints for interfacing with IPFS
@@ -77,7 +76,7 @@ export default class Config {
     // content publication endpoints
     this.DEFAULT_UNITE_ENDPOINTS = [
       'http://unite.cash:5501/'
-      //'https://alpha.unite.cash/',
+      //'https://alpha.unite.cash/', [HELP WANTED]  INFRASTRUCTURE NEEDED
       //'https://beta.unite.cash/',
       //'https://gamma.unite.cash/',
       //'https://delta.unite.cash/',

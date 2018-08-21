@@ -136,7 +136,7 @@ export default class Post {
                 return false
               }
 
-              // JSON object has been now parsed. We can now populate the
+              // Object has been parsed. We can now populate the
               // displayContent array based on what contentType was defined
               // by the content descriptor.
               if (this.resolvedData.contentType === 'image') {
@@ -159,6 +159,9 @@ export default class Post {
                   'class',
                   'UIDisplayImage'
                 )
+                var temp = this.displayContent[0]
+                this.displayContent[0] = $('<center></center>')
+                this.displayContent[0].append(temp)
                 this.displayContent[1] = $('<p></p>')
                 this.displayContent[1].attr('class', 'UIFootnote')
                 this.displayContent[1].text(this.resolvedData.description)
@@ -192,6 +195,9 @@ export default class Post {
                   'video/mp4'
                 )
                 this.displayContent[0].append(source)
+                var temp = this.displayContent[0]
+                this.displayContent[0] = $('<center></center>')
+                this.displayContent[0].append(temp)
                 this.displayContent[1] = $('<h2></h2>')
                 this.displayContent[1].text(this.resolvedData.title)
                 this.displayContent[2] = $('<p></p>')

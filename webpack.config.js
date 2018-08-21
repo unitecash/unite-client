@@ -17,7 +17,10 @@ const config = {
     login:    './src/pages/login.js',
     newPosts: './src/pages/newPosts.js',
     profile:  './src/pages/profile.js',
-    post:     './src/pages/post.js'
+    post:     './src/pages/post.js',
+    feed:     './src/pages/feed.js',
+    newUsers: './src/pages/newUsers.js',
+    popular:  './src/pages/popular.js'
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
@@ -117,8 +120,8 @@ const config = {
     ]
   },
   plugins: [
-    // disabled due to preformance issues
-    //new CleanWebpackPlugin(['dist']),
+    // disable CleanWebpackPlugin in cases of preformance issues
+    new CleanWebpackPlugin(['dist']),
     new HtmlWebpackPlugin({
       template: './src/template.html',
       filename: 'index.html',
@@ -149,9 +152,27 @@ const config = {
       inject: 'body',
       chunks: ['app', 'newPosts']
     }),
+    new HtmlWebpackPlugin({
+      template: './src/template.html',
+      filename: 'newusers.html',
+      inject: 'body',
+      chunks: ['app', 'newUsers']
+    }),
+    new HtmlWebpackPlugin({
+      template: './src/template.html',
+      filename: 'feed.html',
+      inject: 'body',
+      chunks: ['app', 'feed']
+    }),
+    new HtmlWebpackPlugin({
+      template: './src/template.html',
+      filename: 'popular.html',
+      inject: 'body',
+      chunks: ['app', 'popular']
+    }),
     new SriPlugin({
       hashFuncNames: ['sha256', 'sha384'],
-      enabled: false // disabled due to it breaking file:// functionality
+      enabled: true // disable if opening file:// URLs with a browser locally
     }),
     new FaviconsWebpackPlugin({
       logo: path.join(__dirname, 'src/images/icon.svg'),
