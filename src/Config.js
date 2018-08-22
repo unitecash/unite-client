@@ -75,7 +75,7 @@ export default class Config {
 
     // content publication endpoints
     this.DEFAULT_UNITE_ENDPOINTS = [
-      'http://unite.cash:5501/'
+      'https://unite.cash:5501/'
       //'https://alpha.unite.cash/', [HELP WANTED]  INFRASTRUCTURE NEEDED
       //'https://beta.unite.cash/',
       //'https://gamma.unite.cash/',
@@ -90,25 +90,25 @@ export default class Config {
     }
 
     // load default configuration if none exists
-    if (typeof localStorage.networkEndpoints === 'undefined') {
+    //if (typeof localStorage.networkEndpoints === 'undefined') {
   		localStorage.networkEndpoints = JSON.stringify(
         this.DEFAULT_NETWORK_ENDPOINTS
       )
-  	}
+  	//}
     this.networkEndpoints = JSON.parse(localStorage.networkEndpoints)
 
-    if (typeof localStorage.IPFSEndpoints === 'undefined') {
+    //if (typeof localStorage.IPFSEndpoints === 'undefined') {
       localStorage.IPFSEndpoints = JSON.stringify(
         this.DEFAULT_IPFS_ENDPOINTS
       )
-    }
+    //}
     this.IPFSEndpoints = JSON.parse(localStorage.IPFSEndpoints)
 
-    if (typeof localStorage.uniteEndpoints === 'undefined') {
+    //if (typeof localStorage.uniteEndpoints === 'undefined') {
       localStorage.uniteEndpoints = JSON.stringify(
         this.DEFAULT_UNITE_ENDPOINTS
       )
-    }
+    //}
     this.uniteEndpoints = JSON.parse(localStorage.uniteEndpoints)
 
     // re-construct the private key from storage
