@@ -53,3 +53,9 @@ typings/
 
 # dotenv environment variables file
 .env
+
+# Ignore compiled stuff
+dist
+
+# Ignore DS Store
+.DS_Store
