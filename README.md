@@ -1,57 +1,68 @@
-# Unite.cash Client Implementation
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-The Unite protocol is a powerful, extensible, robust and censorship-resistant
-social networking and content distribution system.
+## Available Scripts
 
-Unite-client is simply the first application to implement this protocol.
-Unite-client relies on Bitcoin Cash and IPFS for attribution, content storage
-and content delivery.
+In the project directory, you can run:
 
-## Temporary Note
+### `npm start`
 
-The project, protocol and repository are currently in the process of being
-re-factored. Files will move around frequently, builds may fail and
-dependencies may change often.
+Runs the app in the development mode.<br>
+Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-## Building and Running
+The page will reload if you make edits.<br>
+You will also see any lint errors in the console.
 
-You will need NodeJS and NPM in order to build the project.
-The process should work on all operating systems that can run NPM.
+### `npm test`
 
-Clone the repository to a directory on your computer. Then run the
-commands below:
+Launches the test runner in the interactive watch mode.<br>
+See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-```
-npm install
-npm run build
-```
+### `npm run build`
 
-You will find the compiled application in the dist directory. You may serve the
-directory, or just open the ```index.html``` file in a web browser.
-You may also run the electron desktop application with ```npm run start```.
+Builds the app for production to the `build` folder.<br>
+It correctly bundles React in production mode and optimizes the build for the best performance.
 
-## Contributing
+The build is minified and the filenames include the hashes.<br>
+Your app is ready to be deployed!
 
-Pull requests are much appreciated. Please see the [TODO](TODO.md) for a list
-of what needs doing. Especially lacking are UX and graphic designers.
+See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-## Donations
+### `npm run eject`
 
-Donations are gladly accepted to this Bitcoin Cash address:
+**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
 
-```
-bitcoincash:qra4cts50zs0spfuwk94yae5a57t073jps5hae847u
-```
+If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
 
-## License
+Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
 
-As of May 18th, 2018, this software is licensed under the GNU AGPL 3.0. Prior
-to that date, this software was licensed under the terms of the MIT license.
-A copy of the MIT license is included for the purpose of fulfilling the
-requirement that certain software (JQuery and older revisions of the code
-as contained within this repository before May 18th, 2018) have a copy included.
-As of May 18th, 2018, any code committed to this repository, and any code used
-by the unite.cash project shall be licensed under the terms of the GNU AGPL 3.0
-license. By incorporating code from this repository or any other unite.cash
-repository or source into any application, you agree to make your source code
-freely available to the public. The GNU AGPL 3.0 can be found  [here.](https://www.gnu.org/licenses/agpl-3.0.en.html)
+You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+
+## Learn More
+
+You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+
+To learn React, check out the [React documentation](https://reactjs.org/).
+
+### Code Splitting
+
+This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
+
+### Analyzing the Bundle Size
+
+This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
+
+### Making a Progressive Web App
+
+This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
+
+### Advanced Configuration
+
+This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
+
+### Deployment
+
+This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
+
+### `npm run build` fails to minify
+
+This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
