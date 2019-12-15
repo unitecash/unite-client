@@ -38,8 +38,8 @@ export default class Post {
       }
       // define all the variables
       this.type = transaction.code
-      this.sender = Utilities.stripAddressPrefix(transaction.sender)
-      this.parent = Utilities.stripAddressPrefix(transaction.parent)
+      this.sender = window.Utilities.stripAddressPrefix(transaction.sender)
+      this.parent = window.Utilities.stripAddressPrefix(transaction.parent)
       this.txid = transaction.txid
       this.time = transaction.time
       this.data = transaction.data
@@ -49,17 +49,17 @@ export default class Post {
       // Now we assign some values which are post-type-dependent
       if (this.type === '5504') { // this is a name declaration.
         NameManager.consider ( new Name (
-          this.sender, Utilities.hex2a(this.data), this.time
+          this.sender, window.Utilities.hex2a(this.data), this.time
         ))
       } else if (this.type === '5503') { // this is a simple tip/reply.
         this.parentTXID = this.data.substr(0, 64)
-        this.displayContent[0] = $('<p></p>')
-        this.displayContent[0].text(Utilities.hex2a(this.data.substr(64)))
+        this.displayContent[0] = window.$('<p></p>')
+        this.displayContent[0].text(window.Utilities.hex2a(this.data.substr(64)))
       } else if (this.type === '5501') { // this is a short text post.
-        this.displayContent[0] = $('<p></p>')
-        this.displayContent[0].text(Utilities.hex2a(this.data))
+        this.displayContent[0] = window.$('<p></p>')
+        this.displayContent[0].text(window.Utilities.hex2a(this.data))
       } else if (this.type === '5502' || this.type === '5505') { // multimedia
-        this.hash = Utilities.hex2a(this.data)
+        this.hash = window.Utilities.hex2a(this.data)
         if (this.type === '5505') { // multimedia with a parent TXID.
           this.hash = this.hash.substr(32)
           this.parentTXID = this.data.substr(0, 64)
@@ -142,10 +142,10 @@ export default class Post {
               if (this.resolvedData.contentType === 'image') {
                 // TODO a JavaScript class for displaying images (which allows
                 // you to tap into it and get it full-screen, pinch-to-zoom...)
-                this.displayContent[0] = $('<img></img>')
+                this.displayContent[0] = window.$('<img></img>')
                 this.displayContent[0].attr(
                   'src',
-                  Utilities.getRandomFromArray(config.IPFSEndpoints) + this.resolvedData.hash
+                  window.Utilities.getRandomFromArray(window.config.IPFSEndpoints) + this.resolvedData.hash
                 )
                 this.displayContent[0].attr(
                   'alt',
@@ -160,9 +160,9 @@ export default class Post {
                   'UIDisplayImage'
                 )
                 var temp = this.displayContent[0]
-                this.displayContent[0] = $('<center></center>')
+                this.displayContent[0] = window.$('<center></center>')
                 this.displayContent[0].append(temp)
-                this.displayContent[1] = $('<p></p>')
+                this.displayContent[1] = window.$('<p></p>')
                 this.displayContent[1].attr('class', 'UIFootnote')
                 this.displayContent[1].text(this.resolvedData.description)
                 // pass to host page
@@ -180,15 +180,15 @@ export default class Post {
                   all of these options. Should be mobile-friendly and auto
                   scaledown (no 4K videos on 480p screens).
                 */
-                this.displayContent[0] = $('<video controls></video>')
+                this.displayContent[0] = window.$('<video controls></video>')
                 this.displayContent[0].attr(
                   'class',
                   'UIDisplayVideo'
                 )
-                var source = $('<source></source>')
+                var source = window.$('<source></source>')
                 source.attr(
                   'src',
-                  Utilities.getRandomFromArray(config.IPFSEndpoints) + this.resolvedData.hash
+                  window.Utilities.getRandomFromArray(window.config.IPFSEndpoints) + this.resolvedData.hash
                 )
                 source.attr(
                   'type',
@@ -196,11 +196,11 @@ export default class Post {
                 )
                 this.displayContent[0].append(source)
                 var temp = this.displayContent[0]
-                this.displayContent[0] = $('<center></center>')
+                this.displayContent[0] = window.$('<center></center>')
                 this.displayContent[0].append(temp)
-                this.displayContent[1] = $('<h2></h2>')
+                this.displayContent[1] = window.$('<h2></h2>')
                 this.displayContent[1].text(this.resolvedData.title)
-                this.displayContent[2] = $('<p></p>')
+                this.displayContent[2] = window.$('<p></p>')
                 this.displayContent[2].text(this.resolvedData.description)
                 // pass to host page
                 if (typeof onPostLoad !== 'undefined') {
@@ -266,7 +266,7 @@ export default class Post {
     // as a child (reply) of another post.
     var tag = '#posts' // where the post is rendered.
 
-    var postDiv = $('<div></div>')
+    var postDiv = window.$('<div></div>')
     postDiv.attr('id', this.uid)
     // if there is a UIReplyIndent, add it as a CSS class
     if (this.options.UIReplyIndent > 0) {
@@ -275,67 +275,67 @@ export default class Post {
       postDiv.attr('class', 'post')
     }
 
-    var timeText = $('<p></p>')
+    var timeText = window.$('<p></p>')
     timeText.attr('id', this.uid + 'time')
     timeText.attr('class', 'time')
     timeText.text(
-      Utilities.readableTimeDiff(
-        Utilities.getCurrentTimestamp() - this.time
+      window.Utilities.readableTimeDiff(
+        window.Utilities.getCurrentTimestamp() - this.time
       )
     )
 
-    var postHeader = $('<div></div>')
+    var postHeader = window.$('<div></div>')
     postHeader.append(this.senderName.getInlineName())
     postHeader.append(timeText)
 
-    var postText = $('<div></div>')
+    var postText = window.$('<div></div>')
     postText.attr('id', this.uid + 'content')
     postText.attr('class', 'postText')
     for(var i = 0; i < this.displayContent.length; i++) {
       postText.append(this.displayContent[i])
     }
 
-    var actionBar = $('<div></div>')
+    var actionBar = window.$('<div></div>')
     actionBar.attr('class', 'actionBar')
 
-    var replyButton = $('<p></p>')
+    var replyButton = window.$('<p></p>')
     replyButton.attr('id', this.uid + 'reply')
     replyButton.attr('class', 'UITextButton')
     replyButton.text('reply')
-    $(document).on('click', '#' + this.uid + 'reply', () => {
+    window.$(document).on('click', '#' + this.uid + 'reply', () => {
       new CompositionWindow(this)
     })
 
-    var viewRepliesButton = $('<p></p>')
+    var viewRepliesButton = window.$('<p></p>')
     viewRepliesButton.attr('id', this.uid + 'viewreplies')
     viewRepliesButton.attr('class', 'UITextButton')
     viewRepliesButton.text('show replies')
-    $(document).on('click', '#' + this.uid + 'viewreplies', () => {
-      Utilities.redirect('post.html?txid=' + this.txid)
+    window.$(document).on('click', '#' + this.uid + 'viewreplies', () => {
+      window.Utilities.redirect('post.html?txid=' + this.txid)
     })
 
-    var tipButton = $('<p></p>')
+    var tipButton = window.$('<p></p>')
     tipButton.attr('id', this.uid + 'tip')
     tipButton.attr('class', 'UITextButton')
     tipButton.text('tip')
-    $(document).on('click', '#' + this.uid + 'tip', () => {
+    window.$(document).on('click', '#' + this.uid + 'tip', () => {
       new TipWindow (this)
     })
 
-    var reportButton = $('<p></p>')
+    var reportButton = window.$('<p></p>')
     reportButton.attr('id', this.uid + 'report')
     reportButton.attr('class', 'UITextButton')
     reportButton.text('report')
-    $(document).on('click', '#' + this.uid + 'report', () => {
+    window.$(document).on('click', '#' + this.uid + 'report', () => {
       new ReportWindow (this)
     })
 
-    if (config.DEBUG_MODE) {
-      var debugButton = $('<p></p>')
+    if (window.config.DEBUG_MODE) {
+      var debugButton = window.$('<p></p>')
       debugButton.attr('id', this.uid + 'debug')
       debugButton.attr('class', 'UITextButton')
       debugButton.text('debug')
-      $(document).on('click', '#' + this.uid + 'debug', () => {
+      window.$(document).on('click', '#' + this.uid + 'debug', () => {
         console.log(
           'Debug: dumping post: \n',
           this
@@ -361,9 +361,9 @@ export default class Post {
           'No parent UID given, rendering based on isLive'
         )
       if (this.options.isLive) {
-        $(tag).prepend(postDiv)
+        window.$(tag).prepend(postDiv)
       } else {
-        $(tag).append(postDiv)
+        window.$(tag).append(postDiv)
       }
     } else { // insert the post at the location of the parent UID
       log (
@@ -374,7 +374,7 @@ export default class Post {
         this.options.parentUID,
         ', rendering after parentUID on the page'
       )
-      $('#' + this.options.parentUID).after(postDiv)
+      window.$('#' + this.options.parentUID).after(postDiv)
     }
   }
 

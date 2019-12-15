@@ -11,8 +11,8 @@ export default class Logger {
   // accepts a category and logging parameters. If appropriate, logs a message
   // to the console.
   static log (cat, ...args) {
-    const debug = config.DEBUG_MODE
-    const categories = config.LOGGING_CATEGORIES
+    const debug = window.config.DEBUG_MODE
+    const categories = window.config.LOGGING_CATEGORIES
     if (debug) {
       if (categories.indexOf('all') !== -1 ||
           categories.indexOf(cat) !== -1){
@@ -22,8 +22,8 @@ export default class Logger {
   }
 
   static error (cat, ...args) {
-    const debug = config.DEBUG_MODE
-    const categories = config.LOGGING_CATEGORIES
+    const debug = window.config.DEBUG_MODE
+    const categories = window.config.LOGGING_CATEGORIES
     if (debug) {
       if (categories.indexOf('all') !== -1 ||
           categories.indexOf(cat) !== -1){

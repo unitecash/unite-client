@@ -18,17 +18,19 @@ dependencies may change often.
 You will need NodeJS and NPM in order to build the project.
 The process should work on all operating systems that can run NPM.
 
+You will also need to install yarn.
+
 Clone the repository to a directory on your computer. Then run the
 commands below:
 
 ```
-npm install
-npm run build
+yarn
+yarn start
 ```
 
-You will find the compiled application in the dist directory. You may serve the
-directory, or just open the ```index.html``` file in a web browser.
-You may also run the electron desktop application with ```npm run start```.
+Your browser will open and when you make changes to the code, the changes
+should be live-reloaded in your browser. Compiler warnings and errors will
+update in real-time in the console.
 
 ## Contributing
 

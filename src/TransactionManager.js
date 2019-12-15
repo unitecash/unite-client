@@ -1,3 +1,5 @@
+// eslint-disable-file
+
 /**
  * TransactionManager
  * Author: The Unite.cash Developers
@@ -56,9 +58,9 @@ export default class TransactionManager {
     // we first determine the sending address
     for(var i = 0; i < transaction.vin.length; i++) {
       if (result.sender === 'none') {
-        result.sender = Utilities.toAddress(transaction.vin[i].addr)
+        result.sender = window.Utilities.toAddress(transaction.vin[i].addr)
       } else {
-        if (result.sender !== Utilities.toAddress(transaction.vin[i].addr)){
+        if (result.sender !== window.Utilities.toAddress(transaction.vin[i].addr)){
           log(
             'tx',
             'TransactionManager.validate:',
@@ -87,7 +89,7 @@ export default class TransactionManager {
       if (!transaction.vout[i].scriptPubKey.hex.startsWith('6a')) {
 
         // Finds parent output of transaction. It's hacky, so just trust me
-        var candidate = Utilities.toAddress(
+        var candidate = window.Utilities.toAddress(
           transaction.vout[i].scriptPubKey.addresses[0]
         )
         if (result.parent === 'none') { // this is the first vout

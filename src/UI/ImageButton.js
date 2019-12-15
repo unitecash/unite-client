@@ -24,22 +24,22 @@ export default class ImageButton {
       }
     }
     this.options = options
-    this.uid = Utilities.getRandomChars(16)
+    this.uid = window.Utilities.getRandomChars(16)
   }
 
   render () {
-    var button = $('<button></button>')
+    var button = window.$('<button></button>')
     button.attr('id', this.uid)
     button.attr('class', 'transparent')
 
-    var image = $('<img></img>')
+    var image = window.$('<img></img>')
     image.attr('src', this.options.image)
     image.attr('alt', this.options.text)
     image.attr('title', this.options.text)
     image.attr('class', 'UIImageButton')
     button.append(image)
 
-    $(document).on('click', '#' + this.uid, () => {
+    window.$(document).on('click', '#' + this.uid, () => {
       this.options.onclick()
     })
 

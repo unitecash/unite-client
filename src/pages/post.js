@@ -27,7 +27,7 @@ window.pageInit = function () {
     showBackButton: true
   })
 
-  window.topPostTXID = Utilities.resolveGETParam('txid')
+  window.topPostTXID = window.Utilities.resolveGETParam('txid')
   new Transaction(window.topPostTXID, {
     loadChildren: true
   })
@@ -40,7 +40,7 @@ window.onPostLoad = function (post) {
         resolve (result)
       })
     }else if (post.parentTXID !== undefined) {
-      if ( $('#' + post.parentTXID.substr(0, 16)).length === 1) {
+      if ( window.$('#' + post.parentTXID.substr(0, 16)).length === 1) {
         post.init().then((result) => {
           resolve (result)
         })

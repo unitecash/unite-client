@@ -11,7 +11,7 @@
 export default class Name {
 
   constructor (addr, name, time) {
-    this.address = Utilities.stripAddressPrefix(addr)
+    this.address = window.Utilities.stripAddressPrefix(addr)
     this.displayName = name
     this.time = time
   }
@@ -24,44 +24,44 @@ export default class Name {
   }
 
   getInlineName () {
-    var uid = Utilities.getRandomChars(16)
-    var nameSpan = $('<span></span>')
+    var uid = window.Utilities.getRandomChars(16)
+    var nameSpan = window.$('<span></span>')
     nameSpan.attr('id', uid)
     nameSpan.attr('class', 'UITextButton')
-    var nameHash = $('<img></img>')
+    var nameHash = window.$('<img></img>')
     nameHash.attr('src', this.calcHash())
     nameHash.attr('alt', 'Address: ' + this.address)
     nameHash.attr('title', 'Address: ' + this.address)
     nameHash.attr('class', 'UIInlineNameHash')
     nameSpan.append(nameHash)
     nameSpan.append(this.displayName)
-    $(document).on('click', '#' + uid, () => {
-      Utilities.redirect('./profile.html?addr=' + this.address)
+    window.$(document).on('click', '#' + uid, () => {
+      window.Utilities.redirect('./profile.html?addr=' + this.address)
     })
     return nameSpan
   }
 
   getHeaderName () {
-    var uid = Utilities.getRandomChars(16)
-    var nameSpan = $('<span></span>')
+    var uid = window.Utilities.getRandomChars(16)
+    var nameSpan = window.$('<span></span>')
     nameSpan.attr('id', uid)
     nameSpan.attr('class', 'UITextButton')
 
-    var nameText = $('<p></p>')
+    var nameText = window.$('<p></p>')
     nameText.attr('class', 'name')
     nameText.text(this.senderName.displayName)
-    $(document).on('click', '#' + uid + 'name', () => {
-      Utilities.redirect('./profile.html?addr=' + this.sender)
+    window.$(document).on('click', '#' + uid + 'name', () => {
+      window.Utilities.redirect('./profile.html?addr=' + this.sender)
     })
 
-    var nameHash = $('<img></img>')
+    var nameHash = window.$('<img></img>')
     nameHash.attr('src', this.senderName.calcHash())
     nameHash.attr('alt', 'Address: ' + this.sender)
     nameHash.attr('title', 'Address: ' + this.sender)
     nameHash.attr('id', uid + 'namehash')
     nameHash.attr('class', 'UIPostNameHash UITextButton')
-    $(document).on('click', '#' + uid + 'namehash', () => {
-      Utilities.redirect('./profile.html?addr=' + this.sender)
+    window.$(document).on('click', '#' + uid + 'namehash', () => {
+      window.Utilities.redirect('./profile.html?addr=' + this.sender)
     })
 
   }

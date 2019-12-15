@@ -22,8 +22,8 @@ export default class NetworkManager {
 
       // select a NetworkEndpoint to use for this page
       new NetworkEndpoint(
-        Utilities.getRandomFromArray(
-          config.networkEndpoints
+        window.Utilities.getRandomFromArray(
+          window.config.networkEndpoints
         )
       ).then((result) => {
         if (result !== false) {
@@ -52,8 +52,8 @@ export default class NetworkManager {
               // connect to the IPFS peers
               /* Disabled because the code is obsolete and this functionality
               is now accomplished with the Unite endpoint.
-              for (var i = 0; i < config.IPFSEndpoints.length; i++){
-                this.IPFSNode.swarm.connect(config.IPFSEndpoints[i])
+              for (var i = 0; i < window.config.IPFSEndpoints.length; i++){
+                this.IPFSNode.swarm.connect(window.config.IPFSEndpoints[i])
               }*/
             })
           })
@@ -67,11 +67,11 @@ export default class NetworkManager {
   broadcastTransaction (hex) {
     return new Promise ((resolve, reject) => {
       if (!this.isDead) {
-        if (config.ENABLE_TRANSACTION_BROADCASTS === true) {
-          for (var i = 0; i < config.networkEndpoints.length; i++) {
+        if (window.config.ENABLE_TRANSACTION_BROADCASTS === true) {
+          for (var i = 0; i < window.config.networkEndpoints.length; i++) {
             $.ajax({
               type: 'POST',
-              url: config.networkEndpoints[i].insightURL + 'tx/send',
+              url: window.config.networkEndpoints[i].insightURL + 'tx/send',
               data: {rawtx: hex},
               success: (data) => {
                 console.log('Transaction broadcasted! TXID:\n\n' + data.txid)
@@ -106,14 +106,14 @@ export default class NetworkManager {
           content: Buffer.from(data)
         }, (err, filesAdded) => {
           if (err) { console.error(err) }
-          if (config.DEBUG_MODE) {
+          if (window.config.DEBUG_MODE) {
             console.log('Added to IPFS:', filesAdded[0].hash)
           }
           resolve (filesAdded[0].hash)
         })
       } else if (!this.isIPFSReady) {
         // TODO wait 2 seconds for IPFS to be ready, then try again
-        if (config.DEBUG_MODE) {
+        if (window.config.DEBUG_MODE) {
           console.log('IPFS was not ready, waiting 2 seconds...')
         }
         resolve (false)
@@ -127,7 +127,7 @@ export default class NetworkManager {
       if (!this.isDead) {
         var xhr = $.ajax({
           type: 'GET',
-          url: Utilities.getRandomFromArray(config.IPFSEndpoints) + hash,
+          url: window.Utilities.getRandomFromArray(window.config.IPFSEndpoints) + hash,
           success: (data) => {
             resolve (data)
           },
@@ -144,13 +144,13 @@ export default class NetworkManager {
           },
           xhrFields: {
             onprogress: function(progress) {
-              if (progress.loaded > config.MAX_HASH_DESCRIPTOR_SIZE) {
+              if (progress.loaded > window.config.MAX_HASH_DESCRIPTOR_SIZE) {
                 xhr.abort()
                 error(
                   'ipfs',
                   'NetworkManager.resolveFromIPFS:',
                   'Not resolving hash descriptor above',
-                  config.MAX_HASH_DESCRIPTOR_SIZE,
+                  window.config.MAX_HASH_DESCRIPTOR_SIZE,
                   'bytes.'
                 )
               }

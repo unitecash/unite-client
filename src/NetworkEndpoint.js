@@ -39,7 +39,7 @@ export default class NetworkEndpoint {
     this.totalFailures = 0
     this.totalSuccesses = 0
     this.reliability = 1 // TODO reliability=successes/(success+failures) ???
-    this.uid = Utilities.getRandomChars(16)
+    this.uid = window.Utilities.getRandomChars(16)
     return new Promise ((resolve, reject) => {
       // verify insightURL and websocketURL
       // TODO we only should verify if it has never been used before.
@@ -51,7 +51,7 @@ export default class NetworkEndpoint {
         type: 'GET',
         url: this.insightURL + 'status?q=getInfo',
         success: (data) => {
-          if (this.websocketsSupported === true && config.ENABLE_WEBSOCKETS) {
+          if (this.websocketsSupported === true && window.config.ENABLE_WEBSOCKETS) {
             this.socket = io(this.websocketURL)
             this.socket.on('connect', () => {
               resolve (this)

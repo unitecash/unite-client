@@ -16,37 +16,37 @@ export default class FormManager {
   }
 
   bindBackButtons () {
-    $('#backbutton').on('click', () => {
+    window.$('#backbutton').on('click', () => {
       history.back()
     })
-    $(document).on('keydown', (e) => { // hacky
+    window.$(document).on('keydown', (e) => { // hacky
       if (e.keyCode == 27) {
-        Utilities.closePopup()
+        window.Utilities.closePopup()
       }
     })
   }
 
   bindSendAction () {
-    $('#sendpost').on('submit', function (ev) {
+    window.$('#sendpost').on('submit', function (ev) {
       ev.preventDefault()
-      var post_text = $('#newpost').val()
+      var post_text = window.$('#newpost').val()
       if (post_text.length < 1 || post_text.length > 217) {
         Messages.tempCharLimit(217)
       } else {
         PostBuilder.build(
           '5501',
           post_text,
-          config.CENTRAL_CONTENT_ADDRESS,
-          config.DUST_LIMIT_SIZE
+          window.config.CENTRAL_CONTENT_ADDRESS,
+          window.config.DUST_LIMIT_SIZE
         )
       }
     })
   }
 
   bindSendReplyAction () {
-    $('#sendreply').on('submit', function (ev) {
+    window.$('#sendreply').on('submit', function (ev) {
       ev.preventDefault()
-      var post_text = $('#newpost').val()
+      var post_text = window.$('#newpost').val()
       if (post_text.length < 1 || post_text.length > 45) {
         Messages.tempCharLimit()
       } else {
@@ -54,7 +54,7 @@ export default class FormManager {
           '5503',
           post_text,
           topPost.sender,
-          config.DUST_LIMIT_SIZE
+          window.config.DUST_LIMIT_SIZE
         )
       }
     })

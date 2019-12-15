@@ -1,3 +1,6 @@
+import bchaddr from 'bchaddrjs'
+import bch from 'bitcore-lib-cash'
+
 /**
  * Configuration
  * Author: The Unite.cash Developers
@@ -114,7 +117,7 @@ export default class Config {
     // re-construct the private key from storage
     if (typeof sessionStorage.privateKey !== 'undefined') {
       this.userPrivateKey = bch.PrivateKey.fromWIF(sessionStorage.privateKey)
-      this.userAddress = Utilities.stripAddressPrefix (
+      this.userAddress = window.Utilities.stripAddressPrefix (
         bchaddr.toCashAddress (
           this.userPrivateKey.toAddress().toString()
         )

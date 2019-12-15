@@ -18,11 +18,11 @@ export default class PostBuilder {
     }
 
     if (typeof params.amount === 'undefined') {
-      params.amount = config.DUST_LIMIT_SIZE
+      params.amount = window.config.DUST_LIMIT_SIZE
     }
 
     if (typeof params.fee === 'undefined') {
-      params.fee = config.DEFAULT_FEE_PER_BYTE
+      params.fee = window.config.DEFAULT_FEE_PER_BYTE
     }
 
     if (typeof params.content === 'undefined') {
@@ -70,7 +70,7 @@ export default class PostBuilder {
         store the hashes in the IPFSHashes array, to be sent to the Unite
         endpoint later.
         */
-        Utilities.fileToIPFSHash(file).then((hash) => {
+        window.Utilities.fileToIPFSHash(file).then((hash) => {
           // add the hash to the IPFSHashes array
           // set the hash pointed to by the hash descriptor.
           /*
@@ -95,7 +95,7 @@ export default class PostBuilder {
           )
 
           // hash the hash descriptor
-          Utilities.fileToIPFSHash(hd).then((hash) => {
+          window.Utilities.fileToIPFSHash(hd).then((hash) => {
             // add HD's hash to IPFSHashes
             // put HD's hash on the blockchain.
             params.content = hash
@@ -117,7 +117,7 @@ export default class PostBuilder {
         hashDescriptor.contentType = 'text'
         hashDescriptor.content = params.content.text
         var hd = new File([JSON.stringify(hashDescriptor)], 'file')
-        Utilities.fileToIPFSHash(hd).then((hash) => {
+        window.Utilities.fileToIPFSHash(hd).then((hash) => {
           params.content = hash
           PostBuilder.constructTransaction(
             params
@@ -135,7 +135,7 @@ export default class PostBuilder {
   // ALL params perfectly. Do not be lazy and just go update PostBuilder.build.
   static constructTransaction (params, files) {
     // return an array of UTXOs for this user
-    networkManager.findUTXOsByAddress(config.userAddress).then((allUTXOs) => {
+    networkManager.findUTXOsByAddress(window.config.userAddress).then((allUTXOs) => {
       var transaction = new bch.Transaction()
       // pay the parent address the amount provided
       transaction.to(bchaddr.toLegacyAddress(params.parentAddress), params.amount)
@@ -146,13 +146,13 @@ export default class PostBuilder {
           'builder',
           'PostBuilder.build:',
           'Adding (ascii) data to transaction:',
-          Utilities.hex2a(params.type) + params.content
+          window.Utilities.hex2a(params.type) + params.content
         )
-        transaction.addData(Utilities.hex2a(params.type) + params.content)
+        transaction.addData(window.Utilities.hex2a(params.type) + params.content)
       } else { // if there is a parent TXID
-        var txData = Utilities.hex2buf(params.type)
-        txData = txData.concat(Utilities.hex2buf(params.parentTXID))
-        txData = txData.concat(Utilities.ascii2buf(params.content))
+        var txData = window.Utilities.hex2buf(params.type)
+        txData = txData.concat(window.Utilities.hex2buf(params.parentTXID))
+        txData = txData.concat(window.Utilities.ascii2buf(params.content))
         log (
           'builder',
           'PostBuilder.build:',
@@ -180,9 +180,9 @@ export default class PostBuilder {
         }
       }
       if (success) { // set fee, change address, sign, broadcast
-        transaction.change(bchaddr.toLegacyAddress(config.userAddress))
+        transaction.change(bchaddr.toLegacyAddress(window.config.userAddress))
         transaction.feePerKb(parseInt(params.fee * 512)) // hacky.
-        transaction.sign(config.userPrivateKey)
+        transaction.sign(window.config.userPrivateKey)
         networkManager.broadcastTransaction(transaction.toString()).then((result) => {
           if (result === true) {
             if (params.type === '5502' || params.type === '5505') {
@@ -231,7 +231,7 @@ export default class PostBuilder {
       fdata.append('files', files[i], files[i].name)
     }
     // set the random URL:
-    var randomURL = Utilities.getRandomFromArray(config.uniteEndpoints)
+    var randomURL = window.Utilities.getRandomFromArray(window.config.uniteEndpoints)
     log(
       'builder',
       'Post.pulishConten:',

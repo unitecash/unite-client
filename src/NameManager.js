@@ -56,7 +56,7 @@ export default class NameManager {
         // declare an empty default name just in case none exists for this user
         var name = new Name(addr, addr.substr(0, 6), 0)
         var found_name = false
-        networkManager.findCommonTransactions(addr, config.CENTRAL_PROFILE_ADDRESS).then((txid_arr) => {
+        networkManager.findCommonTransactions(addr, window.config.CENTRAL_PROFILE_ADDRESS).then((txid_arr) => {
           if (txid_arr) {
             (async function loop(){
               for (var i = 0; i < txid_arr.length; i++) {

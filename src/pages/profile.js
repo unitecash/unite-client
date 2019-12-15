@@ -1,14 +1,14 @@
 window.pageInit = () => {
 
   // extract the target user's address from the URL string or use current user
-  window.currentUserAddress = Utilities.resolveGETParam('addr')
+  window.currentUserAddress = window.Utilities.resolveGETParam('addr')
   if (window.currentUserAddress === false) {
-    window.currentUserAddress = config.userAddress
+    window.currentUserAddress = window.config.userAddress
   }
 
   // show the settings button if the profile is the logged-in user
   var leftButton = ''
-  if (window.currentUserAddress === config.userAddress) {
+  if (window.currentUserAddress === window.config.userAddress) {
     leftButton = new ImageButton({
       text: 'Settings',
       image: './images/settings_icon.svg',
@@ -30,7 +30,7 @@ window.pageInit = () => {
         new CompositionWindow()
       }
     }).render(),
-    showBackButton: (window.currentUserAddress !== config.userAddress)
+    showBackButton: (window.currentUserAddress !== window.config.userAddress)
   })
 
   // define a React component for the page
@@ -57,8 +57,8 @@ window.pageInit = () => {
     user.loadPosts()
 
     var inlineName = user.name.getInlineName()
-    $('#myName').text('')
-    $('#myName').append(inlineName)
+    window.$('#myName').text('')
+    window.$('#myName').append(inlineName)
 
   })
 }

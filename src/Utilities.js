@@ -107,11 +107,11 @@ export default class Utilities {
   }
 
   static logOut () {
-    $('*').fadeOut(1000)
+    window.$('*').fadeOut(1000)
     localStorage.clear()
     sessionStorage.clear()
     setTimeout(() => {
-      Utilities.redirect('index.html')
+      window.Utilities.redirect('index.html')
     }, 1100)
   }
 
@@ -128,7 +128,7 @@ export default class Utilities {
   }
 
   static goBack () {
-    $('#content').animate({"marginLeft": "100%"}, 250)
+    window.$('#content').animate({"marginLeft": "100%"}, 250)
     history.back()
   }
 
@@ -146,7 +146,7 @@ export default class Utilities {
     key = key.substr(0, pass.length)
     key = sha512(key)
     for (var i = 0;
-      i < $('#user').val().length * $('#pass').val().length &&
+      i < window.$('#user').val().length * window.$('#pass').val().length &&
         i < 500; i++) {
       var n = 'bar'
       var m = 3301
@@ -193,7 +193,7 @@ export default class Utilities {
   }
 
   static toAddress (addr) {
-    return Utilities.stripAddressPrefix(
+    return window.Utilities.stripAddressPrefix(
       bchaddr.toCashAddress(
         addr
       )

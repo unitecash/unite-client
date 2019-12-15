@@ -29,7 +29,7 @@ class LoginWindow extends React.Component {
         <h1>Advanced Options</h1>
         <h2>Log In with Private Key (WIF)</h2>
         <input className="UITextField center w90" id="privatekeyfield" placeholder="WIF Key..." /><br/>
-        <button className="UIButton center w90" type="submit" onclick="$('#loginbutton').click()">LOG IN</button>
+        <button className="UIButton center w90" type="submit" onclick="window.$('#loginbutton').click()">LOG IN</button>
         </div>
         </center>
       </div>
@@ -37,46 +37,46 @@ class LoginWindow extends React.Component {
   }
 }
 
-$(document).ready(() => {
+window.$(document).ready(() => {
 
   ReactDOM.render(<LoginWindow />, document.getElementById('app'))
 
-  $('#user').focus()
-  //$('#insightURL').val(config.randomInsightEndpoint())
-  //$('#websockURL').val(config.randomInsightWebsocket())
-  $('#loginform').on('submit', function (ev) {
+  window.$('#user').focus()
+  //window.$('#insightURL').val(window.config.randomInsightEndpoint())
+  //window.$('#websockURL').val(window.config.randomInsightWebsocket())
+  window.$('#loginform').on('submit', function (ev) {
     ev.preventDefault()
-    $('#loginbutton').innerHTML = 'PLEASE WAIT...'
+    window.$('#loginbutton').innerHTML = 'PLEASE WAIT...'
     // check if WIF was used for login
-    if ($('#privatekeyfield').val().length > 5) { // logging in with WIF
+    if (window.$('#privatekeyfield').val().length > 5) { // logging in with WIF
       // TODO validate the provided private key
-      sessionStorage.privateKey = $('#privatekeyfield').val()
-      Utilities.redirect('newposts.html')
+      sessionStorage.privateKey = window.$('#privatekeyfield').val()
+      window.Utilities.redirect('newposts.html')
     } else { // logging in with username and password
-      if ($('#user').val().length < 1) {
+      if (window.$('#user').val().length < 1) {
         new ErrorBanner('Please enter a username').show()
-        $('#loginbutton').innerHTML = 'LOG IN'
-      } else if ($('#pass').val().length < 12) { // [TODO]: validate this
+        window.$('#loginbutton').innerHTML = 'LOG IN'
+      } else if (window.$('#pass').val().length < 12) { // [TODO]: validate this
         Messages.passwordSecurity()
-        $('#loginbutton').innerHTML = 'LOG IN'
-      //} else if ($('#insightURL').val().length < 6) {
+        window.$('#loginbutton').innerHTML = 'LOG IN'
+      //} else if (window.$('#insightURL').val().length < 6) {
       //  new ErrorBanner('Is that Insight URL correct?').show()
-      //} else if ($('#websockURL').val().length < 6) {
+      //} else if (window.$('#websockURL').val().length < 6) {
       //  new ErrorBanner('That WebSocket URL smells fishy...').show()
       } else {
-        sessionStorage.privateKey = Utilities.privateKeyFromLoginCredentials (
-          $('#user').val(),
-          $('#pass').val()
+        sessionStorage.privateKey = window.Utilities.privateKeyFromLoginCredentials (
+          window.$('#user').val(),
+          window.$('#pass').val()
         )
-        Utilities.redirect('newposts.html')
+        window.Utilities.redirect('newposts.html')
       }
     }
   })
-  $('#signupButton').on('click', (ev) => {
+  window.$('#signupButton').on('click', (ev) => {
     ev.preventDefault()
     Messages.signUp()
   })
-  $('#advanced').on('click', function () {
+  window.$('#advanced').on('click', function () {
     new InteractivePopup('#advancedwindow').show()
   })
 })

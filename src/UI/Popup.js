@@ -34,10 +34,10 @@ export default class Popup {
       options.centered = false
     }
     this.options = options
-    this.divID = Utilities.getRandomChars(16)
-    this.backgroundID = Utilities.getRandomChars(16)
+    this.divID = window.Utilities.getRandomChars(16)
+    this.backgroundID = window.Utilities.getRandomChars(16)
     if (this.options.showCloseButton) {
-      this.closeButtonID = Utilities.getRandomChars(16)
+      this.closeButtonID = window.Utilities.getRandomChars(16)
     }
     return this
   }
@@ -45,20 +45,20 @@ export default class Popup {
   show () {
     return new Promise((resolve, reject) => {
       if (this.options.playSound) {
-        Utilities.pop()
+        window.Utilities.pop()
       }
 
-      var alertBackground = $('<div></div>')
-      alertBackground.attr('style', 'z-index: ' + config.highestZIndexUsed)
+      var alertBackground = window.$('<div></div>')
+      alertBackground.attr('style', 'z-index: ' + window.config.highestZIndexUsed)
       alertBackground.attr('class', 'UIDimmedBackground hidden')
       alertBackground.attr('id', this.backgroundID)
-      $('body').on('click', '#' + this.backgroundID, () => {
+      window.$('body').on('click', '#' + this.backgroundID, () => {
         resolve ()
         this.hide()
       })
 
-      var alertHTML = $('<div></div>')
-      alertHTML.attr('style', 'z-index: ' + (config.highestZIndexUsed + 1))
+      var alertHTML = window.$('<div></div>')
+      alertHTML.attr('style', 'z-index: ' + (window.config.highestZIndexUsed + 1))
       alertHTML.attr('id', this.divID)
       if (this.options.isCentered) {
         alertHTML.attr('class', 'UIAlertWindow center center-text hidden')
@@ -67,17 +67,17 @@ export default class Popup {
       }
 
       if (this.options.titleText != undefined) {
-        var alertTitle = $('<h3></h3>')
+        var alertTitle = window.$('<h3></h3>')
         alertTitle.attr('class', 'center-text')
         alertTitle.text(this.options.titleText)
         alertHTML.append(alertTitle)
       }
 
       if (this.options.showCloseButton) {
-        var closeButton = $('<button></button>')
+        var closeButton = window.$('<button></button>')
         closeButton.attr('class', 'UICloseButton')
         closeButton.attr('id', this.closeButtonID)
-        $('body').on('click', '#' + this.closeButtonID, () => {
+        window.$('body').on('click', '#' + this.closeButtonID, () => {
           resolve ()
           this.hide()
         })
@@ -85,26 +85,26 @@ export default class Popup {
       }
 
       alertHTML.append(this.options.text)
-      $('body').append(alertBackground)
-      $('body').append(alertHTML)
-      $('#' + this.backgroundID).fadeIn(this.options.animationSpeed)
-      $('#' + this.divID).slideDown(this.options.animationSpeed)
+      window.$('body').append(alertBackground)
+      window.$('body').append(alertHTML)
+      window.$('#' + this.backgroundID).fadeIn(this.options.animationSpeed)
+      window.$('#' + this.divID).slideDown(this.options.animationSpeed)
 
       document.activeElement.blur()
-      config.highestZIndexUsed += 2
+      window.config.highestZIndexUsed += 2
     })
   }
 
   // thanks to https://stackoverflow.com/a/7259663/5860286 for this
   hide () {
     if (this.options.playSound) {
-      Utilities.woosh()
+      window.Utilities.woosh()
     }
-    $.when($('#' + this.divID).fadeOut(this.options.animationSpeed)).done(function () {
-      $('#' + this.divID).remove()
+    window.$.when(window.$('#' + this.divID).fadeOut(this.options.animationSpeed)).done(function () {
+      window.$('#' + this.divID).remove()
     })
-    $.when($('#' + this.backgroundID).fadeOut(this.options.animationSpeed)).done(function () {
-      $('#' + this.backgroundID).remove()
+    window.$.when(window.$('#' + this.backgroundID).fadeOut(this.options.animationSpeed)).done(function () {
+      window.$('#' + this.backgroundID).remove()
     })
   }
 

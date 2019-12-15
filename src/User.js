@@ -1,3 +1,5 @@
+// eslint-disable-file
+
 /*
  * User
  * Author: The Unite.cash Developers

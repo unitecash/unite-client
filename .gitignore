@@ -53,3 +53,10 @@ typings/
 
 # dotenv environment variables file
 .env
+
+# Do not include compiled code
+dist
+build
+
+# Do not include macOS thumbnails
+.DS_Store

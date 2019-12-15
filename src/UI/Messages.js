@@ -10,7 +10,7 @@
 
 export default class Messages {
   static notEnoughFunds () {
-    new Popup().setTitle('ACCOUNT BALANCE')
+    new window.Popup().setTitle('ACCOUNT BALANCE')
       .addText('<p>Check that you\'ve funded your account before posting!</p>')
       .addText('<p>We\'re working on a way to fund new users\' posts, it\'ll be ')
       .addText('out soon.</p><p>In the meantime, here are some ways to fund ')
@@ -25,12 +25,12 @@ export default class Messages {
       .addText('<li>You can buy some on sites like coinbase.com or ')
       .addText('kraken.com</li></ul>')
       .addText('<p>Your Unite.cash Address: </p>')
-      .addText('<div class="UIPanel mono">bitcoincash:' + config.userAddress + '</div>')
+      .addText('<div class="UIPanel mono">bitcoincash:' + window.config.userAddress + '</div>')
       .show()
   }
 
   static broadcastFailure (hexdump) {
-    new Popup().setTitle('BROADCAST FAILURE')
+    new window.Popup().setTitle('BROADCAST FAILURE')
       .addText('Looks like this action was rejected by tne network for some ')
       .addText('reason... Please give this to a developer so they can have a ')
       .addText('look, or post it on Unite, or somewhere we\'ll see it.<br/><br/>')
@@ -40,7 +40,7 @@ export default class Messages {
   }
 
   static signUp () {
-    new Popup().setTitle('NO NEED TO SIGN UP WITH UNITE!')
+    new window.Popup().setTitle('NO NEED TO SIGN UP WITH UNITE!')
       .addText(`<p>
 			Just enter a unique username and a secure password to create
 			your profile!
@@ -54,7 +54,7 @@ export default class Messages {
   }
 
   static tempCharLimit (chars) {
-    new Popup()
+    new window.Popup()
       .addText('There is a temporary limit of ' + chars + ' characters for ')
       .addText('all posts. This will be removed soon. We apologize for the ')
       .addText('inconvenience.')
@@ -62,7 +62,7 @@ export default class Messages {
   }
 
   static passwordSecurity () {
-    new Popup().setTitle('PASSWORD SECURITY')
+    new window.Popup().setTitle('PASSWORD SECURITY')
       .addText(`<p>
       You MUST choose a complex password for this or your funds could
       be stolen!

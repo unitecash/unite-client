@@ -20,7 +20,7 @@ export default class InteractivePopup {
       options.playSound = true
     }
     this.options = options
-    this.backgroundID = Utilities.getRandomChars(16)
+    this.backgroundID = window.Utilities.getRandomChars(16)
     this.tag = tag
     return this
   }
@@ -28,37 +28,37 @@ export default class InteractivePopup {
   show () {
     return new Promise ((resolve, reject) => {
       if (this.options.playSound) {
-        Utilities.pop()
+        window.Utilities.pop()
       }
 
-      var alertBackground = $('<div></div>')
-      alertBackground.attr('style', 'z-index: ' + config.highestZIndexUsed)
+      var alertBackground = window.$('<div></div>')
+      alertBackground.attr('style', 'z-index: ' + window.config.highestZIndexUsed)
       alertBackground.attr('class', 'UIDimmedBackground hidden')
       alertBackground.attr('id', this.backgroundID)
-      $('body').on('click', '#' + this.backgroundID, () => {
+      window.$('body').on('click', '#' + this.backgroundID, () => {
         resolve ()
         this.hide()
       })
 
-      $('body').append(alertBackground)
-      $('#' + this.backgroundID).fadeIn(this.options.animationSpeed)
-      $(this.tag).slideDown(this.options.animationSpeed)
-      $(this.tag).attr('style', 'z-index:' + (config.highestZIndexUsed + 1))
-      $(this.tag).css('display', 'inline')
+      window.$('body').append(alertBackground)
+      window.$('#' + this.backgroundID).fadeIn(this.options.animationSpeed)
+      window.$(this.tag).slideDown(this.options.animationSpeed)
+      window.$(this.tag).attr('style', 'z-index:' + (window.config.highestZIndexUsed + 1))
+      window.$(this.tag).css('display', 'inline')
 
       document.activeElement.blur()
-      config.highestZIndexUsed += 2
+      window.config.highestZIndexUsed += 2
     })
   }
 
   // thanks to https://stackoverflow.com/a/7259663/5860286 for this
   hide () {
     if (this.options.playSound) {
-      Utilities.woosh()
+      window.Utilities.woosh()
     }
-    $(this.tag).fadeOut(this.options.animationSpeed)
-    $.when($('#' + this.backgroundID).fadeOut(this.options.animationSpeed)).done(function () {
-      $('#' + this.backgroundID).remove()
+    window.$(this.tag).fadeOut(this.options.animationSpeed)
+    $.when(window.$('#' + this.backgroundID).fadeOut(this.options.animationSpeed)).done(function () {
+      window.$('#' + this.backgroundID).remove()
     })
   }
 

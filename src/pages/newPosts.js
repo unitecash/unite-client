@@ -23,7 +23,7 @@ window.pageInit = function () {
 
   ReactDOM.render(<NewPostsPage />, document.getElementById('app'))
 
-  networkManager.loadTransactionsByAddress(config.CENTRAL_CONTENT_ADDRESS,
+  networkManager.loadTransactionsByAddress(window.config.CENTRAL_CONTENT_ADDRESS,
   {
     loadChildren: false
   })

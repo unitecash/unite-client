@@ -22,14 +22,14 @@ export default class NotificationManager {
     if (Notification.permission == 'default' &&
         localStorage.notification == undefined) {
       localStorage.notification = 1
-      new Popup().setTitle('ALLOW NOTIFICATIONS')
+      new window.Popup().setTitle('ALLOW NOTIFICATIONS')
         .addText('Notifications let you know when your friends send you tips ')
         .addText('or replies')
         .show()
       Notification.requestPermission(function (permission) {
-        Utilities.goBack()
+        window.Utilities.goBack()
         if (permission != 'granted') {
-          new Popup().setTitle('NOTIFICATIONS')
+          new window.Popup().setTitle('NOTIFICATIONS')
             .addText('Unite will work without notifications, but you might ')
             .addText('miss out when things happen.')
             .show()

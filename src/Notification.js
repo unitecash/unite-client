@@ -56,7 +56,7 @@ export default class Notification {
 
   show () {
     if (this.options.playSound) {
-      Utilities.pop()
+      window.Utilities.pop()
     }
     if (!document.hasFocus()) { // the user is not using the application
       var n = new window.Notification(
@@ -67,7 +67,7 @@ export default class Notification {
         }
       )
       n.onclick = function (ev) {
-        Utilities.obtainFocus()
+        window.Utilities.obtainFocus()
       }
     } else { // the user is using the application
       new SuccessBanner(this.title + ': ' + this.body).show()

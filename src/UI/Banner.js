@@ -26,35 +26,35 @@ export default class Banner {
       options.backgroundColor = '#660033'
     }
     this.options = options
-    this.ID = Utilities.getRandomChars(16)
-    this.closeButtonID = Utilities.getRandomChars(16)
+    this.ID = window.Utilities.getRandomChars(16)
+    this.closeButtonID = window.Utilities.getRandomChars(16)
     this.text = text
     return this
   }
 
   show () {
     if (this.options.playSound) {
-      Utilities.boink() // TODO customize the sound to be played
+      window.Utilities.boink() // TODO customize the sound to be played
     }
 
-    var alertBanner = $('<div></div>')
+    var alertBanner = window.$('<div></div>')
     alertBanner.attr('class', 'banner')
     alertBanner.attr('id', this.ID)
     alertBanner.css('backgroundColor', this.options.backgroundColor)
 
-    var closeButton = $('<button></button>')
+    var closeButton = window.$('<button></button>')
     closeButton.attr('class', 'UICloseBannerButton')
     closeButton.attr('id', this.closeButtonID)
     closeButton.append('×')
-    $('body').on('click', '#' + this.closeButtonID, () => {
+    window.$('body').on('click', '#' + this.closeButtonID, () => {
       this.hide()
     })
 
     alertBanner.append(closeButton)
     alertBanner.append(this.text)
-    $('body').append(alertBanner)
-    $('#' + this.ID).hide()
-    $('#' + this.ID).slideToggle(this.options.animationSpeed)
+    window.$('body').append(alertBanner)
+    window.$('#' + this.ID).hide()
+    window.$('#' + this.ID).slideToggle(this.options.animationSpeed)
     setTimeout(() => {
       this.hide()
     }, this.options.time)
@@ -62,8 +62,8 @@ export default class Banner {
 
   // thanks to https://stackoverflow.com/a/7259663/5860286 for this
   hide () {
-    $.when($('#' + this.ID).slideUp(this.options.animationSpeed)).done(function () {
-      $('#' + this.ID).remove()
+    $.when(window.$('#' + this.ID).slideUp(this.options.animationSpeed)).done(function () {
+      window.$('#' + this.ID).remove()
     })
   }
 
